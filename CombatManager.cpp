@@ -84,23 +84,29 @@ void CombatManager::UpdateStoreUI(BaseCharacter& Player)
     int choice = -1;
     GraphicManager& Gm = GraphicManager::GetInstance();
 
+    Gm.ClearLogs();
+
+    for (int i = 21; i <= 28; i++) {
+        Gm.GoSpace(2, i);
+        cout << "                                                                            ";
+    }
+
     while (choice != 0)
     {
         Gm.DrawLayout();
         Gm.GoSpace(35, 2); cout << "◈ [ SYSTEM MERCHANT ] ◈";
 
-        // 상점 항목 출력 
         Gm.GoSpace(40, 7);  cout << "1. STANDARD ANTIVIRUS (HP +50) : 100 G";
         Gm.GoSpace(40, 9);  cout << "2. ATK ENHANCEMENT PATCH (ATK+5): 250 G";
         Gm.GoSpace(40, 11); cout << "3. FIREWALL EXPANSION (MAX HP+30): 300 G"; 
         Gm.GoSpace(40, 13); cout << "0. EXIT TERMINAL"; 
 
-        // 상태창 출력 
         Gm.GoSpace(72, 21); cout << "[ USER STATUS ]";
         Gm.GoSpace(72, 22); cout << "- CREDIT : " << Player.GetGold() << " G"; 
         Gm.GoSpace(72, 23); cout << "- POWER  : " << Player.GetStrength();
 
-        Gm.GoSpace(5, 22); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
+        Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
+        Gm.GoSpace(38, 20);
 
         if (!(cin >> choice)) 
         {
@@ -196,4 +202,11 @@ void CombatManager::Reward(BaseCharacter& Player)
     //}
 
     cout << "--------------------------\n";
+}
+
+void CombatManager::UpdateStore()
+{
+    CurrentShopList.clear();
+
+   
 }
