@@ -1,12 +1,12 @@
 #include <iostream>
-#include "game.h"
+#include "GameSystem.h"
 
 using namespace std;
 
 int main()
 {
-    game game;
-    game.start_game();
+    GameSystem Game;
+    Game.StartGame();
     
     return 0;
 }

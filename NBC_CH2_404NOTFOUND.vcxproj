@@ -125,7 +125,7 @@
   <ItemGroup>
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="CombatManager.cpp" />
-    <ClCompile Include="game.cpp" />
+    <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="bossMonster.cpp" />
@@ -139,7 +139,7 @@
   <ItemGroup>
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="CombatManager.h" />
-    <ClInclude Include="game.h" />
+    <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GraphicManager.h" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="bossMonster.h" />
