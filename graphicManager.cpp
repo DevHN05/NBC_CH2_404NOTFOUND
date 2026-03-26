@@ -2,7 +2,27 @@
 
 using namespace std;
 
-void GraphicManager::GoSpace(int X, int Y) 
+void GraphicManager::initialize_assets()
+{
+    AsciiAssets["PLAYER"] = {
+    "   ____   ", // 1
+    "  |    |  ", // 2
+    "  (^_^)   ", // 3 (기존 얼굴 반영)
+    "  <)  (>  ", // 4
+    "  --||--  ", // 5
+    "    ||    ", // 6
+    "   /  \\   ", // 7
+    "  /|  |\\  ", // 8
+    " | |  | | ", // 9
+    " | |  | | ", // 10
+    " | |  | | ", // 11
+    " | |  | | ", // 12
+    " | |  | | ", // 13
+    " |/____\\| ", // 14
+    };
+}
+
+void GraphicManager::GoSpace(int X, int Y)
 {
     HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD coord = { (short)X, (short)Y };
@@ -91,10 +111,21 @@ string GraphicManager::ShowTitle() {
     cin >> input_name;
 
     //Gotoxy(35, start_y + 11); cout << ">> CONNECTION ESTABLISHED: " << input_name;
-    GoSpace(38, start_y + 13); cout << "[Press Enter to Start]";
+    GoSpace(42, start_y + 13); cout << "[Press Enter to Start]";
 
     cin.ignore(100, '\n'); 
     cin.get(); 
 
     return input_name;
+}
+
+void GraphicManager::DrawAsciiArt(const string& name, int x, int y)
+{
+    if (AsciiAssets.find(name) == AsciiAssets.end()) return;
+
+    int lineOffset = 0;
+    for (const string& line : AsciiAssets[name]) {
+        GoSpace(x, y + lineOffset++);
+        cout << line;
+    }
 }

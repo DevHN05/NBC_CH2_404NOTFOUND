@@ -58,6 +58,8 @@ void CombatManager::UpdateBattleUI(character& Player, character& Monster)
     gm.GoSpace(75, 3);  cout << "NAME : " << Monster.get_nickname();
     gm.GoSpace(75, 4);  cout << "HP   : " << (Monster.get_health() < 0 ? 0 : Monster.get_health()) << " / 50"; //Max_Health
 
+    //gm.d("SLIME", 40, 4);
+
     gm.GoSpace(72, 21); cout << "- GOLD: " << Player.get_gold() << "G";
     gm.GoSpace(72, 22); cout << "- ATK: " << Player.get_strength();
     gm.GoSpace(72, 24); cout << "[ Inventory ]";
