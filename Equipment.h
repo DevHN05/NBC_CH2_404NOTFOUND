@@ -15,6 +15,6 @@ public:
     : Item(name, price), equip_type_(equip_type), attack_bonus_(attack_bonus), defense_bonus_(defense_bonus), is_equipped_(false) {
     }
 
-    void Use(Character* character) override
+    void Use(character* character);
 };
 

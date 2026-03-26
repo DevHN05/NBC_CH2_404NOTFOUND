@@ -11,6 +11,7 @@ protected:
 
 public:
 	Item(string& name, int price) : name_(name), price_(price) {}
+	Item(const string& name, int price);
 	virtual ~Item() = default;
 
 	string get_name() const;
