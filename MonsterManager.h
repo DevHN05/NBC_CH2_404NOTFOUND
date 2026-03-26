@@ -67,7 +67,7 @@ public:
     // -------------------------------------------------
     //  override
     // -------------------------------------------------
-    void PrintCharacterStatus() override;
+    void PrintCharacterStatus() const override;
 
 
 protected:

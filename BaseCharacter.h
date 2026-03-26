@@ -34,7 +34,7 @@ public:
     void SetCriticalProbability(int CriticalProbability);
     void SetGold(int Gold);
 
-    void PrintCharacterStatus();
+    virtual void PrintCharacterStatus() const;
 
 private:
     string Nickname = " ";

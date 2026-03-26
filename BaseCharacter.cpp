@@ -117,7 +117,7 @@ void BaseCharacter::SetGold(int Gold)
     this->Gold = Gold;
 }
 
-void BaseCharacter::PrintCharacterStatus()
+void BaseCharacter::PrintCharacterStatus() const
 {
     cout << Nickname << '\n';
     cout << Level << '\n';

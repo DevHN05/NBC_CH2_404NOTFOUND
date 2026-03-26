@@ -32,7 +32,7 @@ int MonsterManager::GetGoldReward() const  { return GoldReward; }
 
 string MonsterManager::GetDescription() const { return Description; }
 
-bool MonsterManager::IsAlive() const { return get_health() > 0; }
+bool MonsterManager::IsAlive() const { return GetHealth() > 0; }
 
 
 // =====================================================
@@ -52,11 +52,11 @@ void MonsterManager::ResetHealth() {
 
 
 
-void MonsterManager::PrintCharacterStatus() {
-    cout << "NickName" << NickName << '\n';
-    cout << "Health" << Health << '\n';
-    cout << "Strength" << Strength << '\n';
-    cout << "Dexterity" << Dexterity << '\n';
-    cout << "HealthReward" << HealthReward << '\n';
-    cout << "GoldReward" << GoldReward << '\n';
+void MonsterManager::PrintCharacterStatus() const {
+    cout << "NickName" << GetNickname() << '\n';
+    cout << "Health" << GetHealth() << '\n';
+    cout << "Strength" << GetStrength() << '\n';
+    cout << "Dexterity" << GetDexterity() << '\n';
+    cout << "HealthReward" << GetHealthReward() << '\n';
+    cout << "GoldReward" << GetGoldReward() << '\n';
 }

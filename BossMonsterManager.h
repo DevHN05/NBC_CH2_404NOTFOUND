@@ -52,7 +52,7 @@ public:
     //  override
     // -------------------------------------------------
     void OnPhaseChange() override;
-    void PrintCharacterStatus() override;
+    void PrintCharacterStatus() const override;
 
 
 private:
