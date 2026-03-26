@@ -124,12 +124,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="character.cpp" />
+    <ClCompile Include="combatManager.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="graphicManager.cpp" />
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character.h" />
+    <ClInclude Include="combatManager.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="graphicManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
