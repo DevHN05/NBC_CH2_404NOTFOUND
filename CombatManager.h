@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class character;
+class BaseCharacter;
 
 class CombatManager
 {
@@ -21,10 +21,10 @@ public:
     }
 
 public:
-    void StartBattle(character& Player, character& Monster);
+    void StartBattle(BaseCharacter& Player, BaseCharacter& Monster);
 
-    void UpdateBattleUI(character& Player, character& Monster);
+    void UpdateBattleUI(BaseCharacter& Player, BaseCharacter& Monster);
 
-    void Reward(character& Player);
+    void Reward(BaseCharacter& Player);
 
 };
