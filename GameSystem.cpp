@@ -59,7 +59,7 @@ void GameSystem::StartGame()
         Gm.GoSpace(72, 25); cout << " 1. Recovery (HP)";
 
         Gm.GoSpace(0, 30);
-        cout << " Command (1.Search 2.Recovery 3.Quit): ";
+        cout << " Command (1.Search 2.Recovery 3.Store 4. Event 5.Quit): ";
 
         int choice;
         if (!(cin >> choice)) {
@@ -88,7 +88,30 @@ void GameSystem::StartGame()
             Gm.AddLog("Recovery");
             Sleep(1000);
         }
-        else if (choice == 3) {
+        else if (choice == 3) 
+        {
+            Gm.AddLog(" Enter Store ...");
+
+            Cm.UpdateStoreUI(Player);
+
+            Gm.GoSpace(0, 31);
+            //system("pause");
+
+            Gm.DrawLayout();
+        }
+        else if (choice == 4) 
+        {
+            Gm.AddLog(" Enter Event ...");
+
+            Cm.UpdateEventUI(Player);
+
+            Gm.GoSpace(0, 31);
+            //system("pause");
+
+            Gm.DrawLayout();
+        }
+        else if (choice == 5) 
+        {
             Gm.AddLog("[Game Quit.]");
             Gm.GoSpace(0, 31);
             break;
