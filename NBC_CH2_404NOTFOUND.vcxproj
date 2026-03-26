@@ -136,6 +136,7 @@
     <ClCompile Include="BossMonsterManager.cpp" />
     <ClCompile Include="Potion.cpp" />
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp" />
+    <ClCompile Include="ShopManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseCharacter.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="MonsterManager.h" />
     <ClInclude Include="BossMonsterManager.h" />
     <ClInclude Include="Potion.h" />
+    <ClInclude Include="ShopManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
