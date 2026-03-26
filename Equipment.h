@@ -1,5 +1,5 @@
 #pragma once
-#include "Character.h"
+#include "BaseCharacter.h"
 #include "ItemManager.h"
 
 class Equipment : public ItemManager
@@ -20,7 +20,7 @@ public:
         isEquipped(false) {
     }
 
-    void Use(character* character) override;
+    void Use(BaseCharacter* character) override;
 	void ShowInfo() const override;
 };
 

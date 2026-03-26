@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Character.h"
+#include "BaseCharacter.h"
 using namespace std;
 
 class ItemManager
@@ -17,7 +17,7 @@ public:
 
 	int GetPrice() const;
 
-	virtual void Use(character* character) = 0;
+	virtual void Use(BaseCharacter* character) = 0;
 	virtual void ShowInfo() const = 0;
 };
 

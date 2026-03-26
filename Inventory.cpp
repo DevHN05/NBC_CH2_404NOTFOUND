@@ -22,7 +22,7 @@ shared_ptr<ItemManager> Inventory::FindItem(const string& itemName)
     return nullptr;
 }
 
-void Inventory::UseItem(const string& itemName, Character& user)
+void Inventory::UseItem(const string& itemName, BaseCharacter* character)
 {
     auto item = FindItem(itemName);
 
@@ -32,5 +32,5 @@ void Inventory::UseItem(const string& itemName, Character& user)
         return;
     }
 
-    item->Use(user);
+    item->Use(character);
 }

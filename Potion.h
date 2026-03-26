@@ -1,5 +1,5 @@
 #pragma once
-#include "Character.h"
+#include "BaseCharacter.h"
 #include "ItemManager.h"
 
 
@@ -23,7 +23,7 @@ public:
         Count(count) {
     }
     
-    void Use(Character& character);
+    void Use(BaseCharacter& character);
 
     int GetCount() const
     {

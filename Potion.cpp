@@ -10,7 +10,7 @@ void Potion::SetCount(int count)
 {
 	Count = count;
 }
-void Potion::Use(Character& character)
+void Potion::Use(BaseCharacter& character)
 {
 	if (Count <= 0)
 	{
@@ -22,22 +22,22 @@ void Potion::Use(Character& character)
 	{
 	case EPotionType::Health:
 	{
-		int newHealth = character.get_health() + Recovery;
-		character.set_health(min(newHealth, character.get_maxHealth()));
+		int newHealth = character.GetHealth() + Recovery;
+		character.SetHealth(min(newHealth, character.GetMaxHealth()));
 
 		cout << "You used " << GetName()
 			<< ". Health recovered by " << Recovery
-			<< ". Current health: " << character.get_health()
-			<< "/" << character.get_maxHealth() << "." << endl;
+			<< ". Current health: " << character.GetHealth()
+			<< "/" << character.GetMaxHealth() << "." << endl;
 		break;
 	}
 
 	case EPotionType::Strength:
 	{
-		character.set_strength(character.get_strength() + Recovery);
+		character.SetStrength(character.GetStrength() + Recovery);
 		cout << "You used " << GetName()
 			<< ". Strength increased by " << Recovery
-			<< ". Current strength: " << character.get_strength() << "." << endl;
+			<< ". Current strength: " << character.GetStrength() << "." << endl;
 		break;
 	}
 	
