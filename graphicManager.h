@@ -3,14 +3,21 @@
 #include <string>
 #include <windows.h>
 #include <deque>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
 class GraphicManager 
 {
 private:
-    GraphicManager() {}
+    GraphicManager() { initialize_assets(); }
+
     deque<string> GameLogs;
+    unordered_map<string, vector<string>> AsciiAssets;
+
+private:
+    void initialize_assets();
 
 public:
     GraphicManager(const GraphicManager&) = delete;
@@ -26,8 +33,8 @@ public:
 
     void DrawLayout();
     string ShowTitle();
+    void DrawAsciiArt(const string& name, int x, int y);
 
     void AddLog(const string& Log);
-
     void ClearLogs();
 };
