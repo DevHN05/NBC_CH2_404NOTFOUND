@@ -1,20 +1,26 @@
 #pragma once
-#include "character.h"
-#include "Item.h"
+#include "Character.h"
+#include "ItemManager.h"
 
-class Equipment : public Item
+class Equipment : public ItemManager
 {
 private:
-    string equip_type_;
-    int attack_bonus_;
-    int defense_bonus_;
-    bool is_equipped_;
+    string equipType;
+    int attackBonus;
+    int defenseBonus;
+    bool isEquipped;
 
 public:
-    Equipment(const string& name, int price, const string& equip_type, int attack_bonus, int defense_bonus)
-    : Item(name, price), equip_type_(equip_type), attack_bonus_(attack_bonus), defense_bonus_(defense_bonus), is_equipped_(false) {
+    Equipment(const string& name, int price, const string& equipType,
+        int attackBonus, int defenseBonus)
+        : ItemManager(name, price),
+        equipType(equipType),
+        attackBonus(attackBonus),
+        defenseBonus(defenseBonus),
+        isEquipped(false) {
     }
 
-    void Use(character* character);
+    void Use(character* character) override;
+	void ShowInfo() const override;
 };
 
