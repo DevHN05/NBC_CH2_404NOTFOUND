@@ -6,23 +6,27 @@
 
 using namespace std;
 
-class graphicManager {
+class GraphicManager 
+{
 private:
-    graphicManager() {}
-    deque<string> gameLogs;
+    GraphicManager() {}
+    deque<string> GameLogs;
 
 public:
-    static graphicManager& get_instance() {
-        static graphicManager instance;
-        return instance;
+    GraphicManager(const GraphicManager&) = delete;
+    void operator=(const GraphicManager&) = delete;
+
+    static GraphicManager& GetInstance() {
+        static GraphicManager Instance;
+        return Instance;
     }
-    void go_space(int x, int y);
-    void set_console_size(int width, int height);
+    void GoSpace(int X, int y);
+    void SetConsoleSize(int width, int height);
 
-    void draw_layout();
-    string show_title();
+    void DrawLayout();
+    string ShowTitle();
 
-    void add_log(const string& log);
+    void AddLog(const string& log);
 
-    void clear_logs();
+    void ClearLogs();
 };

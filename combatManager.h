@@ -5,28 +5,26 @@ using namespace std;
 
 class character;
 
-class combatManager
+class CombatManager
 {
 private:
-    combatManager() {}
+    CombatManager() {}
 
 public:
-    combatManager(const combatManager&) = delete;
-    void operator=(const combatManager&) = delete;
+    CombatManager(const CombatManager&) = delete;
+    void operator=(const CombatManager&) = delete;
 
-    static combatManager& get_instance()
+    static CombatManager& GetInstance()
     {
-        static combatManager instance;
-        return instance;
+        static CombatManager Instance;
+        return Instance;
     }
 
 public:
-    void start_battle(character& player, character& monster);
+    void StartBattle(character& Player, character& Monster);
 
-    void update_battle_ui(character& player, character& monster);
+    void UpdateBattleUI(character& Player, character& Monster);
 
-    int random_dice(int dice);
-
-    void reward(character& player);
+    void Reward(character& Player);
 
 };
