@@ -21,7 +21,7 @@
     <ClCompile Include="BaseCharacter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
+    <ClCompile Include="GameSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="logger.cpp">
@@ -33,10 +33,7 @@
     <ClCompile Include="GraphicManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bossMonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dice.cpp">
+    <ClCompile Include="DiceSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Equipment.cpp">
@@ -56,7 +53,7 @@
     <ClInclude Include="BaseCharacter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
+    <ClInclude Include="GameSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logger.h">
@@ -68,7 +65,7 @@
     <ClInclude Include="GraphicManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dice.h">
+    <ClInclude Include="DiceSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Equipment.h">
@@ -79,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="potion.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bossMonster.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>Header Files</Filter>

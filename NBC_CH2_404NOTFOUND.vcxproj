@@ -128,7 +128,6 @@
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="logger.cpp" />
-    <ClCompile Include="bossMonster.cpp" />
     <ClCompile Include="DiceSystem.cpp" />
     <ClCompile Include="Equipment.cpp" />
     <ClCompile Include="item.cpp" />
@@ -142,7 +141,6 @@
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GraphicManager.h" />
     <ClInclude Include="logger.h" />
-    <ClInclude Include="bossMonster.h" />
     <ClInclude Include="DiceSystem.h" />
     <ClInclude Include="Equipment.h" />
     <ClInclude Include="item.h" />
