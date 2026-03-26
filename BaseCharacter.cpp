@@ -2,131 +2,131 @@
 
 using namespace std;
 
-BaseCharacter::BaseCharacter(string nickname)
+BaseCharacter::BaseCharacter(string Nickname)
 {
-    nickname_ = nickname;
+    this->Nickname = Nickname;
 }
 
-string BaseCharacter::get_nickname() const
+string BaseCharacter::GetNickname() const
 {
-    return nickname_;
+    return Nickname;
 };
 
-int BaseCharacter::get_level() const
+int BaseCharacter::GetLevel() const
 {
-    return level_;
+    return Level;
 }
 
-int BaseCharacter::get_experience() const
+int BaseCharacter::GetExperience() const
 {
-    return experience_;
+    return Experience;
 }
 
-int BaseCharacter::get_health() const
+int BaseCharacter::GetHealth() const
 {
-    return health_;
+    return Health;
 }
 
-int BaseCharacter::get_max_health() const
+int BaseCharacter::GetMaxHealth() const
 {
-    return max_health_;
+    return MaxHealth;
 }
 
-int BaseCharacter::get_strength() const
+int BaseCharacter::GetStrength() const
 {
-    return strength_;
+    return Strength;
 }
 
-int BaseCharacter::get_dexterity() const
+int BaseCharacter::GetDexterity() const
 {
-    return dexterity_;
+    return Dexterity;
 }
 
-int BaseCharacter::get_intelligence() const
+int BaseCharacter::GetIntelligence() const
 {
-    return intelligence_;
+    return Intelligence;
 }
 
-int BaseCharacter::get_luck() const
+int BaseCharacter::GetLuck() const
 {
-    return luck_;
+    return Luck;
 }
 
-int BaseCharacter::get_critical_probability() const
+int BaseCharacter::GetCriticalProbability() const
 {
-    return critical_probability_;
+    return CriticalProbability;
 }
 
-int BaseCharacter::get_gold() const
+int BaseCharacter::GetGold() const
 {
-    return gold_;
+    return Gold;
 }
 
-void BaseCharacter::set_nickname(string nickname)
+void BaseCharacter::SetNickname(string Nickname)
 {
-    nickname_ = nickname;
+    this->Nickname = Nickname;
 }
 
-void BaseCharacter::set_level(int level)
+void BaseCharacter::SetLevel(int Level)
 {
-    level_ = level;
+    this->Level = Level;
 }
 
-void BaseCharacter::set_experience(int experience)
+void BaseCharacter::SetExperience(int Experience)
 {
-    experience_ = experience;
+    this->Experience = Experience;
 }
 
-void BaseCharacter::set_health(int health)
+void BaseCharacter::SetHealth(int Health)
 {
-    health_ = health;
+    this->Health = Health;
 }
 
-void BaseCharacter::set_max_health(int maxHealth)
+void BaseCharacter::SetMaxHealth(int MaxHealth)
 {
-    max_health_ = maxHealth;
+    this->MaxHealth = MaxHealth;
 }
 
-void BaseCharacter::set_strength(int strength)
+void BaseCharacter::SetStrength(int Strength)
 {
-    strength_ = strength;
+    this->Strength = Strength;
 }
 
-void BaseCharacter::set_dexterity(int dexterity)
+void BaseCharacter::SetDexterity(int Dexterity)
 {
-    dexterity_ = dexterity;
+    this->Dexterity = Dexterity;
 }
 
-void BaseCharacter::set_intelligence(int intelligence)
+void BaseCharacter::SetIntelligence(int Intelligence)
 {
-    intelligence_ = intelligence;
+    this->Intelligence = Intelligence;
 }
 
-void BaseCharacter::set_luck(int luck)
+void BaseCharacter::SetLuck(int Luck)
 {
-    luck_ = luck;
+    this->Luck = Luck;
 }
 
-void BaseCharacter::set_critical_probability(int critical_probability)
+void BaseCharacter::SetCriticalProbability(int CriticalProbability)
 {
-    critical_probability_ = critical_probability;
+    this->CriticalProbability = CriticalProbability;
 }
 
-void BaseCharacter::set_gold(int gold)
+void BaseCharacter::SetGold(int Gold)
 {
-    gold_ = gold;
+    this->Gold = Gold;
 }
 
-void BaseCharacter::print_character_status()
+void BaseCharacter::PrintCharacterStatus()
 {
-    cout << nickname_ << '\n';
-    cout << level_ << '\n';
-    cout << experience_ << '\n';
-    cout << health_ << '\n';
-    cout << strength_ << '\n';
-    cout << dexterity_ << '\n';
-    cout << intelligence_ << '\n';
-    cout << luck_ << '\n';
-    cout << critical_probability_ << '\n';
-    cout << gold_ << '\n';
+    cout << Nickname << '\n';
+    cout << Level << '\n';
+    cout << Experience << '\n';
+    cout << Health << '\n';
+    cout << Strength << '\n';
+    cout << Dexterity << '\n';
+    cout << Intelligence << '\n';
+    cout << Luck << '\n';
+    cout << CriticalProbability << '\n';
+    cout << Gold << '\n';
 }
