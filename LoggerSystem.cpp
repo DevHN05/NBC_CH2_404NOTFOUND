@@ -5,7 +5,7 @@
 //몬스터가 나타났을때 로그 출력하는 함수
 void LoggerSystem::LogMonsterAppear(const string& MonsterName) 
 {
-	string Log = "야생의 " + MonsterName + "이/가 나타났다!";
+	string Log = "[ DETECTION ] 버그 개체 [ " + MonsterName + " ] 접근 확인. 디버깅 개시.";
 	cout << Log << "\n";
 	EventLogs.push_back(Log);
 };
@@ -13,7 +13,7 @@ void LoggerSystem::LogMonsterAppear(const string& MonsterName)
 //공격을 했을 때 로그 출력하는 함수
 void LoggerSystem::LogAttack(const string& Attacker, const string& Target, int Damage) 
 {
-	string Log = Attacker + "가 " + Target + "을 공격합니다!" + Target + "은/는 " + to_string(Damage) + "의 데미지를 입었습니다!";
+	string Log = "[ ATTACK ] " + Attacker + " >> " + Target + " 에 디버깅 실행 / 데미지: " + to_string(Damage);
 	cout << Log << "\n";
 	EventLogs.push_back(Log);
 };
@@ -22,7 +22,7 @@ void LoggerSystem::LogAttack(const string& Attacker, const string& Target, int D
 void LoggerSystem::LogMonsterKill(const string& MonsterName) 
 {
 	MonsterKillLogs[MonsterName]++;
-	string Log = MonsterName + "을/를 처치했다!";
+	string Log = "[ DEBUG COMPLETE ] " + MonsterName + " 제거됨. 데이터 수집 중...";
 	cout << Log << "\n";
 	EventLogs.push_back(Log);
 };
@@ -48,13 +48,13 @@ void LoggerSystem::LogDiceRoll(int Head, bool IsSucceeded)
 //-----------------------------캐릭터 관련--------------------------------------
 void LoggerSystem::LogLevelUp(int NewLevel) //레벨업 했을때 로그 출력하는 함수 
 {
-	string Log = "[레벨업!] 레벨이 " + to_string(NewLevel) + "로 올랐습니다!";
+	string Log = "[ SYSTEM ] 디버깅 툴 강화 완료 — 권한 레벨 " + to_string(NewLevel) + " 해금";
 	cout << Log << "\n";
 	EventLogs.push_back(Log);
 };
 void LoggerSystem::LogPlayerDeath() //플레이어 사망시 로그 출력하는 함수
 {
-	string Log = " <<플레이어가 사망했습니다. 게임 오버!>>";
+	string Log = "[ CONNECTION LOST ] 디버거 강제 종료. 재접속 시도 중...";
 	cout << Log << "\n";
 	EventLogs.push_back(Log); 
 };
@@ -63,7 +63,7 @@ void LoggerSystem::LogPlayerDeath() //플레이어 사망시 로그 출력하는
 //아이템 사용시 로그 출력하는 함수(아이템명과 효과)
 void LoggerSystem::LogItemUse(const string& ItemName, const string& Effect) 
 {
-	string Log = "[아이템] " + ItemName + " 사용! " + Effect;
+	string Log = "[ TOOL ACTIVATED ] " + ItemName + " 가동 — " + Effect;
 	cout << Log << "\n";
 	EventLogs.push_back(Log);
 };
@@ -72,7 +72,7 @@ void LoggerSystem::LogItemUse(const string& ItemName, const string& Effect)
 void LoggerSystem::LogExpGain(int Amount, int MyExp, int MaxExp) 
 {
 	TotalExp += Amount;
-	string Log = "경험치를 " + to_string(Amount) + "획득! 현재 경험치: " + to_string(MyExp) + " / " + to_string(MaxExp);
+	string Log = "[ DATA COLLECTED ] " + to_string(Amount) + " 데이터 수집 / 현재: " + to_string(MyExp) + " / " + to_string(MaxExp);
 	EventLogs.push_back(Log);
 };
 
@@ -80,47 +80,52 @@ void LoggerSystem::LogExpGain(int Amount, int MyExp, int MaxExp)
 void LoggerSystem::LogGoldGain(int Amount) 
 {
 	TotalGold += Amount;
-	string Log = to_string(Amount) + "골드 획득! => 현재 골드: " + to_string(TotalGold);
+	string Log = "[ RESOURCE ] " + to_string(Amount) + " 골드 확보 / 누적 골드: " + to_string(TotalGold);
 	EventLogs.push_back(Log);
 };
 
 
 //-----------------------------요약----------------------------------
 //처치한 몬스터와 획득한 총 골드와 경험치를 보여주는 함수 
-void LoggerSystem::PrintSummary() 
+void LoggerSystem::PrintSummary()
 {
-	cout << "========== 게임 로그 요약 ==========" << "\n";
+	cout << "======================================\n";
+	cout << "[ DEBUG REPORT ] 디버깅 세션 종료\n";
+	cout << "======================================\n";
 
-	cout << "[처치한 몬스터]" << "\n";
+	cout << "[ 제거된 버그 개체 ]\n";
 	if (MonsterKillLogs.empty())
 	{
-		cout << " 처치한 몬스터가 없습니다." << "\n";
+		cout << "  제거된 버그 개체 없음\n";
 	}
 	else
 	{
 		for (auto& Entry : MonsterKillLogs)
 		{
-			cout << "  " << Entry.first << " x" << Entry.second << "\n";
+			cout << "  >> " << Entry.first << " x" << Entry.second << " 제거 완료\n";
 		}
 	}
 
-	cout << "[총 획득 골드]: " << TotalGold << "골드" << "\n";
-	cout << "[총 획득 경험치]: " << TotalExp << "EXP" << "\n";
-	cout << "====================================" << "\n";
-};
-void LoggerSystem::PrintEventLog() //출력한 로그들을 한번에 보여주는 함수(플레이 이력)
+	cout << "[ 총 확보 골드    ] : " << TotalGold << " G\n";
+	cout << "[ 총 수집 데이터  ] : " << TotalExp << " EXP\n";
+	cout << "======================================\n";
+}
+//출력한 로그들을 한번에 보여주는 함수(플레이 이력)
+void LoggerSystem::PrintEventLog()
 {
-	cout << "========== 플레이 이력 ==========" << "\n";
+	cout << "======================================\n";
+	cout << "[ SYSTEM LOG ] 디버깅 이력 전체 출력\n";
+	cout << "======================================\n";
 	if (EventLogs.empty())
 	{
-		cout << "  기록된 이력이 없습니다." << "\n";
+		cout << "  기록된 이력이 없습니다.\n";
 	}
 	else
 	{
 		for (const string& Log : EventLogs)
 		{
-			cout << Log << "\n";
+			cout << "  " << Log << "\n";
 		}
 	}
-	cout << "==================================" << "\n";
-};
+	cout << "======================================\n";
+}
