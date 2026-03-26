@@ -3,13 +3,7 @@
 void Inventory::AddItem(shared_ptr<ItemManager> item)
 {
     Items.push_back(item);
-    cout << item->GetName() << " 이(가) 인벤토리에 추가되었습니다." << endl;
-}
-
-void Inventory::AddItem(shared_ptr<ItemManager> item)
-{
-    Items.push_back(item);
-    cout << item->GetName() << " 이(가) 인벤토리에 추가되었습니다." << endl;
+    cout << item->GetName() << " is add Inventory" << endl;
 }
 
 shared_ptr<ItemManager> Inventory::FindItem(const string& itemName)
@@ -28,7 +22,7 @@ void Inventory::UseItem(const string& itemName, BaseCharacter* character)
 
     if (!item)
     {
-        cout << "해당 아이템이 인벤토리에 없습니다." << endl;
+        cout << "This item is no inventory" << endl;
         return;
     }
 
