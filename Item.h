@@ -13,11 +13,11 @@ public:
 	Item(string& name, int price) : name_(name), price_(price) {}
 	virtual ~Item() = default;
 
-	string GetName() const;
+	string get_name() const;
 
-	int GetPrice() const;
+	int get_price() const;
 
-	virtual void Use(character* character) = 0;
-	virtual void ShowInfo() const = 0;
+	virtual void use(character* character) = 0;
+	virtual void show_info() const = 0;
 };
 

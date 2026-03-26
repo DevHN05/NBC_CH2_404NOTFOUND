@@ -5,45 +5,45 @@
 
 monster::monster(
             const string& name,
-            int           maxHealth,
+            int           max_health,
             int           attack,
             int           defense,
-            int           xpReward,
-            int           goldReward,
+            int           xp_reward,
+            int           gold_reward,
             const string& description)
     : character(name)
-    , xpReward_(xpReward)
+    , xp_reward_(xp_reward)
     , description_(description)
 {
-    set_maxHealth(maxHealth);               // HP 상한
-    set_health(maxHealth);                  // 시작 HP = 최대 HP
+    set_max_health(max_health);               // HP 상한
+    set_health(max_health);                  // 시작 HP = 최대 HP
     set_strength(attack);               // 공격력
     set_dexterity(defense);             // 방어력 (dexterity 재활용)
-    set_gold(goldReward);               // 골드 보상
+    set_gold(gold_reward);               // 골드 보상
 }
 
 // =====================================================
 // monster 전용 getter
 // =====================================================
 
-int monster::get_xpReward() const  { return xpReward_; }
+int monster::get_xp_reward() const  { return xp_reward_; }
 
 string monster::get_description() const { return description_; }
 
-bool monster::isAlive() const { return get_health() > 0; }
+bool monster::is_alive() const { return get_health() > 0; }
 
 
 // =====================================================
 // 전투 메서드
 // =====================================================
-int monster::takeDamage(int damage) {     // 방어력(dexterity_) 차감 후, 실제로 깎인 HP 반환
+int monster::take_damage(int damage) {     // 방어력(dexterity_) 차감 후, 실제로 깎인 HP 반환
     
-    int actualDamage = max(1, damage - get_dexterity()); //최소 1
-    int newhealth = max(0, get_health() - actualDamage);
-    set_health(newhealth);
-    return actualDamage;
+    int actual_damage = max(1, damage - get_dexterity()); //최소 1
+    int new_health = max(0, get_health() - actual_damage);
+    set_health(new_health);
+    return actual_damage;
 }
 
-void monster::resetHealth() {
-    set_health(get_maxHealth());
+void monster::reset_health() {
+    set_health(get_max_health());
 }

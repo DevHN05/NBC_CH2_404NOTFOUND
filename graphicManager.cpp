@@ -3,9 +3,9 @@
 using namespace std;
 
 void graphicManager::go_space(int x, int y) {
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD coord = { (short)x, (short)y };
-    SetConsoleCursorPosition(hOut, coord);
+    SetConsoleCursorPosition(h_out, coord);
 }
 
 void graphicManager::set_console_size(int width, int height) {
@@ -71,25 +71,25 @@ void graphicManager::clear_logs()
 
 string graphicManager::show_title() {
     system("cls");
-    int startX = 25, startY = 10;
+    int start_x = 25, start_y = 10;
 
-    go_space(startX, startY);     cout << "o  o  o-o  o  o o   o      o  o--o                  o  ";
-    go_space(startX, startY + 1); cout << "|  | o  /o |  | |\\  |      |  |                     |  ";
-    go_space(startX, startY + 2); cout << "o--O | / | o--O | \\ | o-o -o- O-o  o-o o  o o-o   o-O  ";
-    go_space(startX, startY + 3); cout << "   | o/  o    | |  \\| | |  |  |    | | |  | |  | |  |  ";
-    go_space(startX, startY + 4); cout << "   o  o-o     o o   o o-o  o  o    o-o o--o o  o  o-o  ";
+    go_space(start_x, start_y);     cout << "o  o  o-o  o  o o   o      o  o--o                  o  ";
+    go_space(start_x, start_y + 1); cout << "|  | o  /o |  | |\\  |      |  |                     |  ";
+    go_space(start_x, start_y + 2); cout << "o--O | / | o--O | \\ | o-o -o- O-o  o-o o  o o-o   o-O  ";
+    go_space(start_x, start_y + 3); cout << "   | o/  o    | |  \\| | |  |  |    | | |  | |  | |  |  ";
+    go_space(start_x, start_y + 4); cout << "   o  o-o     o o   o o-o  o  o    o-o o--o o  o  o-o  ";
 
-    go_space(41, startY + 7); cout << "[ PROJECT : 404 NOT FOUND ]";
+    go_space(41, start_y + 7); cout << "[ PROJECT : 404 NOT FOUND ]";
 
-    go_space(38, startY + 9); cout << "ENTER YOUR NICKNAME: ";
-    string inputName;
-    cin >> inputName;
+    go_space(38, start_y + 9); cout << "ENTER YOUR NICKNAME: ";
+    string input_name;
+    cin >> input_name;
 
-    //Gotoxy(35, startY + 11); cout << ">> CONNECTION ESTABLISHED: " << inputName;
-    go_space(38, startY + 13); cout << "[Press Enter to Start]";
+    //Gotoxy(35, start_y + 11); cout << ">> CONNECTION ESTABLISHED: " << input_name;
+    go_space(38, start_y + 13); cout << "[Press Enter to Start]";
 
     cin.ignore(100, '\n'); 
     cin.get(); 
 
-    return inputName;
+    return input_name;
 }

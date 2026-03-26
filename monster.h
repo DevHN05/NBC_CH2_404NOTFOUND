@@ -31,11 +31,11 @@ class monster : public character {
 public:
     monster(
         const string& name,
-        int           maxHealth,
+        int           max_health,
         int           attack,
         int           defense,
-        int           xpReward,
-        int           goldReward,
+        int           xp_reward,
+        int           gold_reward,
         const string& description = "");
 
     virtual ~monster() = default;
@@ -44,27 +44,27 @@ public:
     // =====================================================
     // monster 전용 getter
     // =====================================================
-    int get_xpReward() const;
+    int get_xp_reward() const;
     string get_description() const;
-    bool isAlive() const;
+    bool is_alive() const;
 
 
 
     // =====================================================
     // 전투 메서드
     // =====================================================
-    virtual int takeDamage(int damage);     // 방어력(dexterity_) 차감 후, 실제로 깎인 HP 반환
-    void resetHealth();
+    virtual int take_damage(int damage);     // 방어력(dexterity_) 차감 후, 실제로 깎인 HP 반환
+    void reset_health();
 
 
     // =====================================================
     //  페이즈 전환 훅 — BossMonster 에서만 override
     // =====================================================
-    virtual void onPhaseChange() {}
+    virtual void on_phase_change() {}
 
 
 protected:
-    int xpReward_;                          //경험치 보상 (처치 후 지급)
+    int xp_reward_;                          //경험치 보상 (처치 후 지급)
     string description_;                    //출력되는 설명
 
 

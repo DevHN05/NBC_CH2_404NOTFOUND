@@ -27,9 +27,9 @@ int character::get_health() const
     return health_;
 }
 
-int character::get_maxHealth() const
+int character::get_max_health() const
 {
-    return maxHealth_;
+    return max_health_;
 }
 
 int character::get_strength() const
@@ -82,9 +82,9 @@ void character::set_health(int health)
     health_ = health;
 }
 
-void character::set_maxHealth(int maxHealth)
+void character::set_max_health(int maxHealth)
 {
-    maxHealth_ = maxHealth;
+    max_health_ = maxHealth;
 }
 
 void character::set_strength(int strength)

@@ -8,30 +8,30 @@ class Logger
 {
 public:
     //전투 관련
-    void logMonsterAppear(const string& monstername);
-    void logAttack(const string& attacker, const string& target, int damage);
-    void logMonsterKill(const string& monstername);
+    void log_monster_appear(const string& monster_name);
+    void log_attack(const string& attacker, const string& target, int damage);
+    void log_monster_kill(const string& monster_name);
 
     //캐릭터 관련
-    void logLevelUp(int newlevel);
-    void logPlayerDeath();
+    void log_levelup(int new_level);
+    void log_player_death();
 
     //아이템 관련
-    void logItemUse(const string& itemname, const string& effect);
+    void log_item_use(const string& item_name, const string& effect);
 
     //보상 관련
-    void logExpGain(int amount, int myexp, int maxexp);
-    void logGoldGain(int amount);
+    void log_exp_gain(int amount, int my_exp, int max_exp);
+    void log_gold_gain(int amount);
 
     //요약
-    void printSummary();
-    void printEventLog();
+    void print_summary();
+    void print_event_log();
 
 private:
-	int totalgold_;
-	int totalexp_;
-	map<string, int> monsterkilllogs_;
-	vector<string> eventlogs_; 
+	int total_gold_;
+	int total_exp_;
+	map<string, int> monster_kill_logs_;
+	vector<string> event_logs_; 
 
 };
 

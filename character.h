@@ -14,7 +14,7 @@ public:
     int get_level() const;
     int get_experience() const;
     int get_health() const;
-    int get_maxHealth() const;
+    int get_max_health() const;
     int get_strength() const;
     int get_dexterity() const;
     int get_intelligence() const;
@@ -26,7 +26,7 @@ public:
     void set_level(int level);
     void set_experience(int experience);
     void set_health(int health);
-    void set_maxHealth(int maxHealth);
+    void set_max_health(int max_health);
     void set_strength(int strength);
     void set_dexterity(int dexterity);
     void set_intelligence(int intelligence);
@@ -41,7 +41,7 @@ private:
     int level_ = 0;
     int experience_ = 0;
     int health_ = 0;
-    int maxHealth_ = 0;
+    int max_health_ = 0;
     int strength_ = 0;
     int dexterity_ = 0;
     int intelligence_ = 0;

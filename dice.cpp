@@ -59,5 +59,4 @@ void dice::decise(const int target, const int bonus, const int result)
     else 
         // 주사위가 판정 숫자보다 작을 경우 실패
             set_result(false);
-    
 }
