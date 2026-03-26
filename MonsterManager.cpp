@@ -23,7 +23,7 @@ MonsterManager::MonsterManager(
 }
 
 // =====================================================
-// monster 전용 getter
+// MonsterManager 전용 getter
 // =====================================================
 
 int MonsterManager::GetHealthReward() const { return HealthReward; }
