@@ -130,7 +130,8 @@
     <ClCompile Include="LoggerSystem.cpp" />
     <ClCompile Include="DiceSystem.cpp" />
     <ClCompile Include="Equipment.cpp" />
-    <ClCompile Include="item.cpp" />
+    <ClCompile Include="ItemManager.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MonsterManager.cpp" />
     <ClCompile Include="BossMonsterManager.cpp" />
     <ClCompile Include="Potion.cpp" />
@@ -144,7 +145,8 @@
     <ClInclude Include="LoggerSystem.h" />
     <ClInclude Include="DiceSystem.h" />
     <ClInclude Include="Equipment.h" />
-    <ClInclude Include="item.h" />
+    <ClInclude Include="ItemManager.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="MonsterManager.h" />
     <ClInclude Include="BossMonsterManager.h" />
     <ClInclude Include="Potion.h" />
