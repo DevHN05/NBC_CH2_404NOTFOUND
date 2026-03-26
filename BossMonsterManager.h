@@ -12,11 +12,14 @@
 //    - printStatus()를 override하여 페이즈/스킬 정보 추가 출력
 // 
 //  BossMonsterManager 에서 추가하는 것:
-//    - Phase                   → 현재 보스 상태
-//    - PhaseTriggered          → 버프 1회 적용
+//    - Phase                   → 현재 페이즈 번호. 초기값 1, onPhaseChange() 발동 시 2로 변경
+//    - PhaseTriggered          → 페이즈 전환 중복 방지
 //    - SpecialSkillName        → 페이즈 2에서 해금되는 스킬 이름 (출력용)
-//    - SpecialSkillDamage      → 특수 스킬의 고정 데미지 수치
+//    - SpecialSkillDamage      → 특수 스킬의 고정 데미지 수치. CombatManager가 직접 읽어야 함.
+//    - override
+//      - OnPhaseChange()       → CombatManager가 매 턴 호출. 조건부로 딱 한 번 발동 (조건은 함수 선언부 참고)
 //    - getter
+//      - GetPhase()            → 현재 페이즈 반환 (1 = 일반, 2 = 각성)
 // =====================================================
 
 
@@ -43,14 +46,16 @@ public:
     // BossMonsterManager 전용 getter
     // =====================================================
     int GetPhase() const;
-    bool GetPhaseTriggered() const;
     string GetSpecialSkillName() const;
     int GetSpecialSkillDamage() const;
 
 
-    // -------------------------------------------------
+    // =====================================================
     //  override
-    // -------------------------------------------------
+    //    - OnPhaseChange()는 두 가지 조건을 동시에 만족해야 발동
+    //      1) PhaseTriggered == false  → 아직 한 번도 전환 안 됨
+    //      2) 현재 HP <= 최대 HP / 2    → 절반 이하로 깎였을 때
+    // =====================================================
     void OnPhaseChange() override;
     void PrintCharacterStatus() const override;
 
