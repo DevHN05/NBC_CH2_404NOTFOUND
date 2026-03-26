@@ -21,6 +21,7 @@ public:
     void LogAttack(const string& Attacker, const string& Target, int Damage);
     void LogMonsterKill(const string& MonsterName);
     void LogBossPhaseChange(const string& Nickname, const string& SpecialSkillName, int BoostedStrength);
+    void LogDiceRoll(int Head, bool IsSucceeded);
 
     //캐릭터 관련
     void LogLevelUp(int NewLevel);

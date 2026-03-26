@@ -35,6 +35,15 @@ void LoggerSystem::LogBossPhaseChange(const string& Nickname, const string& Spec
 		+ "  >> ATK → " + to_string(BoostedStrength) + "  |  디버깅 난이도 상승";
 	cout << Log << "\n";
 	EventLogs.push_back(Log);
+};
+
+//주사위 로그 출력 함수
+void LoggerSystem::LogDiceRoll(int Head, bool IsSucceeded)
+{
+	string Result = IsSucceeded ? "성공!" : "실패...";
+	string Log = "[ DICE ] 주사위 " + to_string(Head) + " → " + Result;
+	cout << Log << "\n";
+	EventLogs.push_back(Log);
 }
 //-----------------------------캐릭터 관련--------------------------------------
 void LoggerSystem::LogLevelUp(int NewLevel) //레벨업 했을때 로그 출력하는 함수 
