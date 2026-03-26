@@ -77,11 +77,14 @@
     <ClInclude Include="item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="monster.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="potion.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bossMonster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

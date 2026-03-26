@@ -146,7 +146,7 @@
     <ClInclude Include="dice.h" />
     <ClInclude Include="Equipment.h" />
     <ClInclude Include="item.h" />
-    <ClInclude Include="monster.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="potion.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
