@@ -8,21 +8,25 @@ class character
 public:
     character(string nickname);
 
-    string get_nickname();
-    int get_level();
-    int get_experience();
-    int get_health();
-    int get_strength();
-    int get_dexterity();
-    int get_intelligence();
-    int get_luck();
-    int get_critical_probability();
-    int get_gold();
+    virtual ~character() = default;
+
+    string get_nickname() const;
+    int get_level() const;
+    int get_experience() const;
+    int get_health() const;
+    int get_maxHealth() const;
+    int get_strength() const;
+    int get_dexterity() const;
+    int get_intelligence() const;
+    int get_luck() const;
+    int get_critical_probability() const;
+    int get_gold() const;
 
     void set_nickname(string nickname);
     void set_level(int level);
     void set_experience(int experience);
     void set_health(int health);
+    void set_maxHealth(int maxHealth);
     void set_strength(int strength);
     void set_dexterity(int dexterity);
     void set_intelligence(int intelligence);
@@ -37,6 +41,7 @@ private:
     int level_ = 0;
     int experience_ = 0;
     int health_ = 0;
+    int maxHealth_ = 0;
     int strength_ = 0;
     int dexterity_ = 0;
     int intelligence_ = 0;
