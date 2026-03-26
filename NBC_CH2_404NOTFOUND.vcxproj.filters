@@ -24,7 +24,7 @@
     <ClCompile Include="GameSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="logger.cpp">
+    <ClCompile Include="LoggerSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CombatManager.cpp">
@@ -59,7 +59,7 @@
     <ClInclude Include="GameSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="logger.h">
+    <ClInclude Include="LoggerSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CombatManager.h">
