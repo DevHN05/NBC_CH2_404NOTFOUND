@@ -10,6 +10,7 @@ void Potion::SetCount(int count)
 {
 	Count = count;
 }
+
 void Potion::Use(BaseCharacter& character)
 {
 	if (Count <= 0)

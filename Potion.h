@@ -25,14 +25,10 @@ public:
     
     void Use(BaseCharacter& character);
 
-    int GetCount() const
-    {
-        return Count; 
-    }
-    void SetCount(int count)
-    { 
-        Count = count; 
-    }
+    int GetCount() const;
+
+    void SetCount(int count);
+ 
     EPotionType GetPotionType() const { return PotionType; }
     void ShowInfo() const;
 };
