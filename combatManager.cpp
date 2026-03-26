@@ -1,5 +1,5 @@
 #include "CombatManager.h"
-#include "character.h"
+#include "BaseCharacter.h"
 #include "GraphicManager.h"
 #include <random>
 

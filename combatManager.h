@@ -28,3 +28,5 @@ public:
     void Reward(character& Player);
 
 };
+
+// 임시 주석, 삭제 예정

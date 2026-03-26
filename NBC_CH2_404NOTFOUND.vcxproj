@@ -123,13 +123,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="character.cpp" />
-    <ClCompile Include="combatManager.cpp" />
+    <ClCompile Include="BaseCharacter.cpp" />
+    <ClCompile Include="CombatManager.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="graphicManager.cpp" />
+    <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="bossMonster.cpp" />
-    <ClCompile Include="dice.cpp" />
+    <ClCompile Include="DiceSystem.cpp" />
     <ClCompile Include="Equipment.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="monster.cpp" />
@@ -137,13 +137,13 @@
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="character.h" />
-    <ClInclude Include="combatManager.h" />
+    <ClInclude Include="BaseCharacter.h" />
+    <ClInclude Include="CombatManager.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="graphicManager.h" />
+    <ClInclude Include="GraphicManager.h" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="bossMonster.h" />
-    <ClInclude Include="dice.h" />
+    <ClInclude Include="DiceSystem.h" />
     <ClInclude Include="Equipment.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="monster.h" />

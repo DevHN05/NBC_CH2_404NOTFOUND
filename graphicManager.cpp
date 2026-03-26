@@ -7,7 +7,7 @@ void GraphicManager::initialize_assets()
     AsciiAssets["PLAYER"] = {
     "   ____   ", // 1
     "  |    |  ", // 2
-    "  (^_^)   ", // 3 (±âÁ¸ ¾ó±¼ ¹Ý¿µ)
+    "  (^_^)   ", // 3
     "  <)  (>  ", // 4
     "  --||--  ", // 5
     "    ||    ", // 6
@@ -129,3 +129,5 @@ void GraphicManager::DrawAsciiArt(const string& name, int x, int y)
         cout << line;
     }
 }
+
+// ìž„ì‹œ ì£¼ì„, ì‚­ì œ ì˜ˆì •

@@ -38,3 +38,5 @@ public:
     void AddLog(const string& Log);
     void ClearLogs();
 };
+
+// 임시 주석, 삭제 예정
