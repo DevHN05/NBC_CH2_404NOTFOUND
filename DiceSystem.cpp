@@ -10,7 +10,7 @@ int DiceSystem::GetDiceSize()
 
 int DiceSystem::GetDiceHead()
 {
-    return head_;
+    return Head;
 }
 
 bool DiceSystem::GetResult()
