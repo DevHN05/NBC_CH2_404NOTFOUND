@@ -129,5 +129,3 @@ void GraphicManager::DrawAsciiArt(const string& name, int x, int y)
         cout << line;
     }
 }
-
-// 임시 주석, 삭제 예정

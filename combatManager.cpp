@@ -87,3 +87,5 @@ void CombatManager::Reward(character& Player)
 
     cout << "--------------------------\n";
 }
+
+// 임시 추가, 삭제 예정

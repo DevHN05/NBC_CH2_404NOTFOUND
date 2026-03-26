@@ -18,7 +18,7 @@
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="character.cpp">
+    <ClCompile Include="BaseCharacter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
@@ -27,10 +27,10 @@
     <ClCompile Include="logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="combatManager.cpp">
+    <ClCompile Include="CombatManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="graphicManager.cpp">
+    <ClCompile Include="GraphicManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bossMonster.cpp">
@@ -53,7 +53,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="character.h">
+    <ClInclude Include="BaseCharacter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
@@ -62,10 +62,10 @@
     <ClInclude Include="logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="combatManager.h">
+    <ClInclude Include="CombatManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="graphicManager.h">
+    <ClInclude Include="GraphicManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dice.h">
