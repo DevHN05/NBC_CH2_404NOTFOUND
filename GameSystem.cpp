@@ -43,7 +43,7 @@ void GameSystem::StartGame()
         Gm.DrawLayout();
 
         Gm.GoSpace(5, 2);  cout << ">> FIELD: SYSTEM CORE";
-        Gm.GoSpace(40, 8); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.get_level();
+        Gm.GoSpace(40, 8); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
         Gm.GoSpace(40, 9); cout << " HP: " << Player.GetHealth() << " / 100";
 
         Gm.GoSpace(40, 10); cout << " STATUS: [";
