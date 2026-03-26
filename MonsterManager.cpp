@@ -11,7 +11,7 @@ MonsterManager::MonsterManager(
             int           InHealthReward,
             int           InGoldReward,
             const string& InDescription)
-    : character(InName)
+    : BaseCharacter(InName)
     , HealthReward(InHealthReward)
     , GoldReward(InGoldReward)
     , Description(InDescription)
