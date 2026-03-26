@@ -1,20 +1,18 @@
 // BossMonsterManager.cpp
 
 #include "BossMonsterManager.h"
-
-
+#include "LoggerSystem.h"
 
 BossMonsterManager::BossMonsterManager(
             const string&   InName,
             int             InMaxHealth,
             int             InAttack,
-            int             InDefense,
             int             InHealthReward,
             int             InGoldReward,
             const string&   InSpecialSkillName,
             int             InSpecialSkillDamage,
             const string&   InDescription) 
-    : MonsterManager(InName, InMaxHealth, InAttack, InDefense, InHealthReward, InGoldReward, InDescription)
+    : MonsterManager(InName, InMaxHealth, InAttack, InHealthReward, InGoldReward, InDescription)
     , SpecialSkillName(InSpecialSkillName)
     , SpecialSkillDamage(InSpecialSkillDamage) 
     , Phase(1)
@@ -48,10 +46,7 @@ void BossMonsterManager::OnPhaseChange() {
     int BoostedStrength = static_cast<int>(GetStrength() * 1.5);
     SetStrength(BoostedStrength);
 
-    // 로그 담당자 봐주세요!!!!
-    // 전투 화면에 각성 메시지 출력 예시
-    //cout << "\n!!! [페이즈 2] " << GetNickname() << " 이(가) 각성했다 !!!\n";
-    //cout << "    " << GetSpecialSkillName() << " 사용 가능 / ATK " << GetStrength() << " 으로 증가!\n\n";
+    LoggerSystem::GetInstance().LogBossPhaseChange(GetNickname(), GetSpecialSkillName(), BoostedStrength);
 
 }
 
@@ -60,7 +55,6 @@ void BossMonsterManager::PrintCharacterStatus() const {
     cout << "NickName" << GetNickname() << '\n';
     cout << "Health" << GetHealth() << '\n';
     cout << "Strength" << GetStrength() << '\n';
-    cout << "Dexterity" << GetDexterity() << '\n';
     cout << "HealthReward" << GetHealthReward() << '\n';
     cout << "GoldReward" << GetGoldReward() << '\n';
     cout << "SpecialSkillName" << GetSpecialSkillName() << '\n';

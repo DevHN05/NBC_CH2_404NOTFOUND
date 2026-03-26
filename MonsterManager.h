@@ -11,7 +11,6 @@
 //    - Health             → 현재 HP
 //    - MaxHealth         → HP 상한
 //    - Strength           → 공격력
-//    - Dexterity          → 방어/회피 관련
 //    - Nickname           → 몬스터 이름
 //    - getter, setter
 //    - PrintCharacterStatus
@@ -34,7 +33,6 @@ public:
         const string& InName,
         int           InMaxHealth,
         int           InAttack,
-        int           InDefense,
         int           InHealthReward,
         int           InGoldReward,
         const string& InDescription = "");

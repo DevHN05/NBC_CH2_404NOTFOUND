@@ -32,7 +32,6 @@ public:
         const string&   InName,
         int             InMaxHealth,
         int             InAttack,
-        int             InDefense,
         int             InHealthReward,
         int             InGoldReward,
         const string&   SpecialSkillName,
