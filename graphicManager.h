@@ -16,17 +16,18 @@ public:
     GraphicManager(const GraphicManager&) = delete;
     void operator=(const GraphicManager&) = delete;
 
-    static GraphicManager& GetInstance() {
+    static GraphicManager& GetInstance() 
+    {
         static GraphicManager Instance;
         return Instance;
     }
-    void GoSpace(int X, int y);
-    void SetConsoleSize(int width, int height);
+    void GoSpace(int X, int Y);
+    void SetConsoleSize(int Width, int Height);
 
     void DrawLayout();
     string ShowTitle();
 
-    void AddLog(const string& log);
+    void AddLog(const string& Log);
 
     void ClearLogs();
 };

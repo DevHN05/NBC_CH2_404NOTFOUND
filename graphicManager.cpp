@@ -2,21 +2,24 @@
 
 using namespace std;
 
-void GraphicManager::GoSpace(int x, int y) {
+void GraphicManager::GoSpace(int X, int Y) 
+{
     HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord = { (short)x, (short)y };
+    COORD coord = { (short)X, (short)Y };
     SetConsoleCursorPosition(h_out, coord);
 }
 
-void GraphicManager::SetConsoleSize(int width, int height) {
+void GraphicManager::SetConsoleSize(int Width, int Height) 
+{
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord = { (short)width, (short)height };
+    COORD coord = { (short)Width, (short)Height };
     SetConsoleScreenBufferSize(out, coord);
-    SMALL_RECT rect = { 0, 0, (short)width - 1, (short)height - 1 };
+    SMALL_RECT rect = { 0, 0, (short)Width - 1, (short)Height - 1 };
     SetConsoleWindowInfo(out, TRUE, &rect);
 }
 
-void GraphicManager::DrawLayout() {
+void GraphicManager::DrawLayout() 
+{
     system("cls");
 
     for (int i = 0; i < 110; i++) { GoSpace(i, 0); cout << "="; GoSpace(i, 18); cout << "="; }
@@ -39,8 +42,9 @@ void GraphicManager::DrawLayout() {
     }
 }
 
-void GraphicManager::AddLog(const string& log) {
-    GameLogs.push_back(log);
+void GraphicManager::AddLog(const string& Log) 
+{
+    GameLogs.push_back(Log);
     if (GameLogs.size() > 7) GameLogs.pop_front();
 
     for (int i = 0; i < 7; i++)
@@ -70,6 +74,7 @@ void GraphicManager::ClearLogs()
 }
 
 string GraphicManager::ShowTitle() {
+
     system("cls");
     int start_x = 25, start_y = 10;
 
