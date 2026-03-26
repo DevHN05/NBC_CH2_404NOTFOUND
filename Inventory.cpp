@@ -28,3 +28,16 @@ void Inventory::UseItem(const string& itemName, BaseCharacter* character)
 
     item->Use(character);
 }
+
+
+bool Inventory::RemoveItem(const string& itemName)
+{
+    for (auto it = Items.begin(); it != Items.end(); ++it) {
+        if ((*it)->GetName() == itemName) {
+            Items.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
