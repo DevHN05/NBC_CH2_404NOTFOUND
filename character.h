@@ -8,16 +8,16 @@ class character
 public:
     character(string nickname);
 
-    string get_nickname();
-    int get_level();
-    int get_experience();
-    int get_health();
-    int get_strength();
-    int get_dexterity();
-    int get_intelligence();
-    int get_luck();
-    int get_critical_probability();
-    int get_gold();
+    string get_nickname() const;
+    int get_level() const;
+    int get_experience() const;
+    int get_health() const;
+    int get_strength() const;
+    int get_dexterity() const;
+    int get_intelligence() const;
+    int get_luck() const;
+    int get_critical_probability() const;
+    int get_gold() const;
 
     void set_nickname(string nickname);
     void set_level(int level);

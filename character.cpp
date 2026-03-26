@@ -7,52 +7,52 @@ character::character(string nickname)
     nickname_ = nickname;
 }
 
-string character::get_nickname()
+string character::get_nickname() const
 {
     return nickname_;
 };
 
-int character::get_level()
+int character::get_level() const
 {
     return level_;
 }
 
-int character::get_experience()
+int character::get_experience() const
 {
     return experience_;
 }
 
-int character::get_health()
+int character::get_health() const
 {
     return health_;
 }
 
-int character::get_strength()
+int character::get_strength() const
 {
     return strength_;
 }
 
-int character::get_dexterity()
+int character::get_dexterity() const
 {
     return dexterity_;
 }
 
-int character::get_intelligence()
+int character::get_intelligence() const
 {
     return intelligence_;
 }
 
-int character::get_luck()
+int character::get_luck() const
 {
     return luck_;
 }
 
-int character::get_critical_probability()
+int character::get_critical_probability() const
 {
     return critical_probability_;
 }
 
-int character::get_gold()
+int character::get_gold() const
 {
     return gold_;
 }
