@@ -51,8 +51,6 @@ void EventManager::TriggerNextEvent()
 void EventManager::BattleFirewall()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    int choice;
-    bool isBattle = false;
 
     // 파수꾼 메세지 출력 함수란
 
@@ -67,12 +65,12 @@ void EventManager::BattleFirewall()
 
         if (choice == 1)
         {
-            Dice.RollDice(20, 13, DexBonus);
+            Dice.RollDice(20, 13, DexBonus());
             if (!Dice.GetResult()) isBattle = true;
         }
         else if (choice == 2)
         {
-            Dice.RollDice(20, 13, IntBonus);
+            Dice.RollDice(20, 13, IntBonus());
             if (!Dice.GetResult()) isBattle = true;
         }
         else if (choice == 3)
@@ -107,8 +105,6 @@ void EventManager::BattleFirewall()
 void EventManager::BattleMemoryLeak()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    int choice;
-    bool isBattle = false;
 
     // 메모리 누수 메세지 출력 함수란
 
@@ -153,7 +149,7 @@ void EventManager::BattleMemoryLeak()
     }
     else {
         // 실패 메세지
-        // 아마도 이 함수로 방랑자 :: delete ptr과 전투?
+        // 아마도 이곳에서 함수로 방랑자 :: delete ptr과 전투
     }
 }
 
@@ -165,8 +161,6 @@ void EventManager::BattleMemoryLeak()
 void EventManager::ChoiceGarbageCollection()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    int choice;
-    bool isBattle = false;
 
     // 가비지 컬렉션 메세지 출력 함수란
 
@@ -225,8 +219,6 @@ void EventManager::ChoiceGarbageCollection()
 void EventManager::ChestNormal()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    int choice;
-    bool isBattle = false;
 
     // 평범한 보물상자 이벤트 출력 함수란
 
@@ -270,7 +262,6 @@ void EventManager::ChestNormal()
     {
         // 판정 실패 메세지
         // 보상 이벤트는 실패 패널티는 없음
-		CombatManager::GetInstance().StartBattle(Player, SecurityBot);
     }
 }
 
@@ -283,6 +274,5 @@ void EventManager::ChestNormal()
 void EventManager::ShopChoiceEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    int choice;
-    bool isBattle = false;
+
 }
