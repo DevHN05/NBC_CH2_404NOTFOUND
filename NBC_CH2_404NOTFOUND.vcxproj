@@ -155,6 +155,7 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="BaseMonster.h" />
     <ClInclude Include="BaseBossMonster.h" />
+    <ClInclude Include="MonsterData.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="Potion.h" />
     <ClInclude Include="ShopManager.h" />
