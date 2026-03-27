@@ -75,7 +75,7 @@ void GameSystem::StartGame()
             continue;
         }
 
-        if (choice == 0)
+        if (choice == 1)
         {
             int randomEvent = 0;//rand() % 3;
 
