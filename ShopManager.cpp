@@ -1,11 +1,11 @@
-//ShopManager.cpp
+﻿//ShopManager.cpp
 
 #include "ShopManager.h"
 //#include "HealthPotion.h" //아이템매니저 파생 클래스 필요합니당
 //#include "StrengthPotion.h"
 
 
-
+//테스트
 
 ShopManager::ShopManager() //포션 4개로 고정이라, 하드 코딩할게요
 {
