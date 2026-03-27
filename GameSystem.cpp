@@ -32,7 +32,7 @@ void GameSystem::StartGame()
     GraphicManager& Gm = GraphicManager::GetInstance();
     CombatManager& Cm = CombatManager::GetInstance();
 
-    Gm.SetConsoleSize(110, 32);
+    Gm.SetConsoleSize(160, 90);
 
     string Name = Gm.ShowTitle();
 
@@ -49,20 +49,18 @@ void GameSystem::StartGame()
         Gm.GoSpace(40, 9); cout << " HP: " << Player.GetHealth() << " / 100";
 
         Gm.GoSpace(40, 10); cout << " STATUS: [";
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++)
+        {
             if (i < Player.GetHealth() / 5) cout << "■";
             else cout << " ";
         }
         cout << "]";
 
-        Gm.GoSpace(72, 21); cout << "- GOLD: " << Player.GetGold() << "G";
-        Gm.GoSpace(72, 22); cout << "- ATK: " << Player.GetStrength();
-        Gm.GoSpace(72, 24); cout << "[ Inventory ]";
-        Gm.GoSpace(72, 25); cout << " 1. Recovery (HP)";
+        Gm.DrawInventoryData(Player);
 
         //Gm.GoSpace(0, 30);
         Gm.GoSpace(3, 20);
-        cout << " Command(1.Seareach 2.Recovery 3.Quit): ";
+        cout << " Command(1.Search 2.Recovery 3.Quit): ";
 
         int choice;
         if (!(cin >> choice))
@@ -74,7 +72,7 @@ void GameSystem::StartGame()
 
         if (choice == 1)
         {
-            int randomEvent = rand() % 3;
+            int randomEvent = 2;//rand() % 3;
 
             switch (randomEvent)
             {

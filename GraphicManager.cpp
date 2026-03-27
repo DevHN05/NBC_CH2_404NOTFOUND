@@ -1,5 +1,7 @@
 #include "GraphicManager.h"
 
+#include "PlayerManager.h"
+
 using namespace std;
 
 void GraphicManager::initialize_assets()
@@ -31,35 +33,51 @@ void GraphicManager::GoSpace(int X, int Y)
 
 void GraphicManager::SetConsoleSize(int Width, int Height)
 {
-    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord = { (short)Width, (short)Height };
-    SetConsoleScreenBufferSize(out, coord);
-    SMALL_RECT rect = { 0, 0, (short)(Width - 1), (short)(Height - 1) };
-    SetConsoleWindowInfo(out, TRUE, &rect);
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD bufferSize = { (short)Width, (short)Height };
+    SMALL_RECT windowSize = { 0, 0, (short)(Width - 1), (short)(Height - 1) };
 }
 
 void GraphicManager::DrawLayout()
 {
     system("cls");
 
-    for (int i = 0; i < 110; i++) { GoSpace(i, 0); cout << "="; GoSpace(i, 18); cout << "="; }
-    for (int i = 0; i <= 18; i++) { GoSpace(0, i); cout << "|"; GoSpace(109, i); cout << "|"; }
+    for (int i = 0; i < 120; i++)
+    {
+        GoSpace(i, 0); cout << "="; GoSpace(i, 18); cout << "=";
+    }
+    for (int i = 0; i <= 18; i++)
+    {
+        GoSpace(0, i); cout << "|"; GoSpace(119, i); cout << "|";
+    }
 
     for (int i = 19; i < 28; i++) {
         GoSpace(0, i); cout << "|";
-        GoSpace(70, i); cout << "|";
-        GoSpace(109, i); cout << "|";
+        GoSpace(76, i); cout << "|";
+        GoSpace(119, i); cout << "|";
     }
-    for (int i = 0; i < 110; i++) { GoSpace(i, 28); cout << "="; }
+    for (int i = 0; i < 120; i++)
+    {
+        GoSpace(i, 28); cout << "=";
+    }
 
     GoSpace(2, 19); cout << "[ SYSTEM LOG ]";
-    GoSpace(72, 19); cout << "[ STATUS & INVENTORY ]";
+    GoSpace(78, 19); cout << "[ STATUS & INVENTORY ]";
 
     int line = 0;
-    for (const string& log : GameLogs) {
+    for (const string& log : GameLogs)
+    {
         GoSpace(2, 21 + line++);
         cout << "> " << log;
     }
+}
+
+void GraphicManager::DrawInventoryData(PlayerManager& Player)
+{
+    GoSpace(78, 21); cout << "- GOLD: " << Player.GetGold() << "G";
+    GoSpace(78, 22); cout << "- ATK: " << Player.GetStrength();
+    GoSpace(78, 24); cout << "[ Inventory ]";
+    GoSpace(78, 25); cout << " 1. Recovery (HP)";
 }
 
 void GraphicManager::AddLog(const string& Log)
