@@ -38,12 +38,17 @@ void LoggerSystem::LogMonsterKill(const string& MonsterName)
 void LoggerSystem::LogBossPhaseChange(const string& Nickname, const string& SpecialSkillName, int BoostedStrength)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-	string Log = "[ CRITICAL WARNING ] 버그 개체 [ " + Nickname + " ] 자가 코드 재작성 감지\n"
-		+ "  >> 권한 레벨 상승 / " + SpecialSkillName + " 활성화\n"
-		+ "  >> ATK → " + to_string(BoostedStrength) + "  |  디버깅 난이도 상승";
+    string Log1 = "[ CRITICAL WARNING ] 버그 개체 [ " + Nickname + " ] 자가 코드 재작성 감지";
+    string Log2 = "  >> 권한 레벨 상승 / " + SpecialSkillName + " 활성화";
+    string Log3 = "  >> ATK → " + to_string(BoostedStrength) + "  |  디버깅 난이도 상승";
 
-    Gm.AddLog(Log);
-	EventLogs.push_back(Log);
+    Gm.AddLog(Log1);
+    Gm.AddLog(Log2);
+    Gm.AddLog(Log3);
+
+    EventLogs.push_back(Log1);
+    EventLogs.push_back(Log2);
+    EventLogs.push_back(Log3);
 };
 
 //주사위 로그 출력 함수
