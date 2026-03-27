@@ -102,15 +102,72 @@ void LoggerSystem::LogExpGain(int Amount, int MyExp, int MaxExp)
 };
 
 //골드 획득시 로그 출력하는 함수(얻은량, 현재 골드량)
-void LoggerSystem::LogGoldGain(int Amount)
+void LoggerSystem::LogGoldGain(int Amount, int MyGold)
 {
 	TotalGold += Amount;
     GraphicManager& Gm = GraphicManager::GetInstance();
-	string Log = "[ RESOURCE ] " + to_string(Amount) + " 골드 확보 / 누적 골드: " + to_string(TotalGold);
+	string Log = "[ RESOURCE ] " + to_string(Amount) + " 골드 확보 / 누적 골드: " + to_string(MyGold);
 
     Gm.AddLog(Log);
     EventLogs.push_back(Log);
 };
+
+//----------------------------------------상점 관련----------------------------------------
+void LoggerSystem::LogShopPrompt()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    string Log = "수상한 상인이 접근한다. 거래하시겠습니까? (1: 수락 / 0: 거절)";
+
+    Gm.AddLog(Log);
+}
+
+void LoggerSystem::LogShopEnter()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    string Log = "[ SHOP ] 상인을 발견했다. 거래를 시작합니다.";
+    Gm.AddLog(Log);
+    EventLogs.push_back(Log);
+}
+
+void LoggerSystem::LogShopDecline()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    string Log = "[ SHOP ] 거래를 거절했다. 상인이 자리를 떠난다.";
+    Gm.AddLog(Log);
+    EventLogs.push_back(Log);
+}
+
+void LoggerSystem::LogBuyItem(const string& ItemName, int Price)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    string Log = "[ PURCHASE ] " + ItemName + " 획득 / " + to_string(Price) + "골드 소모";
+    Gm.AddLog(Log);
+    EventLogs.push_back(Log);
+}
+
+void LoggerSystem::LogInsufficientGold(int MyGold, int RequiredGold)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    string Log = "[ ERROR ] 골드 부족 — 보유: " + to_string(MyGold) + "골드 / 필요: " + to_string(RequiredGold) + "골드";
+    Gm.AddLog(Log);
+    EventLogs.push_back(Log);
+}
+
+void LoggerSystem::LogSellItem(const string& ItemName, int SellPrice)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    string Log = "[ SELL ] " + ItemName + " 판매 완료 / +" + to_string(SellPrice) + "골드";
+    Gm.AddLog(Log);
+    EventLogs.push_back(Log);
+}
+
+void LoggerSystem::LogItemNotFound(const string& ItemName)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    string Log = "[ ERROR ] " + ItemName + " — 인벤토리에서 찾을 수 없음";
+    Gm.AddLog(Log);
+    EventLogs.push_back(Log);
+}
 
 
 //-----------------------------요약----------------------------------

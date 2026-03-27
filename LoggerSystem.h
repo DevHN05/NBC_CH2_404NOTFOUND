@@ -32,7 +32,16 @@ public:
 
     //보상 관련
     void LogExpGain(int Amount, int MyExp, int MaxExp);
-    void LogGoldGain(int Amount);
+    void LogGoldGain(int Amount, int MyGold);
+
+    //상점 관련
+    void LogShopPrompt();
+    void LogShopEnter();
+    void LogShopDecline();
+    void LogBuyItem(const string& ItemName, int Price);
+    void LogInsufficientGold(int MyGold, int RequiredGold);
+    void LogSellItem(const string& ItemName, int SellPrice);
+    void LogItemNotFound(const string& ItemName);
 
     //요약
     void PrintSummary();
