@@ -1,5 +1,10 @@
 ﻿#include "PlayerManager.h"
 
+PlayerManager::PlayerManager(string Nickname) : BaseCharacter(Nickname)
+{
+    SetNickname(Nickname);
+}
+
 int PlayerManager::GetLevel()
 {
     return Level;
@@ -90,19 +95,14 @@ void PlayerManager::UseItem(const string& ItemName, PlayerManager* Player)
     PlayerInventory.UseItem(ItemName, Player);
 }
 
-bool PlayerManager::RemoveItem(const string& ItemName)
+void PlayerManager::RemoveItem(const string& ItemName)
 {
     PlayerInventory.RemoveItem(ItemName);
 }
 
-void PlayerManager::ShowItems()
-{
-    PlayerInventory.ShowItems();
-}
-
 shared_ptr<ItemManager> PlayerManager::FindItem(const string& ItemName)
 {
-    PlayerInventory.FindItem(ItemName);
+    return PlayerInventory.FindItem(ItemName);
 }
 
 void PlayerManager::PrintPlayerStatus()

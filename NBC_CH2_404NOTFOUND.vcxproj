@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-16 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,8 +133,8 @@
     <ClCompile Include="Equipment.cpp" />
     <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="Inventory.cpp" />
-    <ClCompile Include="MonsterManager.cpp" />
-    <ClCompile Include="BossMonsterManager.cpp" />
+    <ClCompile Include="BaseMonster.cpp" />
+    <ClCompile Include="BaseBossMonster.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Potion.cpp" />
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp" />
@@ -149,8 +150,8 @@
     <ClInclude Include="Equipment.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Inventory.h" />
-    <ClInclude Include="MonsterManager.h" />
-    <ClInclude Include="BossMonsterManager.h" />
+    <ClInclude Include="BaseMonster.h" />
+    <ClInclude Include="BaseBossMonster.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="Potion.h" />
     <ClInclude Include="ShopManager.h" />

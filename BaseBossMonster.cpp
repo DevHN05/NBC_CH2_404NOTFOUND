@@ -1,9 +1,9 @@
 // BossMonsterManager.cpp
 
-#include "BossMonsterManager.h"
+#include "BaseBossMonster.h"
 #include "LoggerSystem.h"
 
-BossMonsterManager::BossMonsterManager(
+BaseBossMonster::BaseBossMonster(
             const string&   InName,
             int             InMaxHealth,
             int             InAttack,
@@ -12,7 +12,7 @@ BossMonsterManager::BossMonsterManager(
             const string&   InSpecialSkillName,
             int             InSpecialSkillDamage,
             const string&   InDescription)
-    : MonsterManager(InName, InMaxHealth, InAttack, InExperienceReward, InGoldReward, InDescription)
+    : BaseMonster(InName, InMaxHealth, InAttack, InExperienceReward, InGoldReward, InDescription)
     , SpecialSkillName(InSpecialSkillName)
     , SpecialSkillDamage(InSpecialSkillDamage)
     , Phase(1)
@@ -24,18 +24,18 @@ BossMonsterManager::BossMonsterManager(
 // BossMonsterManager 전용 getter
 // =====================================================
 
-int BossMonsterManager::GetPhase() const { return Phase; }
+int BaseBossMonster::GetPhase() const { return Phase; }
 
-string BossMonsterManager::GetSpecialSkillName() const { return SpecialSkillName; }
+string BaseBossMonster::GetSpecialSkillName() const { return SpecialSkillName; }
 
-int BossMonsterManager::GetSpecialSkillDamage() const { return SpecialSkillDamage; }
+int BaseBossMonster::GetSpecialSkillDamage() const { return SpecialSkillDamage; }
 
 
 // =====================================================
 // OnPhaseChange
 // =====================================================
 
-void BossMonsterManager::OnPhaseChange() {
+void BaseBossMonster::OnPhaseChange() {
 
     //조건 미충족 시 아무것도 안 함
     if (PhaseTriggered || GetHealth() > GetMaxHealth() / 2)
@@ -51,7 +51,7 @@ void BossMonsterManager::OnPhaseChange() {
 }
 
 
-void BossMonsterManager::PrintCharacterStatus() const {
+void BaseBossMonster::PrintCharacterStatus() const {
     cout << "NickName" << GetNickname() << '\n';
     cout << "Health" << GetHealth() << '\n';
     cout << "Strength" << GetStrength() << '\n';

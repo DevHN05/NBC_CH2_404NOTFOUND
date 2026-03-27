@@ -39,8 +39,11 @@ void LoggerSystem::LogBossPhaseChange(const string& Nickname, const string& Spec
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     string Log1 = "[ CRITICAL WARNING ] 버그 개체 [ " + Nickname + " ] 자가 코드 재작성 감지";
-    string Log2 = "  >> 권한 레벨 상승 / " + SpecialSkillName + " 활성화";
-    string Log3 = "  >> ATK → " + to_string(BoostedStrength) + "  |  디버깅 난이도 상승";
+
+    //이놈이 문제[
+    string Log2 = "  >> 권한 레벨 상승 / " + SpecialSkillName + "활성";
+
+    string Log3 = "  >> ATK -> " + to_string(BoostedStrength) + "  |  디버깅 난이도 상승";
 
     Gm.AddLog(Log1);
     Gm.AddLog(Log2);

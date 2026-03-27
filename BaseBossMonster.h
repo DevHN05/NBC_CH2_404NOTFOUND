@@ -1,7 +1,7 @@
 // BossMonsterManager.h
 
 #pragma once
-#include "MonsterManager.h"
+#include "BaseMonster.h"
 
 // =====================================================
 //  상속 관계 : BaseCharacter → MonsterManager → BossMonsterManager
@@ -25,10 +25,10 @@
 
 
 
-class BossMonsterManager : public MonsterManager
+class BaseBossMonster : public BaseMonster
 {
 public:
-    BossMonsterManager(
+    BaseBossMonster(
         const string&   InName,
         int             InMaxHealth,
         int             InAttack,
@@ -38,7 +38,7 @@ public:
         int             SpecialSkillDamage,
         const string&   InDescription = "");
 
-    ~BossMonsterManager() override = default;
+    ~BaseBossMonster() override = default;
 
 
     // =====================================================
