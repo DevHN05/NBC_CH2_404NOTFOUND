@@ -1,5 +1,10 @@
 ﻿#include "PlayerManager.h"
 
+PlayerManager::PlayerManager(string Nickname) : BaseCharacter(Nickname)
+{
+    SetNickname(Nickname);
+}
+
 int PlayerManager::GetLevel()
 {
     return Level;

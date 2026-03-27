@@ -6,6 +6,8 @@
 class PlayerManager : public BaseCharacter
 {
 public:
+    PlayerManager(string Nickname);
+
     int GetLevel();
     int GetExperience();
     int GetMaxExperience();
