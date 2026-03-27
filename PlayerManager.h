@@ -2,7 +2,7 @@
 
 #include "BaseCharacter.h"
 #include "Inventory.h"
-class Inventory;
+
 class PlayerManager : public BaseCharacter
 {
 public:
@@ -27,7 +27,7 @@ public:
     void SetGold(int Gold);
 
     void CollectItem(std::shared_ptr<ItemManager> Item);
-    void UseItem(const string& ItemName, PlayerManager& Player);
+    void UseItem(const string& ItemName);
     void RemoveItem(const string& ItemName);
     void ShowItems();
 
