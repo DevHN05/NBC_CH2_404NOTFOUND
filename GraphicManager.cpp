@@ -29,16 +29,16 @@ void GraphicManager::GoSpace(int X, int Y)
     SetConsoleCursorPosition(h_out, coord);
 }
 
-void GraphicManager::SetConsoleSize(int Width, int Height) 
+void GraphicManager::SetConsoleSize(int Width, int Height)
 {
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD coord = { (short)Width, (short)Height };
     SetConsoleScreenBufferSize(out, coord);
-    SMALL_RECT rect = { 0, 0, (short)Width - 1, (short)Height - 1 };
+    SMALL_RECT rect = { 0, 0, (short)(Width - 1), (short)(Height - 1) };
     SetConsoleWindowInfo(out, TRUE, &rect);
 }
 
-void GraphicManager::DrawLayout() 
+void GraphicManager::DrawLayout()
 {
     system("cls");
 
@@ -62,7 +62,7 @@ void GraphicManager::DrawLayout()
     }
 }
 
-void GraphicManager::AddLog(const string& Log) 
+void GraphicManager::AddLog(const string& Log)
 {
     GameLogs.push_back(Log);
     if (GameLogs.size() > 7) GameLogs.pop_front();
@@ -96,27 +96,27 @@ void GraphicManager::ClearLogs()
 string GraphicManager::ShowTitle() {
 
     system("cls");
-    int start_x = 25, start_y = 10;
+    int StartX = 25, StartY = 10;
 
-    GoSpace(start_x, start_y);     cout << "o  o  o-o  o  o o   o      o  o--o                  o  ";
-    GoSpace(start_x, start_y + 1); cout << "|  | o  /o |  | |\\  |      |  |                     |  ";
-    GoSpace(start_x, start_y + 2); cout << "o--O | / | o--O | \\ | o-o -o- O-o  o-o o  o o-o   o-O  ";
-    GoSpace(start_x, start_y + 3); cout << "   | o/  o    | |  \\| | |  |  |    | | |  | |  | |  |  ";
-    GoSpace(start_x, start_y + 4); cout << "   o  o-o     o o   o o-o  o  o    o-o o--o o  o  o-o  ";
+    GoSpace(StartX, StartY);     cout << "o  o  o-o  o  o   o   o      o    o--o                  o  ";
+    GoSpace(StartX, StartY + 1); cout << "|  | o  /o |  |   |\\  |      |    |                     |  ";
+    GoSpace(StartX, StartY + 2); cout << "o--O | / | o--O   | \\ | o-o -o-   O-o  o-o o  o o-o   o-O  ";
+    GoSpace(StartX, StartY + 3); cout << "   | o/  o    |   |  \\| | |  |    |    | | |  | |  | |  |  ";
+    GoSpace(StartX, StartY + 4); cout << "   o  o-o     o   o   o o-o  o    o    o-o o--o o  o  o-o  ";
 
-    GoSpace(41, start_y + 7); cout << "[ PROJECT : 404 NOT FOUND ]";
+    GoSpace(41, StartY + 7); cout << "[ PROJECT : 404 NOT FOUND ]";
 
-    GoSpace(38, start_y + 9); cout << "ENTER YOUR NICKNAME: ";
-    string input_name;
-    cin >> input_name;
+    GoSpace(38, StartY + 9); cout << "ENTER YOUR NICKNAME: ";
+    string InputName;
+    cin >> InputName;
 
     //Gotoxy(35, start_y + 11); cout << ">> CONNECTION ESTABLISHED: " << input_name;
-    GoSpace(42, start_y + 13); cout << "[Press Enter to Start]";
+    GoSpace(42, StartY + 13); cout << "[Press Enter to Start]";
 
-    cin.ignore(100, '\n'); 
-    cin.get(); 
+    cin.ignore(100, '\n');
+    cin.get();
 
-    return input_name;
+    return InputName;
 }
 
 void GraphicManager::DrawAsciiArt(const string& name, int x, int y)
