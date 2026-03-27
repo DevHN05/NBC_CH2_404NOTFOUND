@@ -1,4 +1,4 @@
-#include "CombatManager.h"
+ï»¿#include "CombatManager.h"
 #include "BaseCharacter.h"
 #include "GraphicManager.h"
 #include "DiceSystem.h"
@@ -94,7 +94,7 @@ void CombatManager::UpdateStoreUI(BaseCharacter& Player)
     while (choice != 0)
     {
         Gm.DrawLayout();
-        Gm.GoSpace(35, 2); cout << "¢Â [ SYSTEM MERCHANT ] ¢Â";
+        Gm.GoSpace(35, 2); cout << " [ SYSTEM MERCHANT ] ";
 
         Gm.GoSpace(40, 7);  cout << "1. STANDARD ANTIVIRUS (HP +50) : 100 G";
         Gm.GoSpace(40, 9);  cout << "2. ATK ENHANCEMENT PATCH (ATK+5): 250 G";
