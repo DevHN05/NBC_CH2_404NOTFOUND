@@ -4,7 +4,7 @@
 404 NOT FOUND (4조)
 ### 팀원
 - **한승재** (Game System, Character System, Dice System 구현)
-- 김시리 (Monster, Boss Monster 구현)
+- 김시리 (Monster, Boss Monster, Shop System 구현)
 - 김유민 (Logger System 구현)
 - 오성현 (Item System 구현)
 - 장진희 (Game System, Graphic System, Combat System 구현)
