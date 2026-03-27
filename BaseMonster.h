@@ -27,9 +27,9 @@
 // =====================================================
 
 
-class MonsterManager : public BaseCharacter {
+class BaseMonster : public BaseCharacter {
 public:
-    MonsterManager(
+    BaseMonster(
         const string& InName,
         int           InMaxHealth,
         int           InAttack,
@@ -37,7 +37,7 @@ public:
         int           InGoldReward,
         const string& InDescription = "");
 
-    virtual ~MonsterManager() = default;
+    virtual ~BaseMonster() = default;
 
 
     // =====================================================

@@ -1,9 +1,9 @@
 // MonsterManager.cpp
 
-#include "MonsterManager.h"
+#include "BaseMonster.h"
 
 
-MonsterManager::MonsterManager(
+BaseMonster::BaseMonster(
             const string& InName,
             int           InMaxHealth,
             int           InAttack,
@@ -24,31 +24,31 @@ MonsterManager::MonsterManager(
 // MonsterManager 전용 getter
 // =====================================================
 
-int MonsterManager::GetExperienceReward() const { return ExperienceReward; }
+int BaseMonster::GetExperienceReward() const { return ExperienceReward; }
 
-int MonsterManager::GetGoldReward() const  { return GoldReward; }
+int BaseMonster::GetGoldReward() const  { return GoldReward; }
 
-string MonsterManager::GetDescription() const { return Description; }
+string BaseMonster::GetDescription() const { return Description; }
 
-bool MonsterManager::IsAlive() const { return GetHealth() > 0; }
+bool BaseMonster::IsAlive() const { return GetHealth() > 0; }
 
 
 // =====================================================
 // 전투 메서드
 // =====================================================
-void MonsterManager::TakeDamage(int InDamage) {
+void BaseMonster::TakeDamage(int InDamage) {
 
     int NewHealth = max(0, GetHealth() - InDamage);
     SetHealth(NewHealth);
 }
 
-void MonsterManager::ResetHealth() {
+void BaseMonster::ResetHealth() {
     SetHealth(GetMaxHealth());
 }
 
 
 
-void MonsterManager::PrintCharacterStatus() const {
+void BaseMonster::PrintCharacterStatus() const {
     cout << "NickName" << GetNickname() << '\n';
     cout << "Health" << GetHealth() << '\n';
     cout << "Strength" << GetStrength() << '\n';

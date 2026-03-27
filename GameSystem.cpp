@@ -1,7 +1,7 @@
 ﻿#include "GameSystem.h"
 #include "BaseCharacter.h"
 #include "PlayerManager.h"
-#include "MonsterManager.h"
+#include "BaseMonster.h"
 #include "GraphicManager.h"
 #include "CombatManager.h"
 
@@ -81,7 +81,7 @@ void GameSystem::StartGame()
             case 0:
                 Gm.AddLog(" [!] Monster Detected! Battle Progress ...");
                 {
-                    MonsterManager Bug("Fatal Error Bug",50,5,5,5);
+                    BaseMonster Bug("Fatal Error Bug",50,5,5,5);
                     Bug.SetHealth(50);
                     Bug.SetStrength(7);
                     Cm.StartBattle(Player, Bug);
