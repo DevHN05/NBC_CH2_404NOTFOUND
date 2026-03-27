@@ -1,11 +1,9 @@
 #pragma once
 #include <string>
-#include "PlayerManager.h"
-
-using namespace std;
-
+#include <iostream>
 class PlayerManager;
 
+using namespace std;
 class ItemManager
 {
 protected:

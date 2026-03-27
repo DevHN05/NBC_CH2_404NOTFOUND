@@ -85,7 +85,7 @@ void PlayerManager::SetGold(int Gold)
     this->Gold = Gold;
 }
 
-void PlayerManager::CollectItem(shared_ptr<ItemManager> Item)
+void PlayerManager::CollectItem(std::shared_ptr<ItemManager> Item)
 {
     PlayerInventory.AddItem(Item);
 }
@@ -100,7 +100,7 @@ void PlayerManager::RemoveItem(const string& ItemName)
     PlayerInventory.RemoveItem(ItemName);
 }
 
-shared_ptr<ItemManager> PlayerManager::FindItem(const string& ItemName)
+std::shared_ptr<ItemManager> PlayerManager::FindItem(const string& ItemName)
 {
     return PlayerInventory.FindItem(ItemName);
 }
