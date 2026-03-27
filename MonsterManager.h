@@ -52,7 +52,7 @@ public:
     // =====================================================
     // 전투 메서드
     // =====================================================
-    virtual int TakeDamage(int InDamage);    // 방어력(dexterity_) 차감 후, 실제로 깎인 HP 반환
+    virtual void TakeDamage(int InDamage);
     void ResetHealth();
 
 

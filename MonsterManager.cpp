@@ -36,12 +36,10 @@ bool MonsterManager::IsAlive() const { return GetHealth() > 0; }
 // =====================================================
 // 전투 메서드
 // =====================================================
-int MonsterManager::TakeDamage(int InDamage) {     // 방어력 차감 후, 실제로 깎인 HP 반환
+void MonsterManager::TakeDamage(int InDamage) {
 
-    int ActualDamage = max(1, InDamage - GetDexterity()); //최소 1
-    int NewHealth = max(0, GetHealth() - ActualDamage);
+    int NewHealth = max(0, GetHealth() - InDamage);
     SetHealth(NewHealth);
-    return ActualDamage;
 }
 
 void MonsterManager::ResetHealth() {
