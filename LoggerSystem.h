@@ -43,6 +43,32 @@ public:
     void LogSellItem(const string& ItemName, int SellPrice);
     void LogItemNotFound(const string& ItemName);
 
+    //전투 이벤트 내러티브
+    void LogEventWanderer(); //방랑자
+    void LogEventGuardian(); //파수꾼
+    void LogEventBreaker(); //분쇄자
+    void LogEventInvader(); //침략자
+    void LogEventAssassin(); //암살자
+    void LogEventBridge(); //아래로 쭉 재활용 몬스터
+    void LogEventForest();
+    void LogEventDataNoise();
+    void LogEventGravity();
+    void LogEventCliff();
+
+    //전투 이벤트 실패 메시지
+    void LogEventFailWanderer();
+    void LogEventFailGuardian();
+    void LogEventFailBreaker();
+    void LogEventFailInvader();
+    void LogEventFailAssassin();
+    void LogEventFailBridge();
+    void LogEventFailForest();
+    void LogEventFailDataNoise();
+    void LogEventFailGravity();
+    void LogEventFailCliff();
+
+
+
     //요약
     void PrintSummary();
     void PrintEventLog();
