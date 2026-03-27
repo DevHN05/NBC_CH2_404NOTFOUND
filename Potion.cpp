@@ -2,11 +2,11 @@
 
 void Potion::Use(PlayerManager& user)
 {
-    if (Count <= 0)
+    /*if (Count <= 0)
     {
         cout << "You have no more " << GetName() << " left!" << '\n';
         return;
-    }
+    }*/
 
     switch (PotionType)
     {
@@ -34,8 +34,8 @@ void Potion::Use(PlayerManager& user)
         }
     }
 
-    Count--;
-    cout << "Remaining count of " << GetName() << ": " << Count << '\n';
+    //Count--;
+    //cout << "Remaining count of " << GetName() << ": " << Count << '\n';
 }
 
 void Potion::ShowInfo() const
@@ -43,5 +43,10 @@ void Potion::ShowInfo() const
     cout << "Potion: " << GetName() << '\n';
     cout << "Price: " << GetPrice() << " gold" << '\n';
     cout << "Recovery: " << Recovery << '\n';
-    cout << "Count: " << Count << '\n';
+    //cout << "Count: " << Count << '\n';
+}
+
+
+shared_ptr<ItemManager> Potion::Clone() const  {
+    return make_shared<Potion>(*this);  // 복사 생성
 }
