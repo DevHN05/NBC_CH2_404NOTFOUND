@@ -28,7 +28,7 @@ public:
 
     void CollectItem(shared_ptr<ItemManager> Item);
     void UseItem(const string& ItemName, PlayerManager* Player);
-    bool RemoveItem(const string& ItemName);
+    void RemoveItem(const string& ItemName);
     void ShowItems();
 
     shared_ptr<ItemManager> FindItem(const string& ItemName);
