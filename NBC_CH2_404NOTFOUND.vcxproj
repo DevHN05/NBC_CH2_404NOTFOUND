@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="CombatManager.cpp" />
+    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
     <ClCompile Include="LoggerSystem.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="CombatManager.h" />
+    <ClInclude Include="EventManager.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GraphicManager.h" />
     <ClInclude Include="LoggerSystem.h" />
