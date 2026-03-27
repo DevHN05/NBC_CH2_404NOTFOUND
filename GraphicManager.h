@@ -8,7 +8,9 @@
 
 using namespace std;
 
-class GraphicManager 
+class PlayerManager;
+
+class GraphicManager
 {
 private:
     GraphicManager() { initialize_assets(); }
@@ -23,7 +25,7 @@ public:
     GraphicManager(const GraphicManager&) = delete;
     void operator=(const GraphicManager&) = delete;
 
-    static GraphicManager& GetInstance() 
+    static GraphicManager& GetInstance()
     {
         static GraphicManager Instance;
         return Instance;
@@ -32,6 +34,7 @@ public:
     void SetConsoleSize(int Width, int Height);
 
     void DrawLayout();
+    void DrawInventoryData(PlayerManager& Player);
     string ShowTitle();
     void DrawAsciiArt(const string& name, int x, int y);
 
