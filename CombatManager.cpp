@@ -2,6 +2,7 @@
 #include "BaseCharacter.h"
 #include "PlayerManager.h"
 #include "BaseMonster.h"
+#include "BaseBossMonster.h"
 #include "GraphicManager.h"
 #include "LoggerSystem.h"
 #include "DiceSystem.h"
@@ -14,12 +15,12 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
     Gm.ClearLogs();
     Ls.LogMonsterAppear(Monster.GetNickname());
 
+    UpdateBattleUI(Player, Monster);
+
     cin.ignore(100, '\n');
 
     while (Player.GetHealth() > 0 && Monster.GetHealth() > 0)
     {
-        UpdateBattleUI(Player, Monster);
-
         Gm.GoSpace(3, 20);
         cout << "[ Enter: Player Turn ]";
         cin.get();
@@ -28,23 +29,26 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
         Dice.RollDice(24, 10, 2);
         bool IsSuccess = Dice.GetResult();
         int DiceValue = Dice.GetDiceHead();
-
+        bool Critical = false;
         int Damage = IsSuccess ? Player.GetStrength() : Player.GetStrength() / 2;
 
         Ls.LogDiceRoll(DiceValue, IsSuccess);
+        if (rand()%100 < Player.GetCriticalProbability())
+        {
+            Critical = true;
+            Gm.AddLog("Critical!");
+        }
+        Damage = (Critical? Damage * 2 : Damage);
         Monster.SetHealth(Monster.GetHealth() - Damage);
         Ls.LogAttack(Player.GetNickname(),Monster.GetNickname(),Damage);
-        //Gm.AddLog(Player.GetNickname() + " Attack ! -" + to_string(Damage));
 
+        UpdateBattleUI(Player, Monster);
 
         Gm.GoSpace(3, 20);
         cout << "[ Enter: Monster Turn ]";
-        //cin.ignore(100, '\n');
         cin.get();
 
         if (Monster.GetHealth() <= 0) break;
-
-        UpdateBattleUI(Player, Monster);
 
         // --- Monster Turn ---
         Dice.RollDice(24, 10, 2);
@@ -56,18 +60,115 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
         Ls.LogDiceRoll(DiceValue, IsSuccess);
         Player.SetHealth(Player.GetHealth() - Damage);
         Ls.LogAttack(Monster.GetNickname(), Player.GetNickname(), Damage);
+
+        UpdateBattleUI(Player, Monster);
     }
 
     UpdateBattleUI(Player, Monster);
 
     if (Player.GetHealth() > 0)
     {
-        Gm.AddLog("Victory");
-        Gm.AddLog("Reward");
-        //player.set_gold() += 78;
+        Ls.LogMonsterKill(Monster.GetNickname());
+        Reward(Player, Monster);
     }
-    else {
-        Gm.AddLog("Fail");
+    else
+    {
+        Ls.LogPlayerDeath();
+    }
+}
+
+void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
+    Gm.ClearLogs();
+    Ls.LogMonsterAppear(Boss.GetNickname());
+
+    bool Rage = false;
+
+    UpdateBattleUI(Player, Boss);
+
+    cin.ignore(100, '\n');
+
+    while (Player.GetHealth() > 0 && Boss.GetHealth() > 0)
+    {
+        Gm.GoSpace(3, 20);
+        cout << "[ Enter: Player Turn ]";
+        cin.get();
+
+        // --- Player Turn ---
+        Dice.RollDice(24, 10, 2);
+        bool IsSuccess = Dice.GetResult();
+        int DiceValue = Dice.GetDiceHead();
+        bool Critical = false;
+        int Damage = IsSuccess ? Player.GetStrength() : Player.GetStrength() / 2;
+
+        Ls.LogDiceRoll(DiceValue, IsSuccess);
+        if (rand()%100 < Player.GetCriticalProbability())
+        {
+            Critical = true;
+            Gm.AddLog("Critical!");
+        }
+        Damage = (Critical? Damage * 2 : Damage);
+        Boss.SetHealth(Boss.GetHealth() - Damage);
+        Ls.LogAttack(Player.GetNickname(),Boss.GetNickname(),Damage);
+
+        UpdateBattleUI(Player, Boss);
+
+        Gm.GoSpace(3, 20);
+        cout << "[ Enter: Boss Turn ]";
+        cin.get();
+
+        if (Boss.GetHealth() <= 0) break;
+
+        // --- Boss Turn ---
+        Boss.OnPhaseChange();
+
+        if(Boss.GetPhase() == 2 && !Rage)
+        {
+            Ls.LogBossPhaseChange(Boss.GetNickname(),Boss.GetSpecialSkillName(), Boss.GetStrength());
+            Rage = true;
+        }
+
+        Dice.RollDice(24, 10, 2);
+        IsSuccess = Dice.GetResult();
+        DiceValue = Dice.GetDiceHead();
+
+        Damage = IsSuccess ? Boss.GetStrength() : Boss.GetStrength() / 2;
+
+        Ls.LogDiceRoll(DiceValue, IsSuccess);
+        if (Rage)
+        {
+            Gm.AddLog(Boss.GetNickname() + "가 " + Boss.GetSpecialSkillName() + " 차지중");
+            if (IsSuccess)
+            {
+                Gm.AddLog("[ ATTACK ]" + Boss.GetNickname()+ "의 " + Boss.GetSpecialSkillName() + " 공격");
+                Player.SetHealth(Player.GetHealth() - Boss.GetSpecialSkillDamage());
+            }
+            else
+            {
+                Player.SetHealth(Player.GetHealth() - Damage);
+                Ls.LogAttack(Boss.GetNickname(), Player.GetNickname(), Damage/2);
+            }
+        }
+        else
+        {
+            Player.SetHealth(Player.GetHealth() - Damage);
+            Ls.LogAttack(Boss.GetNickname(), Player.GetNickname(), Damage);
+        }
+        UpdateBattleUI(Player, Boss);
+    }
+
+    UpdateBattleUI(Player, Boss);
+
+    if (Player.GetHealth() > 0)
+    {
+        Ls.LogMonsterKill(Boss.GetNickname());
+        Reward(Player, Boss);
+    }
+    else
+    {
+        Ls.LogPlayerDeath();
     }
 }
 
@@ -79,11 +180,11 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
 
     Gm.GoSpace(5, 2);  cout << "[ PLAYER STATUS ]";
     Gm.GoSpace(5, 3);  cout << "NAME : " << Player.GetNickname();
-    Gm.GoSpace(5, 4);  cout << "HP   : " << Player.GetHealth() << " / 100";
+    Gm.GoSpace(5, 4);  cout << "HP   : " << Player.GetHealth() << " / " << Player.GetMaxHealth();
 
     Gm.GoSpace(75, 2);  cout << "[ ENEMY STATUS ]";
     Gm.GoSpace(75, 3);  cout << "NAME : " << Monster.GetNickname();
-    Gm.GoSpace(75, 4);  cout << "HP   : " << (Monster.GetHealth() < 0 ? 0 : Monster.GetHealth()) << " / 50"; //Max_Health
+    Gm.GoSpace(75, 4);  cout << "HP   : " << (Monster.GetHealth() < 0 ? 0 : Monster.GetHealth()) << " / " << Monster.GetMaxHealth(); //Max_Health
 
     //gm.d("SLIME", 40, 4);
 
@@ -146,13 +247,14 @@ void CombatManager::UpdateStoreUI(PlayerManager& Player)
     }
 }
 
-void CombatManager::UpdateEventUI(PlayerManager& Player)
+void CombatManager::UpdateEventUI(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
 
     Gm.ClearLogs();
 
-    for (int i = 21; i <= 28; i++) {
+    for (int i = 21; i <= 28; i++)
+    {
         Gm.GoSpace(2, i);
         cout << "                                                                            ";
     }
@@ -192,24 +294,31 @@ void CombatManager::UpdateEventUI(PlayerManager& Player)
     cin.get();
 }
 
-void CombatManager::Reward(PlayerManager& Player)
+void CombatManager::Reward(PlayerManager& Player, BaseMonster& Monster)
 {
-    //int expGain = RandomDice(50) + 10;
-    //int goldGain = RandomDice(100) + 20;
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
 
-    //player.set_experience(player.get_experience() + expGain);
-    //player.set_gold(player.get_gold() + goldGain);
+    int CurrentExp = Player.GetExperience() + Monster.GetExperienceReward();
+    int Gold = Monster.GetGoldReward();
 
-    //cout << "\n [Reward]\n";
-    //cout << " Exp: +" << expGain << "\n";
-    //cout << " Gold: +" << goldGain << "\n";
+    Ls.LogExpGain(Monster.GetExperienceReward(),Player.GetExperience(),Player.GetMaxExperience());
+    Ls.LogGoldGain(Gold,Player.GetGold());
 
-    // 10percentage
-    //if (RandomDice(100) <= 10)
-    //{
-        //cout << "Add Equipment \n";
-        //Item Add
-    //}
+    if (Player.GetMaxExperience() < CurrentExp)
+    {
+        //Player.SetMaxExperience(CurrentExp);
+        Player.SetExperience(CurrentExp - Player.GetMaxExperience());
+        Player.SetLevel(Player.GetLevel() + 1);
+        Ls.LogLevelUp(Player.GetLevel());
+    }
+    else
+    {
+        Player.SetExperience(CurrentExp);
+    }
+
+    Player.SetGold(Player.GetGold() + Gold);
+
+
 
     cout << "--------------------------\n";
 }
