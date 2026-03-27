@@ -1,5 +1,7 @@
 #include "LoggerSystem.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include "GraphicManager.h"
 
 //----------------------------전투 관련-----------------------------------
@@ -64,6 +66,31 @@ void LoggerSystem::LogDiceRoll(int Head, bool IsSucceeded)
     Gm.AddLog(Log);
 	EventLogs.push_back(Log);
 }
+//-----------------------------전투 이벤트 관련----------------------------------
+//상단 출력 헬퍼
+void LoggerSystem::PrintMainArea(const vector<string>& Lines)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+
+    for (int i = 0; i < 17; i++)
+    {
+        Gm.GoSpace(2, i);
+        cout << string(106, ' ');
+    }
+
+    for (int i = 0; i < (int)Lines.size() && i < 15; ++i)
+    {
+        Gm.GoSpace(2, 2 + i);
+        for (char C : Lines[i])
+        {
+            cout << C;
+            cout.flush();
+            this_thread::sleep_for(chrono::milliseconds(15));
+        }
+        this_thread::sleep_for(chrono::milliseconds(80));
+    }
+}
+
 //-----------------------------캐릭터 관련--------------------------------------
 void LoggerSystem::LogLevelUp(int NewLevel) //레벨업 했을때 로그 출력하는 함수
 {

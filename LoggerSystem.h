@@ -53,6 +53,6 @@ private:
     LoggerSystem() : TotalGold(0), TotalExp(0) {}
     map<string, int> MonsterKillLogs;
     vector<string> EventLogs;
-
+    void PrintMainArea(const vector<string>& Lines);
 };
 
