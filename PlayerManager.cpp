@@ -10,6 +10,11 @@ int PlayerManager::GetExperience()
     return Experience;
 }
 
+int PlayerManager::GetMaxExperience()
+{
+    return Experience;
+}
+
 int PlayerManager::GetDexterity()
 {
     return Dexterity;
@@ -45,6 +50,11 @@ void PlayerManager::SetExperience(int Experience)
     this->Experience = Experience;
 }
 
+void PlayerManager::SetMaxExperience(int MaxExperience)
+{
+    this->MaxExperience = MaxExperience;
+}
+
 void PlayerManager::SetDexterity(int Dexterity)
 {
     this->Dexterity = Dexterity;
@@ -68,6 +78,31 @@ void PlayerManager::SetCriticalProbability(int CriticalProbability)
 void PlayerManager::SetGold(int Gold)
 {
     this->Gold = Gold;
+}
+
+void PlayerManager::CollectItem(shared_ptr<ItemManager> Item)
+{
+    PlayerInventory.AddItem(Item);
+}
+
+void PlayerManager::UseItem(const string& ItemName, PlayerManager* Player)
+{
+    PlayerInventory.UseItem(ItemName, Player);
+}
+
+bool PlayerManager::RemoveItem(const string& ItemName)
+{
+    PlayerInventory.RemoveItem(ItemName);
+}
+
+void PlayerManager::ShowItems()
+{
+    PlayerInventory.ShowItems();
+}
+
+shared_ptr<ItemManager> PlayerManager::FindItem(const string& ItemName)
+{
+    PlayerInventory.FindItem(ItemName);
 }
 
 void PlayerManager::PrintPlayerStatus()
