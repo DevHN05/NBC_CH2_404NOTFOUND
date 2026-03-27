@@ -1,12 +1,14 @@
 #include "Inventory.h"
 
-void Inventory::AddItem(std::shared_ptr<ItemManager> item)
+using namespace std;
+
+void Inventory::AddItem(shared_ptr<ItemManager> item)
 {
     Items.push_back(item);
-    cout << item->GetName() << " is add Inventory" << endl;
+    cout << item->GetName() << " is add Inventory" << "\n";
 }
 
-std::shared_ptr<ItemManager> Inventory::FindItem(const std::string& itemName)
+shared_ptr<ItemManager> Inventory::FindItem(const string& itemName)
 {
     for (auto& item : Items)
     {
@@ -16,13 +18,13 @@ std::shared_ptr<ItemManager> Inventory::FindItem(const std::string& itemName)
     return nullptr;
 }
 
-void Inventory::UseItem(const std::string& itemName, PlayerManager& character)
+void Inventory::UseItem(const string& itemName, PlayerManager& character)
 {
     auto item = FindItem(itemName);
 
     if (!item)
     {
-        cout << "This item is no inventory" << endl;
+        cout << "This item is no inventory" << "\n";
         return;
     }
 
@@ -30,7 +32,7 @@ void Inventory::UseItem(const std::string& itemName, PlayerManager& character)
 }
 
 
-bool Inventory::RemoveItem(const std::string& itemName)
+bool Inventory::RemoveItem(const string& itemName)
 {
     for (auto it = Items.begin(); it != Items.end(); ++it) {
         if ((*it)->GetName() == itemName) {
