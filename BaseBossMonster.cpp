@@ -1,4 +1,4 @@
-// BaseBossMonster.cpp
+// BossMonsterManager.cpp
 
 #include "BaseBossMonster.h"
 #include "LoggerSystem.h"

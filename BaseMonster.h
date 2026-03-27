@@ -1,4 +1,4 @@
-// BaseMonster.h
+// MonsterManager.h
 
 #pragma once
 #include "BaseCharacter.h"
@@ -15,7 +15,7 @@
 //    - getter, setter
 //    - PrintCharacterStatus
 //
-//  BaseMonster 에서 추가하는 것:
+//  MonsterManager 에서 추가하는 것:
 //    - ExperienceReward          → 경험치 보상
 //    - GoldReward        → 골드 보상
 //    - Description        → 세계관 설명 텍스트
