@@ -1,6 +1,8 @@
 #pragma once
-#include "BaseCharacter.h"
 #include "ItemManager.h"
+#include "PlayerManager.h"
+
+class PlayerManager;
 
 class Equipment : public ItemManager
 {
@@ -20,7 +22,7 @@ public:
         isEquipped(false) {
     }
 
-    void Use(BaseCharacter* character) override;
+    void Use(PlayerManager& character) override;
 	void ShowInfo() const override;
 };
 

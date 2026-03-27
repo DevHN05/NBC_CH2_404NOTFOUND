@@ -27,7 +27,7 @@ public:
     void SetGold(int Gold);
 
     void CollectItem(shared_ptr<ItemManager> Item);
-    void UseItem(const string& ItemName, PlayerManager* Player);
+    void UseItem(const string& ItemName, PlayerManager& Player);
     void RemoveItem(const string& ItemName);
     void ShowItems();
 
