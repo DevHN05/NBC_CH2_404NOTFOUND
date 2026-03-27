@@ -7,11 +7,11 @@ MonsterManager::MonsterManager(
             const string& InName,
             int           InMaxHealth,
             int           InAttack,
-            int           InHealthReward,
+            int           InExperienceReward,
             int           InGoldReward,
             const string& InDescription)
     : BaseCharacter(InName)
-    , HealthReward(InHealthReward)
+    , ExperienceReward(InExperienceReward)
     , GoldReward(InGoldReward)
     , Description(InDescription)
 {
@@ -24,7 +24,7 @@ MonsterManager::MonsterManager(
 // MonsterManager 전용 getter
 // =====================================================
 
-int MonsterManager::GetHealthReward() const { return HealthReward; }
+int MonsterManager::GetExperienceReward() const { return ExperienceReward; }
 
 int MonsterManager::GetGoldReward() const  { return GoldReward; }
 
@@ -37,7 +37,7 @@ bool MonsterManager::IsAlive() const { return GetHealth() > 0; }
 // 전투 메서드
 // =====================================================
 int MonsterManager::TakeDamage(int InDamage) {     // 방어력 차감 후, 실제로 깎인 HP 반환
-    
+
     int ActualDamage = max(1, InDamage - GetDexterity()); //최소 1
     int NewHealth = max(0, GetHealth() - ActualDamage);
     SetHealth(NewHealth);
@@ -54,6 +54,6 @@ void MonsterManager::PrintCharacterStatus() const {
     cout << "NickName" << GetNickname() << '\n';
     cout << "Health" << GetHealth() << '\n';
     cout << "Strength" << GetStrength() << '\n';
-    cout << "HealthReward" << GetHealthReward() << '\n';
+    cout << "ExperienceReward" << GetExperienceReward() << '\n';
     cout << "GoldReward" << GetGoldReward() << '\n';
 }

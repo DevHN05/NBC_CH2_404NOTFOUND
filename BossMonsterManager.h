@@ -10,11 +10,11 @@
 //    - Health가 50% 이하로 떨어지면 페이즈 2로 전환되어, 공격력이 1.5배로 강화되고 특수 스킬이 해금됨
 //    - onPhaseChange()를 override
 //    - printStatus()를 override하여 페이즈/스킬 정보 추가 출력
-// 
+//
 //  BossMonsterManager 에서 추가하는 것:
 //    - Phase                   → 현재 페이즈 번호. 초기값 1, onPhaseChange() 발동 시 2로 변경
 //    - PhaseTriggered          → 페이즈 전환 중복 방지
-//    - SpecialSkillName        → 페이즈 2에서 해금되는 스킬 이름 (출력용)
+//    - SpecialSkillName        → 페이즈 2에서 해금되는 플레이어 스킬 이름 (출력용)
 //    - SpecialSkillDamage      → 특수 스킬의 고정 데미지 수치. CombatManager가 직접 읽어야 함.
 //    - override
 //      - OnPhaseChange()       → CombatManager가 매 턴 호출. 조건부로 딱 한 번 발동 (조건은 함수 선언부 참고)

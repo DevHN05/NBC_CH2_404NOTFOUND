@@ -7,14 +7,14 @@ BossMonsterManager::BossMonsterManager(
             const string&   InName,
             int             InMaxHealth,
             int             InAttack,
-            int             InHealthReward,
+            int             InExperienceReward,
             int             InGoldReward,
             const string&   InSpecialSkillName,
             int             InSpecialSkillDamage,
-            const string&   InDescription) 
-    : MonsterManager(InName, InMaxHealth, InAttack, InHealthReward, InGoldReward, InDescription)
+            const string&   InDescription)
+    : MonsterManager(InName, InMaxHealth, InAttack, InExperienceReward, InGoldReward, InDescription)
     , SpecialSkillName(InSpecialSkillName)
-    , SpecialSkillDamage(InSpecialSkillDamage) 
+    , SpecialSkillDamage(InSpecialSkillDamage)
     , Phase(1)
     , PhaseTriggered(false)
 {}
@@ -55,7 +55,7 @@ void BossMonsterManager::PrintCharacterStatus() const {
     cout << "NickName" << GetNickname() << '\n';
     cout << "Health" << GetHealth() << '\n';
     cout << "Strength" << GetStrength() << '\n';
-    cout << "HealthReward" << GetHealthReward() << '\n';
+    cout << "ExperienceReward" << GetExperienceReward() << '\n';
     cout << "GoldReward" << GetGoldReward() << '\n';
     cout << "SpecialSkillName" << GetSpecialSkillName() << '\n';
     cout << "SpecialSkillDamage" << GetSpecialSkillDamage() << '\n';

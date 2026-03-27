@@ -16,7 +16,7 @@
 //    - PrintCharacterStatus
 //
 //  MonsterManager 에서 추가하는 것:
-//    - HealthReward          → 경험치 보상
+//    - ExperienceReward          → 경험치 보상
 //    - GoldReward        → 골드 보상
 //    - Description        → 세계관 설명 텍스트
 //    - getter
@@ -43,7 +43,7 @@ public:
     // =====================================================
     // MonsterManager 전용 getter
     // =====================================================
-    int GetHealthReward() const;
+    int GetExperienceReward() const;
     int GetGoldReward() const;
     string GetDescription() const;
     bool IsAlive() const;
@@ -69,7 +69,7 @@ public:
 
 
 protected:
-    int HealthReward;       //경험치 보상 (처치 후 지급)
+    int ExperienceReward;       //경험치 보상 (처치 후 지급)
     int GoldReward;         //골드 보상 (처치 후 지급)
     string Description;     //출력되는 설명
 
