@@ -2,9 +2,7 @@
 
 
 #pragma once
-#include "BaseCharacter.h"
 #include "ItemManager.h"
-#include "Inventory.h"
 #include <vector>
 
 // =====================================================
@@ -18,6 +16,11 @@
 //
 // =====================================================
 
+//진희님 요청 내용
+//생성할때 아이템 배열에 상점에서 팔거 다 넣기 (완료)
+//아이템 배열에서 뽑아 올거라 랜덤 셔플기능
+
+
 class PlayerManager;
 
 class ShopManager
@@ -25,7 +28,6 @@ class ShopManager
 private:
 
     vector<shared_ptr<ItemManager>> ShopItems;
-
 
 public:
 
@@ -37,9 +39,9 @@ public:
 
     void ShowShopItems() const;
 
-    bool BuyItem(int Index, PlayerManager& Player, Inventory& PlayerInventory);
+    bool BuyItem(int Index, PlayerManager& Player);
 
-    bool SellItem(const std::string& ItemName, PlayerManager& Player, Inventory& PlayerInventory);
+    bool SellItem(const std::string& ItemName, PlayerManager& Player);
 
 
 };
