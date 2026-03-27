@@ -1,21 +1,28 @@
 #pragma once
-#include "BaseCharacter.h"
+#include "PlayerManager.h"
 #include "ItemManager.h"
+#include <iostream>
+#include <algorithm>
 
 class Potion : public ItemManager
 {
-protected:
+    enum class EPotionType
+    {
+        Health,
+        Strength
+    };
+private:
+    EPotionType PotionType;
     int Recovery;
     int Count;
 
 public:
-    Potion(const string& name, int price, int recovery, int count)
+    Potion(const string& name, int price, EPotionType type, int recovery, int count)
         : ItemManager(name, price),
+        PotionType(type),
         Recovery(recovery),
         Count(count) {}
 
-    int GetCount() const;
-    int GetRecovery() const;
-    void SetCount(int count);
-    void ShowInfo() const override = 0;
+    void Use(PlayerManager& character) override;
+    void ShowInfo() const override;
 };

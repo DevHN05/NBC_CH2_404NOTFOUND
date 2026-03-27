@@ -16,7 +16,7 @@ shared_ptr<ItemManager> Inventory::FindItem(const string& itemName)
     return nullptr;
 }
 
-void Inventory::UseItem(const string& itemName, BaseCharacter* character)
+void Inventory::UseItem(const string& itemName, PlayerManager& character)
 {
     auto item = FindItem(itemName);
 

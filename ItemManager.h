@@ -1,7 +1,10 @@
 #pragma once
 #include <string>
-#include "BaseCharacter.h"
+#include "PlayerManager.h"
+
 using namespace std;
+
+class PlayerManager;
 
 class ItemManager
 {
@@ -17,7 +20,7 @@ public:
 
 	int GetPrice() const;
 
-	virtual void Use(BaseCharacter* character) = 0;
+	virtual void Use(PlayerManager& character) = 0;
 	virtual void ShowInfo() const = 0;
 };
 
