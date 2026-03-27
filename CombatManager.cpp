@@ -12,6 +12,7 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+
     Gm.ClearLogs();
     Ls.LogMonsterAppear(Monster.GetNickname());
 
@@ -27,20 +28,23 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 
         // --- Player Turn ---
         Dice.RollDice(24, 10, 2);
+
         bool IsSuccess = Dice.GetResult();
         int DiceValue = Dice.GetDiceHead();
         bool Critical = false;
         int Damage = IsSuccess ? Player.GetStrength() : Player.GetStrength() / 2;
 
         Ls.LogDiceRoll(DiceValue, IsSuccess);
-        if (rand()%100 < Player.GetCriticalProbability())
+
+        if (rand() % 100 < Player.GetCriticalProbability())
         {
             Critical = true;
             Gm.AddLog("Critical!");
         }
+
         Damage = (Critical? Damage * 2 : Damage);
         Monster.SetHealth(Monster.GetHealth() - Damage);
-        Ls.LogAttack(Player.GetNickname(),Monster.GetNickname(),Damage);
+        Ls.LogAttack(Player.GetNickname(), Monster.GetNickname(), Damage);
 
         UpdateBattleUI(Player, Monster);
 
@@ -81,6 +85,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+
     Gm.ClearLogs();
     Ls.LogMonsterAppear(Boss.GetNickname());
 
@@ -98,20 +103,23 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
 
         // --- Player Turn ---
         Dice.RollDice(24, 10, 2);
+
         bool IsSuccess = Dice.GetResult();
         int DiceValue = Dice.GetDiceHead();
         bool Critical = false;
         int Damage = IsSuccess ? Player.GetStrength() : Player.GetStrength() / 2;
 
         Ls.LogDiceRoll(DiceValue, IsSuccess);
-        if (rand()%100 < Player.GetCriticalProbability())
+
+        if (rand() % 100 < Player.GetCriticalProbability())
         {
             Critical = true;
             Gm.AddLog("Critical!");
         }
+
         Damage = (Critical? Damage * 2 : Damage);
         Boss.SetHealth(Boss.GetHealth() - Damage);
-        Ls.LogAttack(Player.GetNickname(),Boss.GetNickname(),Damage);
+        Ls.LogAttack(Player.GetNickname(), Boss.GetNickname(), Damage);
 
         UpdateBattleUI(Player, Boss);
 
@@ -126,7 +134,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
 
         if(Boss.GetPhase() == 2 && !Rage)
         {
-            Ls.LogBossPhaseChange(Boss.GetNickname(),Boss.GetSpecialSkillName(), Boss.GetStrength());
+            Ls.LogBossPhaseChange(Boss.GetNickname(), Boss.GetSpecialSkillName(), Boss.GetStrength());
             Rage = true;
         }
 
@@ -137,6 +145,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         Damage = IsSuccess ? Boss.GetStrength() : Boss.GetStrength() / 2;
 
         Ls.LogDiceRoll(DiceValue, IsSuccess);
+
         if (Rage)
         {
             Gm.AddLog(Boss.GetNickname() + "가 " + Boss.GetSpecialSkillName() + " 차지중");
@@ -289,7 +298,7 @@ void CombatManager::UpdateEventUI(PlayerManager& Player, BaseMonster& Monster)
         Gm.AddLog("Run!");
     }
 
-    Gm.GoSpace(5, 27); cout << "[ Press Enter to return ]";
+    Gm.GoSpace(5, 27);  cout << "[ Press Enter to return ]";
     cin.ignore(100, '\n');
     cin.get();
 }
@@ -318,8 +327,5 @@ void CombatManager::Reward(PlayerManager& Player, BaseMonster& Monster)
 
     Player.SetGold(Player.GetGold() + Gold);
 
-
-
     cout << "--------------------------\n";
 }
-

@@ -13,14 +13,18 @@ private:
     bool isEquipped;
 
 public:
-    Equipment(const string& name, int price, const string& equipType,
-        int attackBonus, int defenseBonus)
-        : ItemManager(name, price),
+    Equipment(
+            const string& name,
+            int price,
+            const string& equipType,
+            int attackBonus,
+            int defenseBonus):
+        ItemManager(name, price),
         equipType(equipType),
         attackBonus(attackBonus),
         defenseBonus(defenseBonus),
-        isEquipped(false) {
-    }
+        isEquipped(false)
+    {}
 
     void Use(PlayerManager& character) override;
 	void ShowInfo() const override;

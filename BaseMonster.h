@@ -26,8 +26,8 @@
 //    - OnPhaseChange()   → 보스 전용 훅
 // =====================================================
 
-
-class BaseMonster : public BaseCharacter {
+class BaseMonster : public BaseCharacter
+{
 public:
     BaseMonster(
         const string& InName,
@@ -39,7 +39,6 @@ public:
 
     virtual ~BaseMonster() = default;
 
-
     // =====================================================
     // MonsterManager 전용 getter
     // =====================================================
@@ -48,30 +47,24 @@ public:
     string GetDescription() const;
     bool IsAlive() const;
 
-
     // =====================================================
     // 전투 메서드
     // =====================================================
     virtual void TakeDamage(int InDamage);
     void ResetHealth();
 
-
     // =====================================================
     //  페이즈 전환 훅 — BossMonster 에서만 override
     // =====================================================
     virtual void OnPhaseChange() {}
-
 
     // -------------------------------------------------
     //  override
     // -------------------------------------------------
     void PrintCharacterStatus() const override;
 
-
 protected:
     int ExperienceReward;       //경험치 보상 (처치 후 지급)
     int GoldReward;         //골드 보상 (처치 후 지급)
     string Description;     //출력되는 설명
-
-
 };

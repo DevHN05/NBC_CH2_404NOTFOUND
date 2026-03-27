@@ -1,6 +1,6 @@
 #include "Potion.h"
 
-void Potion::Use(PlayerManager& user)
+void Potion::Use(PlayerManager& User)
 {
     /*if (Count <= 0)
     {
@@ -12,20 +12,20 @@ void Potion::Use(PlayerManager& user)
     {
     case EPotionType::Health:
         {
-            int newHealth = user.GetHealth() + Recovery;
-            user.SetHealth(min(newHealth, user.GetMaxHealth()));
+            int NewHealth = User.GetHealth() + Recovery;
+            User.SetHealth(min(NewHealth, User.GetMaxHealth()));
 
             cout << "You used " << GetName()
                  << ". Health recovered by " << Recovery
-                 << ". Current health: " << user.GetHealth()
-                 << "/" << user.GetMaxHealth() << "." << '\n';
+                 << ". Current health: " << User.GetHealth()
+                 << "/" << User.GetMaxHealth() << "." << '\n';
             break;
         }
 
     case EPotionType::Strength:
         {
-            int newStrength = user.GetStrength() + Recovery;
-            user.SetStrength(newStrength);
+            int NewStrength = User.GetStrength() + Recovery;
+            User.SetStrength(NewStrength);
 
             cout << "You used " << GetName()
                  << ". strength up " << Recovery
@@ -45,7 +45,6 @@ void Potion::ShowInfo() const
     cout << "Recovery: " << Recovery << '\n';
     //cout << "Count: " << Count << '\n';
 }
-
 
 shared_ptr<ItemManager> Potion::Clone() const  {
     return make_shared<Potion>(*this);  // 복사 생성

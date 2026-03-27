@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <string>
+
 using namespace std;
 
 class LoggerSystem
@@ -66,8 +67,6 @@ public:
     void LogEventFailDataNoise();
     void LogEventFailGravity();
     void LogEventFailCliff();
-
-
 
     //요약
     void PrintSummary();

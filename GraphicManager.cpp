@@ -6,36 +6,37 @@ using namespace std;
 
 void GraphicManager::initialize_assets()
 {
-    AsciiAssets["PLAYER"] = {
-    "   ____   ", // 1
-    "  |    |  ", // 2
-    "  (^_^)   ", // 3
-    "  <)  (>  ", // 4
-    "  --||--  ", // 5
-    "    ||    ", // 6
-    "   /  \\   ", // 7
-    "  /|  |\\  ", // 8
-    " | |  | | ", // 9
-    " | |  | | ", // 10
-    " | |  | | ", // 11
-    " | |  | | ", // 12
-    " | |  | | ", // 13
-    " |/____\\| ", // 14
+    AsciiAssets["PLAYER"] =
+    {
+        "   ____   ", // 1
+        "  |    |  ", // 2
+        "  (^_^)   ", // 3
+        "  <)  (>  ", // 4
+        "  --||--  ", // 5
+        "    ||    ", // 6
+        "   /  \\   ", // 7
+        "  /|  |\\  ", // 8
+        " | |  | | ", // 9
+        " | |  | | ", // 10
+        " | |  | | ", // 11
+        " | |  | | ", // 12
+        " | |  | | ", // 13
+        " |/____\\| ", // 14
     };
 }
 
 void GraphicManager::GoSpace(int X, int Y)
 {
-    HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord = { (short)X, (short)Y };
-    SetConsoleCursorPosition(h_out, coord);
+    HANDLE HOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD Coord = { (short)X, (short)Y };
+    SetConsoleCursorPosition(HOut, Coord);
 }
 
 void GraphicManager::SetConsoleSize(int Width, int Height)
 {
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD bufferSize = { (short)Width, (short)Height };
-    SMALL_RECT windowSize = { 0, 0, (short)(Width - 1), (short)(Height - 1) };
+    HANDLE HOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD BufferSize = { (short)Width, (short)Height };
+    SMALL_RECT WindowSize = { 0, 0, (short)(Width - 1), (short)(Height - 1) };
 }
 
 void GraphicManager::DrawLayout()
@@ -64,11 +65,11 @@ void GraphicManager::DrawLayout()
     GoSpace(2, 19); cout << "[ SYSTEM LOG ]";
     GoSpace(78, 19); cout << "[ STATUS & INVENTORY ]";
 
-    int line = 0;
-    for (const string& log : GameLogs)
+    int Line = 0;
+    for (const string& Log : GameLogs)
     {
-        GoSpace(2, 21 + line++);
-        cout << "> " << log;
+        GoSpace(2, 21 + Line++);
+        cout << "> " << Log;
     }
 }
 
@@ -101,18 +102,15 @@ void GraphicManager::ClearLogs()
     GameLogs.clear();
 
     for (int i = 0; i < 7; i++) {
-
         GoSpace(2, 21 + i);
-
 
         cout << "                                                                 ";
     }
-
     GoSpace(0, 30);
 }
 
-string GraphicManager::ShowTitle() {
-
+string GraphicManager::ShowTitle()
+{
     system("cls");
     int StartX = 25, StartY = 10;
 
@@ -137,13 +135,13 @@ string GraphicManager::ShowTitle() {
     return InputName;
 }
 
-void GraphicManager::DrawAsciiArt(const string& name, int x, int y)
+void GraphicManager::DrawAsciiArt(const string& Name, int X, int Y)
 {
-    if (AsciiAssets.find(name) == AsciiAssets.end()) return;
+    if (AsciiAssets.find(Name) == AsciiAssets.end()) return;
 
-    int lineOffset = 0;
-    for (const string& line : AsciiAssets[name]) {
-        GoSpace(x, y + lineOffset++);
-        cout << line;
+    int LineOffset = 0;
+    for (const string& Line : AsciiAssets[Name]) {
+        GoSpace(X, Y + LineOffset++);
+        cout << Line;
     }
 }

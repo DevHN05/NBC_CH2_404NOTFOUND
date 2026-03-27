@@ -3,6 +3,8 @@
 #include "DiceSystem.h"
 #include "PlayerManager.h"
 
+using namespace std;
+
 class EventManager
 {
 public:
@@ -10,8 +12,8 @@ public:
     void TriggerNextEvent();
 
 private:
-    int choice;
-    bool isBattle;
+    int Choice;
+    bool IsBattle;
     void ShuffleEvents();
 
     void BattleFirewall(); 		             // 노말 이벤트 #1 vs시스템 보안 봇
@@ -22,7 +24,7 @@ private:
 
     PlayerManager& Player;
     DiceSystem Dice;
-    std::vector<int> EventIds;
+    vector<int> EventIds;
     size_t CurrentEventIndex;
     int StrBonus() { return Player.GetStrength() / 5; }
     int DexBonus() { return Player.GetDexterity() / 5; }

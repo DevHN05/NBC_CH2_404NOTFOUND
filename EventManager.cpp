@@ -58,38 +58,38 @@ void EventManager::BattleFirewall()
 
 	while (true)
 	{
-	    cin >> choice;
+	    cin >> Choice;
 
-        bool isValid = true;
-        isBattle = false;
+        bool IsValid = true;
+        IsBattle = false;
 
-        if (choice == 1)
+        if (Choice == 1)
         {
             Dice.RollDice(20, 13, DexBonus());
-            if (!Dice.GetResult()) isBattle = true;
+            if (!Dice.GetResult()) IsBattle = true;
         }
-        else if (choice == 2)
+        else if (Choice == 2)
         {
             Dice.RollDice(20, 13, IntBonus());
-            if (!Dice.GetResult()) isBattle = true;
+            if (!Dice.GetResult()) IsBattle = true;
         }
-        else if (choice == 3)
+        else if (Choice == 3)
         {
-            isBattle = true; // 3번 선택 시 즉시 전투
+            IsBattle = true; // 3번 선택 시 즉시 전투
         }
 	    else
 	    {
             Gm.GoSpace(2, 26); cout << "잘못된 입력입니다. 선택지에 맞는 숫자를 입력해주세요.";
-            isValid = false;
+            IsValid = false;
 
             cin.clear();
             cin.ignore(100, '\n');
 	    }
 
-        if (isValid) break;
+        if (IsValid) break;
     }
 
-    if (!isBattle)
+    if (!IsBattle)
     {
         // 성공 메세지
         // 경험치 오르고 골드 보상 없이 종료
@@ -112,38 +112,38 @@ void EventManager::BattleMemoryLeak()
 
 	while (true)
 	{
-	    cin >> choice;
+	    cin >> Choice;
 
-        bool isValid = true;
-        isBattle = false;
+        bool IsValid = true;
+        IsBattle = false;
 
-        if (choice == 1)
+        if (Choice == 1)
         {
             Dice.RollDice(20, 13, Player.GetStrength() / 5);
-            if (!Dice.GetResult()) isBattle = true;
+            if (!Dice.GetResult()) IsBattle = true;
         }
-        else if (choice == 2)
+        else if (Choice == 2)
         {
             Dice.RollDice(20, 13, Player.GetDexterity() / 5);
-            if (!Dice.GetResult()) isBattle = true;
+            if (!Dice.GetResult()) IsBattle = true;
         }
-        else if (choice == 3)
+        else if (Choice == 3)
         {
-            isBattle = true; // 3번 선택 시 즉시 전투
+            IsBattle = true; // 3번 선택 시 즉시 전투
         }
         else
         {
             Gm.GoSpace(2, 26); cout << "잘못된 입력입니다. 선택지에 맞는 숫자를 입력해주세요.";
-            isValid = false;
+            IsValid = false;
 
             cin.clear();
             cin.ignore(100, '\n');
         }
 
-        if (isValid) break;
+        if (IsValid) break;
     }
 
-    if (!isBattle) {
+    if (!IsBattle) {
         // 성공 메세지
         // 경험치 오르고 골드 보상 없이 종료
     }
@@ -168,37 +168,37 @@ void EventManager::ChoiceGarbageCollection()
 
 	while (true)
 	{
-	    cin >> choice;
+	    cin >> Choice;
 
-        bool isValid = true;
-        isBattle = false;
+        bool IsValid = true;
+        IsBattle = false;
 
-        if (choice == 1)
+        if (Choice == 1)
         {
             Dice.RollDice(20, 13, Player.GetDexterity() / 5);
-            if (!Dice.GetResult()) isBattle = true;
+            if (!Dice.GetResult()) IsBattle = true;
         }
-        else if (choice == 2)
+        else if (Choice == 2)
         {
-            isBattle = true; // 2번 선택 시 패널티 없이 즉시 전투
+            IsBattle = true; // 2번 선택 시 패널티 없이 즉시 전투
         }
-        else if (choice == 3)
+        else if (Choice == 3)
         {
 	    	break; // 보스전은 3번 선택시 즉시 도망 가능
         }
         else
         {
             Gm.GoSpace(2, 26); cout << "잘못된 입력입니다. 선택지에 맞는 숫자를 입력해주세요.";
-            isValid = false;
+            IsValid = false;
 
             cin.clear();
             cin.ignore(100, '\n');
         }
 
-        if (isValid) break;
+        if (IsValid) break;
     }
 
-    if (!isBattle)
+    if (!IsBattle)
     {
         // 성공 메세지 출력
         // 경험치 오르고 골드 보상 얻으며 종료
@@ -226,34 +226,34 @@ void EventManager::ChestNormal()
 
 	while (true)
 	{
-	    cin >> choice;
+	    cin >> Choice;
 
-        bool isValid = true;
-        isBattle = false;
+        bool IsValid = true;
+        IsBattle = false;
 
-        if (choice == 1)
+        if (Choice == 1)
         {
             Dice.RollDice(20, 13, Player.GetStrength() / 5);
-            if (!Dice.GetResult()) isBattle = true;
+            if (!Dice.GetResult()) IsBattle = true;
         }
-        else if (choice == 2)
+        else if (Choice == 2)
         {
             Dice.RollDice(20, 13, Player.GetDexterity() / 5);
-            if (!Dice.GetResult()) isBattle = true;
+            if (!Dice.GetResult()) IsBattle = true;
         }
         else
         {
             Gm.GoSpace(2, 26); cout << "잘못된 입력입니다. 선택지에 맞는 숫자를 입력해주세요.";
-            isValid = false;
+            IsValid = false;
 
             cin.clear();
             cin.ignore(100, '\n');
         }
 
-        if (isValid) break;
+        if (IsValid) break;
     }
 
-    if (!isBattle)
+    if (!IsBattle)
     {
         // 판정 성공 메세지
         // 골드 경험치 보상 얻고 종료
@@ -274,5 +274,4 @@ void EventManager::ChestNormal()
 void EventManager::ShopChoiceEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-
 }

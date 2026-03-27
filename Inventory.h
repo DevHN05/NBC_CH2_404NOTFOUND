@@ -15,9 +15,9 @@ private:
 	vector<shared_ptr<ItemManager>> Items;
 
 public:
-	void AddItem(shared_ptr<ItemManager> item);
-	shared_ptr<ItemManager> FindItem(const string& itemName);
-	void UseItem(const string& itemName, PlayerManager& character);
-	bool RemoveItem(const string& itemName);
+	void AddItem(shared_ptr<ItemManager> Item);
+	shared_ptr<ItemManager> FindItem(const string& ItemName);
+	void UseItem(const string& ItemName, PlayerManager& Character);
+	bool RemoveItem(const string& ItemName);
 };
 

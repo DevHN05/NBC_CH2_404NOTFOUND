@@ -14,10 +14,9 @@ class BaseBossMonster;
 class CombatManager
 {
 private:
-    CombatManager() {};
+    CombatManager() {}
 
     DiceSystem Dice;
-
 
 public:
     CombatManager(const CombatManager&) = delete;

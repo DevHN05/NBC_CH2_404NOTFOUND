@@ -19,12 +19,13 @@ private:
     //int Count;
 
 public:
-    Potion(const string& name, int price, EPotionType type, int recovery)
-        : ItemManager(name, price),
-        PotionType(type),
-        Recovery(recovery) {}
+    Potion(const string& Name, int Price, EPotionType Type, int Recovery)
+        : ItemManager(Name, Price),
+        PotionType(Type),
+        Recovery(Recovery)
+    {}
 
-    void Use(PlayerManager& character) override;
+    void Use(PlayerManager& Character) override;
     void ShowInfo() const override;
 
     shared_ptr<ItemManager> Clone() const override; //복사 생성

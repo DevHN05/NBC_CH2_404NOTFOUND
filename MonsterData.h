@@ -14,7 +14,6 @@
 #include "BaseBossMonster.h"
 #include <memory>
 
-
 namespace MonsterData
 {
     // =====================================================
@@ -52,8 +51,6 @@ namespace MonsterData
     {
         return make_shared<BaseMonster>("침략자 :: 2147483648", 150, 28, 70, 30, "침략자 관련된 소개 문장");
     }
-
-
 
     // =====================================================
     //  보스 몬스터
@@ -93,5 +90,4 @@ namespace MonsterData
             "(예시)~~~~~한 처형자. HP 50% 이하에서 각성한다."
         );
     }
-
 }

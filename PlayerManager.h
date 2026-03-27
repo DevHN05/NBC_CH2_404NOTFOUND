@@ -3,7 +3,6 @@
 #include "BaseCharacter.h"
 #include "Inventory.h"
 
-
 class PlayerManager : public BaseCharacter
 {
 public:

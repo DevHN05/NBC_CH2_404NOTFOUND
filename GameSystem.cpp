@@ -54,32 +54,35 @@ void GameSystem::StartGame()
         Gm.GoSpace(40, 9); cout << " HP: " << Player.GetHealth() << " / " << Player.GetMaxHealth();
 
         Gm.GoSpace(40, 10); cout << " STATUS: [";
+
         for (int i = 0; i < 20; i++)
         {
             if (i < Player.GetHealth() / 5) cout << "■";
             else cout << " ";
         }
+
         cout << "]";
 
         Gm.DrawInventoryData(Player);
 
         //Gm.GoSpace(0, 30);
         Gm.GoSpace(3, 20);
-        cout << " Command(1.Search 2.Recovery 3.Quit): ";
+        cout << " Command (1.Search 2.Recovery 3.Quit): ";
 
-        int choice;
-        if (!(cin >> choice))
+        int Choice;
+
+        if (!(cin >> Choice))
         {
             cin.clear();
             cin.ignore(100, '\n');
             continue;
         }
 
-        if (choice == 1)
+        if (Choice == 1)
         {
-            int randomEvent = 0;//rand() % 3;
+            int RandomEvent = 0; //rand() % 3;
 
-            switch (randomEvent)
+            switch (RandomEvent)
             {
             case 0:
                 Gm.AddLog(" [!] Monster Detected! Battle Progress ...");
@@ -90,7 +93,7 @@ void GameSystem::StartGame()
                     //Bug.SetStrength(7);
                     //Cm.StartBattle(Player, Bug);BaseBossMonster
 
-                    BaseBossMonster BugBoss("Error King",100,10,10,10,"IndexOut",17,"Hi");
+                    BaseBossMonster BugBoss("Error King", 100, 10, 10, 10, "IndexOut", 17, "Hi");
                     Cm.StartBossBattle(Player, BugBoss);
                 }
                 break;
@@ -110,14 +113,14 @@ void GameSystem::StartGame()
             // system("pause");
             Gm.DrawLayout();
         }
-        else if (choice == 2)
+        else if (Choice == 2)
         {
             Player.SetHealth(100);
             Gm.AddLog(" >> System Recovery Complete.");
             Sleep(1000);
             Gm.DrawLayout();
         }
-        else if (choice == 3)
+        else if (Choice == 3)
         {
             Gm.AddLog("[Game Quit.]");
             Gm.GoSpace(0, 31);

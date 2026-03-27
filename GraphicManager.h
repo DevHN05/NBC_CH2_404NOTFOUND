@@ -13,13 +13,13 @@ class PlayerManager;
 class GraphicManager
 {
 private:
-    GraphicManager() { initialize_assets(); }
+    GraphicManager() { InitializeAssets(); }
 
     deque<string> GameLogs;
     unordered_map<string, vector<string>> AsciiAssets;
 
 private:
-    void initialize_assets();
+    void InitializeAssets();
 
 public:
     GraphicManager(const GraphicManager&) = delete;
@@ -30,13 +30,14 @@ public:
         static GraphicManager Instance;
         return Instance;
     }
+
     void GoSpace(int X, int Y);
     void SetConsoleSize(int Width, int Height);
 
     void DrawLayout();
     void DrawInventoryData(PlayerManager& Player);
     string ShowTitle();
-    void DrawAsciiArt(const string& name, int x, int y);
+    void DrawAsciiArt(const string& Name, int X, int Y);
 
     void AddLog(const string& Log);
     void ClearLogs();

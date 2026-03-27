@@ -2,41 +2,40 @@
 
 using namespace std;
 
-void Inventory::AddItem(shared_ptr<ItemManager> item)
+void Inventory::AddItem(shared_ptr<ItemManager> Item)
 {
-    Items.push_back(item);
-    cout << item->GetName() << " is add Inventory" << "\n";
+    Items.push_back(Item);
+    cout << Item->GetName() << " is add Inventory" << "\n";
 }
 
-shared_ptr<ItemManager> Inventory::FindItem(const string& itemName)
+shared_ptr<ItemManager> Inventory::FindItem(const string& ItemName)
 {
-    for (auto& item : Items)
+    for (auto& Item : Items)
     {
-        if (item->GetName() == itemName)
-            return item;
+        if (Item->GetName() == ItemName)
+            return Item;
     }
     return nullptr;
 }
 
-void Inventory::UseItem(const string& itemName, PlayerManager& character)
+void Inventory::UseItem(const string& ItemName, PlayerManager& Character)
 {
-    auto item = FindItem(itemName);
+    auto Item = FindItem(ItemName);
 
-    if (!item)
+    if (!Item)
     {
         cout << "This item is no inventory" << "\n";
         return;
     }
 
-    item->Use(character);
+    Item->Use(Character);
 }
 
-
-bool Inventory::RemoveItem(const string& itemName)
+bool Inventory::RemoveItem(const string& ItemName)
 {
-    for (auto it = Items.begin(); it != Items.end(); ++it) {
-        if ((*it)->GetName() == itemName) {
-            Items.erase(it);
+    for (auto It = Items.begin(); It != Items.end(); ++It) {
+        if ((*It)->GetName() == ItemName) {
+            Items.erase(It);
             return true;
         }
     }

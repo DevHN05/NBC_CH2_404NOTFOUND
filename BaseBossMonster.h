@@ -22,9 +22,6 @@
 //      - GetPhase()            → 현재 페이즈 반환 (1 = 일반, 2 = 각성)
 // =====================================================
 
-
-
-
 class BaseBossMonster : public BaseMonster
 {
 public:
@@ -40,14 +37,12 @@ public:
 
     ~BaseBossMonster() override = default;
 
-
     // =====================================================
     // BossMonsterManager 전용 getter
     // =====================================================
     int GetPhase() const;
     string GetSpecialSkillName() const;
     int GetSpecialSkillDamage() const;
-
 
     // =====================================================
     //  override
@@ -58,11 +53,9 @@ public:
     void OnPhaseChange() override;
     void PrintCharacterStatus() const override;
 
-
 private:
     int    Phase;
     bool   PhaseTriggered;
     string SpecialSkillName;
     int    SpecialSkillDamage;
 };
-

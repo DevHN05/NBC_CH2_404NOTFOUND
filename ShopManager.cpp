@@ -5,8 +5,6 @@
 #include "Potion.h"
 #include "LoggerSystem.h"
 
-
-
 ShopManager::ShopManager()
 {
 	ShopItems.push_back(make_shared<Potion>("Minor Healing Potion", 100, Potion::EPotionType::Health, 30));
@@ -15,17 +13,16 @@ ShopManager::ShopManager()
     ShopItems.push_back(make_shared<Potion>("Major Strength Potion", 300, Potion::EPotionType::Strength, 15));
 }
 
-
-void ShopManager::EnterShop(PlayerManager& Player) {
-
+void ShopManager::EnterShop(PlayerManager& Player)
+{
     LoggerSystem& Ls = LoggerSystem::GetInstance();
     Ls.LogShopPrompt();
 
 	int EnterChoice;
 	cin >> EnterChoice;
 
-
-	if (EnterChoice != 1) {
+	if (EnterChoice != 1)
+	{
 	    Ls.LogShopDecline();
 		return;
 	}
@@ -33,8 +30,8 @@ void ShopManager::EnterShop(PlayerManager& Player) {
 	bool InShop = true;
 	int MenuChoice;
 
-	while (InShop) {
-
+	while (InShop)
+	{
 	    Ls.LogShopEnter();
 
 		PrintShopMenu(); //-> 이것도 출력필요해요. 밑에는 예시여서
@@ -61,13 +58,12 @@ void ShopManager::EnterShop(PlayerManager& Player) {
 			InShop = false;
 			break;
 		}
-
 	}
-
 }
 
-
-void ShopManager::PrintShopMenu() const { //로거에서 구현하면 여기서는 없어질 함수
+void ShopManager::PrintShopMenu() const
+{
+    //로거에서 구현하면 여기서는 없어질 함수
 	cout << "===== 상점 =====\n";
 	cout << "1. 아이템 구매\n";
 	cout << "2. 아이템 판매\n";
@@ -75,20 +71,19 @@ void ShopManager::PrintShopMenu() const { //로거에서 구현하면 여기서�
     cout << "선택 : ";
 }
 
-void ShopManager::ShowShopItems() const { //로거에서 구현하면 여기서는 없어질 함수
-
+void ShopManager::ShowShopItems() const
+{
+    //로거에서 구현하면 여기서는 없어질 함수
     cout << "===== 아이템  =====\n";
     cout << "1. Minor Healing Potion (100G)\n";
     cout << "2. Major Healing Potion (250G)\n";
     cout << "3. Minor Strength Potion (120G)\n";
     cout << "4. Major Strength Potion (300G)\n";
     cout << "선택 : ";
-
 }
 
-
-
-bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player) {
+bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player)
+{
     LoggerSystem& Ls = LoggerSystem::GetInstance();
 	int ItemIndex = SelectedNumber - 1;
 	if (ItemIndex < 0 || ItemIndex >= ShopItems.size()) return false;
@@ -104,17 +99,17 @@ bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player) {
 
     Player.SetGold(Player.GetGold() - Item->GetPrice());
 
-	Ls.LogBuyItem(Item->GetName(),Item->GetPrice());
-
+	Ls.LogBuyItem(Item->GetName(), Item->GetPrice());
 
 	return true;
-
 }
 
-bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player) {
+bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player)
+{
     LoggerSystem& Ls = LoggerSystem::GetInstance();
 	auto Item = Player.FindItem(ItemName);
-	if (Item == nullptr) {
+
+    if (Item == nullptr) {
 		Ls.LogItemNotFound(ItemName);
 		return false;
 	}
@@ -126,6 +121,4 @@ bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player) {
 	Player.RemoveItem(ItemName);
 
 	return true;
-
 }
-
