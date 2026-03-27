@@ -20,5 +20,6 @@ public:
 
 	virtual void Use(PlayerManager& character) = 0;
 	virtual void ShowInfo() const = 0;
+    virtual shared_ptr<ItemManager> Clone() const = 0;
 };
 
