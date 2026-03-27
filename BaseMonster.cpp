@@ -1,4 +1,4 @@
-// MonsterManager.cpp
+// BaseMonster.cpp
 
 #include "BaseMonster.h"
 
