@@ -1,5 +1,5 @@
 #include "ItemManager.h"
-
+using namespace std;
 string ItemManager::GetName() const
 {
 	return Name;

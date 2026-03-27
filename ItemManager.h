@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
-#include "BaseCharacter.h"
-using namespace std;
+#include <iostream>
+class PlayerManager;
 
+using namespace std;
 class ItemManager
 {
 protected:
@@ -17,7 +18,7 @@ public:
 
 	int GetPrice() const;
 
-	virtual void Use(BaseCharacter* character) = 0;
+	virtual void Use(PlayerManager& character) = 0;
 	virtual void ShowInfo() const = 0;
 };
 
