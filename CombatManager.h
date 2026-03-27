@@ -9,6 +9,7 @@ using namespace std;
 
 class PlayerManager;
 class BaseMonster;
+class BaseBossMonster;
 
 class CombatManager
 {
@@ -30,13 +31,11 @@ public:
 
 public:
     void StartBattle(PlayerManager& Player, BaseMonster& Monster);
+    void StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss);
 
     void UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster);
     void UpdateStoreUI(PlayerManager& Player);
-    void UpdateEventUI(PlayerManager& Player);
+    void UpdateEventUI(PlayerManager& Player, BaseMonster& Monster);
 
-
-    void Reward(PlayerManager& Player);
-    void UpdateStore();
-
+    void Reward(PlayerManager& Player, BaseMonster& Monster);
 };
