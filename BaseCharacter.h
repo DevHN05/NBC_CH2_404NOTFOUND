@@ -37,12 +37,12 @@ public:
     virtual void PrintCharacterStatus() const;
 
 private:
-    string Nickname = " ";
+    string Nickname = " "; //몬스터에 필요
     int Level = 0;
     int Experience = 0;
-    int Health = 0;
-    int MaxHealth = 0;
-    int Strength = 0;
+    int Health = 0;//몬스터에 필요
+    int MaxHealth = 0;//몬스터에 필요
+    int Strength = 0;//몬스터에 필요
     int Dexterity = 0;
     int Intelligence = 0;
     int Luck = 0;
