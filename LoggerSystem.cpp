@@ -4,6 +4,30 @@
 #include <thread>
 #include "GraphicManager.h"
 
+//상단 출력 헬퍼
+void LoggerSystem::PrintMainArea(const vector<string>& Lines)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+
+    for (int i = 0; i < 17; i++)
+    {
+        Gm.GoSpace(2, i);
+        cout << string(106, ' ');
+    }
+
+    for (int i = 0; i < (int)Lines.size() && i < 15; ++i)
+    {
+        Gm.GoSpace(2, 2 + i);
+        for (char C : Lines[i])
+        {
+            cout << C;
+            cout.flush();
+            this_thread::sleep_for(chrono::milliseconds(15));
+        }
+        this_thread::sleep_for(chrono::milliseconds(80));
+    }
+}
+
 //----------------------------전투 관련-----------------------------------
 //몬스터가 나타났을때 로그 출력하는 함수
 void LoggerSystem::LogMonsterAppear(const string& MonsterName)
@@ -67,31 +91,8 @@ void LoggerSystem::LogDiceRoll(int Head, bool IsSucceeded)
 	EventLogs.push_back(Log);
 }
 //-----------------------------전투 이벤트 관련----------------------------------
-//상단 출력 헬퍼
-void LoggerSystem::PrintMainArea(const vector<string>& Lines)
-{
-    GraphicManager& Gm = GraphicManager::GetInstance();
-
-    for (int i = 0; i < 17; i++)
-    {
-        Gm.GoSpace(2, i);
-        cout << string(106, ' ');
-    }
-
-    for (int i = 0; i < (int)Lines.size() && i < 15; ++i)
-    {
-        Gm.GoSpace(2, 2 + i);
-        for (char C : Lines[i])
-        {
-            cout << C;
-            cout.flush();
-            this_thread::sleep_for(chrono::milliseconds(15));
-        }
-        this_thread::sleep_for(chrono::milliseconds(80));
-    }
-}
 //방랑자::delete ptr;
-void LoggerSystem::LogEventWanderer()
+void LoggerSystem::LogEventWanderer(int StrBonus, int DexBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -101,8 +102,9 @@ void LoggerSystem::LogEventWanderer()
         "다행히, 렌더링 오류로 공중에 멈춘 거대한 바위 파편들이 징검다리처럼 놓여 있군요.",
         "고정되지 않은 오브젝트들이라 사이 거리가 제법 된다는 점이 문제지만요."
     });
-    Gm.AddLog("1. 오브젝트를 근력으로 쓰러뜨려 평탄한 길을 확보합니다. (힘)");
-    Gm.AddLog("2. 바위 파편 위를 건너뛰며 건너편으로 갑니다. (민첩)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 오브젝트를 근력으로 쓰러뜨려 평탄한 길을 확보합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 바위 파편 위를 건너뛰며 건너편으로 갑니다. (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
 }
 //실패 메세지 - 방랑자::delete ptr;
 void LoggerSystem::LogEventFailWanderer()
@@ -114,7 +116,7 @@ void LoggerSystem::LogEventFailWanderer()
 }
 
 //파수꾼::시스템 보안 봇
-void LoggerSystem::LogEventGuardian()
+void LoggerSystem::LogEventGuardian(int DexBonus, int IntBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -124,8 +126,9 @@ void LoggerSystem::LogEventGuardian()
         "다행히 방화벽의 소스 코드가 꼬여 발생한 보안 취약점이 보입니다.",
         "하지만 실수로 보안 레이어를 건드려 경보를 울린다면, 정말 골치 아픈 일이 벌어질 겁니다."
     });
-    Gm.AddLog("1. 보안 취약점 사이로 재빠르게 지나갑니다. (민첩)");
-    Gm.AddLog("2. 방화벽의 취약점을 분석해 무력화하고 통과합니다. (지능)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 보안 취약점 사이로 재빠르게 지나갑니다. (판정값 13, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 방화벽의 취약점을 분석해 무력화하고 통과합니다. (판정값 13, 지능 보정 +" + to_string(IntBonus) + ")");
 }
 //실패 메세지 - 파수꾼::시스템 보안 봇
 void LoggerSystem::LogEventFailGuardian()
@@ -137,7 +140,7 @@ void LoggerSystem::LogEventFailGuardian()
 }
 
 //분쇄자::Break
-void LoggerSystem::LogEventBreaker()
+void LoggerSystem::LogEventBreaker(int StrBonus, int IntBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -146,8 +149,9 @@ void LoggerSystem::LogEventBreaker()
         "이 루프를 끊어내지 못하면 프로세스 점유율이 치솟아 시스템이 다운되고 말 것입니다.",
         "루프를 강제로 종료하거나, 조건문을 건드려 탈출 조건을 만들어내야 합니다."
     });
-    Gm.AddLog("1. 루프문 코드를 디버그 툴로 파괴해 물리적으로 종료합니다. (힘)");
-    Gm.AddLog("2. 조건문을 수정해서 디버깅해, 반복문을 정상으로 되돌립니다. (지식)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 루프문 코드를 디버그 툴로 파괴해 물리적으로 종료합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 조건문을 수정해서 디버깅해, 반복문을 정상으로 되돌립니다. (판정값 10, 지능 보정 +" + to_string(IntBonus) + ")");
 }
 //실패 메세지 - 분쇄자::Break
 void LoggerSystem::LogEventFailBreaker()
@@ -159,7 +163,7 @@ void LoggerSystem::LogEventFailBreaker()
 }
 
 //침략자::2147483648
-void LoggerSystem::LogEventInvader()
+void LoggerSystem::LogEventInvader(int DexBonus, int LukBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -168,8 +172,9 @@ void LoggerSystem::LogEventInvader()
         "잘못 건드렸다간 당신의 데이터마저 오염되어 엉뚱한 영향을 받을 것 같습니다.",
         "오버플로우에 휩쓸리지 않고 다음 지역으로 넘어가야 합니다."
     });
-    Gm.AddLog("1. 오버플로우에 영향받기 전에 재빠르게 다음 구역으로 질주합니다. (민첩)");
-    Gm.AddLog("2. 자료형에 맞는 데이터가 담기길 기대하며 다음 구역으로 향합니다. (행운)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 오버플로우에 영향받기 전에 재빠르게 다음 구역으로 질주합니다. (판정값 13, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 자료형에 맞는 데이터가 담기길 기대하며 다음 구역으로 향합니다. (판정값 13, 행운 보정 +" + to_string(LukBonus) + ")");
 }
 //실패 메세지 - 침략자::2147483648
 void LoggerSystem::LogEventFailInvader()
@@ -181,7 +186,7 @@ void LoggerSystem::LogEventFailInvader()
 }
 
 //암살자::세미콜론
-void LoggerSystem::LogEventAssassin()
+void LoggerSystem::LogEventAssassin(int StrBonus, int IntBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -191,8 +196,9 @@ void LoggerSystem::LogEventAssassin()
         "정작 필요한 세미콜론은 빠져있어, 계단이 두 칸이 하나로 이어지거나 아예 깨져 있습니다.",
         "한 칸이라도 잘못 밟으면 컴파일 에러가 일어나 큰 일이 벌어질 것 같습니다."
     });
-    Gm.AddLog("1. 세미콜론이 빠진 곳을 잘 피해 성큼성큼 뛰어갑니다. (힘)");
-    Gm.AddLog("2. 빠진 세미콜론을 넣고 계단 데이터를 복구하며 나아갑니다. (지능)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 세미콜론이 빠진 곳을 잘 피해 성큼성큼 뛰어갑니다. (판정값 13, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 빠진 세미콜론을 넣고 계단 데이터를 복구하며 나아갑니다. (판정값 13, 지능 보정 +" + to_string(IntBonus) + ")");
 }
 //실패 메세지 - 암살자
 void LoggerSystem::LogEventFailAssassin()
@@ -204,7 +210,7 @@ void LoggerSystem::LogEventFailAssassin()
 }
 
 //재활용 - 통나무 다리
-void LoggerSystem::LogEventBridge()
+void LoggerSystem::LogEventBridge(int DexBonus, int LukBonus, int StrBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -214,9 +220,10 @@ void LoggerSystem::LogEventBridge()
         "일방통행이라 건너는 도중 도착 지점에 버그가 나타난다면 전투를 치러야 합니다.",
         "저 멀리서 깨진 음향 파일 같은 기분 나쁜 소음이 들려옵니다."
     });
-    Gm.AddLog("1. 버그가 앞길을 막기 전에 다리를 빠르게 건너갑니다. (민첩)");
-    Gm.AddLog("2. 버그가 나타나지 않길 바라며 다리를 건넙니다. (행운)");
-    Gm.AddLog("3. 힘으로 절벽을 한 번에 뛰어넘어봅니다. (힘 / 역보정 -5)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 버그가 앞길을 막기 전에 다리를 빠르게 건너갑니다. (판정값 14, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 버그가 나타나지 않길 바라며 다리를 건넙니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("3. 힘으로 절벽을 한 번에 뛰어넘어봅니다. (판정값 14, 힘 보정 +" + to_string(StrBonus - 5) + ")");
 }
 //실패 메세지 - 통나무 다리
 void LoggerSystem::LogEventFailBridge()
@@ -228,7 +235,7 @@ void LoggerSystem::LogEventFailBridge()
 }
 
 //재활용 - 숲
-void LoggerSystem::LogEventForest()
+void LoggerSystem::LogEventForest(int IntBonus, int LukBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -237,8 +244,9 @@ void LoggerSystem::LogEventForest()
         "여정을 계속하려면 이 숲을 빨리 지나가야 하는데, 왜인지 마주칠 것만 같습니다.",
         "이대로는 안되겠군요. 무언가 방안을 세워야만 할 것 같습니다."
     });
-    Gm.AddLog("1. 버그의 흔적을 조사하고 방향을 유추해 피해갑니다. (지능)");
-    Gm.AddLog("2. 아무 일도 없길 바라며 행운에 기대 숲을 지나갑니다. (행운)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 버그의 흔적을 조사하고 방향을 유추해 피해갑니다. (판정값 14, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 아무 일도 없길 바라며 행운에 기대 숲을 지나갑니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
 }
 //실패 메세지 - 숲
 void LoggerSystem::LogEventFailForest()
@@ -250,7 +258,7 @@ void LoggerSystem::LogEventFailForest()
 }
 
 //재활용 - 데이터 노이즈
-void LoggerSystem::LogEventDataNoise()
+void LoggerSystem::LogEventDataNoise(int IntBonus, int LukBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -260,8 +268,9 @@ void LoggerSystem::LogEventDataNoise()
         "어디선가 이 데이터 노이즈를 일으킨 버그들의 기척이 느껴집니다.",
         "당신까지 버그가 나기 전에, 이 혼란스러운 코드를 안전하게 빠져나가야 합니다."
     });
-    Gm.AddLog("1. 구역의 구조를 파악하고 정상적인 코드를 골라 나아갑니다. (지식)");
-    Gm.AddLog("2. 버그가 안 옮길 빌며 행운에 기대 이 지역을 나아가봅니다. (행운)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 구역의 구조를 파악하고 정상적인 코드를 골라 나아갑니다. (판정값 14, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 버그가 안 옮길 빌며 행운에 기대 이 지역을 나아가봅니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
 }
 //실패 메세지 - 데이터 노이즈
 void LoggerSystem::LogEventFailDataNoise()
@@ -273,7 +282,7 @@ void LoggerSystem::LogEventFailDataNoise()
 }
 
 //재활용 - 중력
-void LoggerSystem::LogEventGravity()
+void LoggerSystem::LogEventGravity(int LukBonus, int IntBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -282,8 +291,9 @@ void LoggerSystem::LogEventGravity()
         "반대로 하늘을 날던 버그 몬스터들이 중력을 거슬러 당신이 있는 바닥으로 추락하기 시작합니다.",
         "하늘에서 적들이 쏟아지며 말 그대로 아수라장이 펼쳐지기 시작합니다."
     });
-    Gm.AddLog("1. 떨어지는 적들을 운에 맡기며 안전 구역으로 대피합니다. (행운)");
-    Gm.AddLog("2. 중력이 뒤집힌 구역을 분석해 영향이 적은 곳으로 대피합니다. (지식)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 떨어지는 적들을 운에 맡기며 안전 구역으로 대피합니다. (판정값 12, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("2. 중력이 뒤집힌 구역을 분석해 영향이 적은 곳으로 대피합니다. (판정값 12, 지능 보정 +" + to_string(IntBonus) + ")");
 }
 //실패 메세지 - 중력
 void LoggerSystem::LogEventFailGravity()
@@ -295,7 +305,7 @@ void LoggerSystem::LogEventFailGravity()
 }
 
 //재활용 - 절벽
-void LoggerSystem::LogEventCliff()
+void LoggerSystem::LogEventCliff(int DexBonus, int IntBonus)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     PrintMainArea({
@@ -304,8 +314,9 @@ void LoggerSystem::LogEventCliff()
         "원래는 없어야 할 지형이라 그런지 절벽 단면에 다 지워지지 않은 주석들이 둥둥 떠다닙니다.",
         "빙 돌아가면 시간 소모가 너무 클 것 같습니다. 기어오르거나 정상으로 돌려놓아야 합니다."
     });
-    Gm.AddLog("1. 절벽에 떠 있는 주석들을 발판 삼아 민첩하게 기어 올라갑니다. (민첩)");
-    Gm.AddLog("2. 지형 스크립트를 해킹해 절벽을 다시 평지로 롤백시킵니다. (지식)");
+    Gm.ClearLogs();
+    Gm.AddLog("1. 절벽에 떠 있는 주석들을 발판 삼아 민첩하게 기어 올라갑니다. (판정값 12, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 지형 스크립트를 해킹해 절벽을 다시 평지로 롤백시킵니다. (판정값 15, 지능 보정 +" + to_string(IntBonus) + ")");
 }
 //실패 메세지 - 절벽
 void LoggerSystem::LogEventFailCliff()

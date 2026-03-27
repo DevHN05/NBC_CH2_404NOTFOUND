@@ -2,6 +2,7 @@
 #include "BaseCharacter.h"
 #include "PlayerManager.h"
 #include "BaseMonster.h"
+#include "BaseBossMonster.h"
 #include "GraphicManager.h"
 #include "CombatManager.h"
 
@@ -37,6 +38,10 @@ void GameSystem::StartGame()
     string Name = Gm.ShowTitle();
 
     PlayerManager Player(Name);
+    Player.SetHealth(100);
+    Player.SetStrength(7);
+    Player.SetMaxHealth(100);
+    Player.SetCriticalProbability(20);
 
     cout << "Is your nickname " << Player.GetNickname() << "?\n";
 
@@ -46,7 +51,7 @@ void GameSystem::StartGame()
 
         Gm.GoSpace(5, 2);  cout << ">> FIELD: SYSTEM CORE";
         Gm.GoSpace(40, 8); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
-        Gm.GoSpace(40, 9); cout << " HP: " << Player.GetHealth() << " / 100";
+        Gm.GoSpace(40, 9); cout << " HP: " << Player.GetHealth() << " / " << Player.GetMaxHealth();
 
         Gm.GoSpace(40, 10); cout << " STATUS: [";
         for (int i = 0; i < 20; i++)
@@ -70,19 +75,23 @@ void GameSystem::StartGame()
             continue;
         }
 
-        if (choice == 1)
+        if (choice == 0)
         {
-            int randomEvent = 2;//rand() % 3;
+            int randomEvent = 0;//rand() % 3;
 
             switch (randomEvent)
             {
             case 0:
                 Gm.AddLog(" [!] Monster Detected! Battle Progress ...");
                 {
-                    BaseMonster Bug("Fatal Error Bug",50,5,5,5);
-                    Bug.SetHealth(50);
-                    Bug.SetStrength(7);
-                    Cm.StartBattle(Player, Bug);
+                    //BaseMonster Bug("Fatal Error Bug",50,5,5,5);
+                    //Bug.SetHealth(50);
+                    //Bug.SetMaxHealth(50);
+                    //Bug.SetStrength(7);
+                    //Cm.StartBattle(Player, Bug);BaseBossMonster
+
+                    BaseBossMonster BugBoss("Error King",100,10,10,10,"IndexOut",17,"Hi");
+                    Cm.StartBossBattle(Player, BugBoss);
                 }
                 break;
 
@@ -93,7 +102,7 @@ void GameSystem::StartGame()
 
             case 2:
                 Gm.AddLog(" [?] Unknown Signal Detected...");
-                Cm.UpdateEventUI(Player);
+                //Cm.UpdateEventUI(Player);
                 break;
             }
 

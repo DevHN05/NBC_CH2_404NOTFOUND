@@ -44,16 +44,16 @@ public:
     void LogItemNotFound(const string& ItemName);
 
     //전투 이벤트 내러티브
-    void LogEventWanderer(); //방랑자
-    void LogEventGuardian(); //파수꾼
-    void LogEventBreaker(); //분쇄자
-    void LogEventInvader(); //침략자
-    void LogEventAssassin(); //암살자
-    void LogEventBridge(); //아래로 쭉 재활용 몬스터
-    void LogEventForest();
-    void LogEventDataNoise();
-    void LogEventGravity();
-    void LogEventCliff();
+    void LogEventWanderer(int StrBonus, int DexBonus); //방랑자
+    void LogEventGuardian(int DexBonus, int IntBonus); //파수꾼
+    void LogEventBreaker(int StrBonus, int IntBonus); //분쇄자
+    void LogEventInvader(int DexBonus, int LukBonus); //침략자
+    void LogEventAssassin(int StrBonus, int IntBonus); //암살자
+    void LogEventBridge(int DexBonus, int LukBonus, int StrBonus); //아래로 쭉 재활용 몬스터
+    void LogEventForest(int IntBonus, int LukBonus);
+    void LogEventDataNoise(int IntBonus, int LukBonus);
+    void LogEventGravity(int LukBonus, int IntBonus);
+    void LogEventCliff(int DexBonus, int IntBonus);
 
     //전투 이벤트 실패 메시지
     void LogEventFailWanderer();

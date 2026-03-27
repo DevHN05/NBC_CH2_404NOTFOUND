@@ -10,6 +10,8 @@ public:
     void TriggerNextEvent();
 
 private:
+    int choice;
+    bool isBattle;
     void ShuffleEvents();
 
     void BattleFirewall(); 		             // 노말 이벤트 #1 vs시스템 보안 봇
@@ -21,5 +23,9 @@ private:
     PlayerManager& Player;
     DiceSystem Dice;
     std::vector<int> EventIds;
-    int CurrentEventIndex;
+    size_t CurrentEventIndex;
+    int StrBonus() { return Player.GetStrength() / 5; }
+    int DexBonus() { return Player.GetDexterity() / 5; }
+    int IntBonus() { return Player.GetIntelligence() / 5; }
+    int LukBonus() { return Player.GetLuck() / 5; }
 };
