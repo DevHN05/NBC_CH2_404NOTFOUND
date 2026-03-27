@@ -134,6 +134,7 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="MonsterManager.cpp" />
     <ClCompile Include="BossMonsterManager.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Potion.cpp" />
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp" />
     <ClCompile Include="ShopManager.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="MonsterManager.h" />
     <ClInclude Include="BossMonsterManager.h" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="Potion.h" />
     <ClInclude Include="ShopManager.h" />
   </ItemGroup>
