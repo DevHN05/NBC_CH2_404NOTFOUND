@@ -91,7 +91,7 @@ void GameSystem::StartGame()
                     //Bug.SetHealth(50);
                     //Bug.SetMaxHealth(50);
                     //Bug.SetStrength(7);
-                    //Cm.StartBattle(Player, Bug);BaseBossMonster
+                    //Cm.StartBattle(Player, Bug);
 
                     BaseBossMonster BugBoss("Error King", 100, 10, 10, 10, "IndexOut", 17, "Hi");
                     Cm.StartBossBattle(Player, BugBoss);
