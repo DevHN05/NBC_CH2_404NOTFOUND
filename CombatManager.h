@@ -8,7 +8,7 @@
 using namespace std;
 
 class PlayerManager;
-class MonsterManager;
+class BaseMonster;
 
 class CombatManager
 {
@@ -29,9 +29,9 @@ public:
     }
 
 public:
-    void StartBattle(PlayerManager& Player, MonsterManager& Monster);
+    void StartBattle(PlayerManager& Player, BaseMonster& Monster);
 
-    void UpdateBattleUI(PlayerManager& Player, MonsterManager& Monster);
+    void UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster);
     void UpdateStoreUI(PlayerManager& Player);
     void UpdateEventUI(PlayerManager& Player);
 

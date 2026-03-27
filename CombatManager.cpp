@@ -1,12 +1,12 @@
 ﻿#include "CombatManager.h"
 #include "BaseCharacter.h"
 #include "PlayerManager.h"
-#include "MonsterManager.h"
+#include "BaseMonster.h"
 #include "GraphicManager.h"
 #include "DiceSystem.h"
 #include <random>
 
-void CombatManager::StartBattle(PlayerManager& Player, MonsterManager& Monster)
+void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     Gm.ClearLogs();
@@ -59,7 +59,7 @@ void CombatManager::StartBattle(PlayerManager& Player, MonsterManager& Monster)
     }
 }
 
-void CombatManager::UpdateBattleUI(PlayerManager& Player, MonsterManager& Monster)
+void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
 
