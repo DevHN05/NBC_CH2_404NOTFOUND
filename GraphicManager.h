@@ -34,11 +34,16 @@ public:
     void GoSpace(int X, int Y);
     void SetConsoleSize(int Width, int Height);
 
+    //Draw
     void DrawLayout();
     void DrawInventoryData(PlayerManager& Player);
     string ShowTitle();
-    void DrawAsciiArt(const string& Name, int X, int Y);
+    void DrawAsciiArt(const string& Player,const string& Monster);
 
+    //System Log
     void AddLog(const string& Log);
     void ClearLogs();
+
+    //Effect
+    void HitShake(const string& TargetKey, int StartX, int StartY, int Force);
 };
