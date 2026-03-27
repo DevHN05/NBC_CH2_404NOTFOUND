@@ -24,7 +24,7 @@
 - `NBC_CH2_404NOTFOUND.cpp` → 게임 실행
 - `GameSystem.cpp` → 게임 내 기본 구조 구현
 - `DiceSystem.cpp` → 주사위 시스템 구현
-- `CombatSystem.cpp` → 전투 시스템 구현 
+- `CombatManager.cpp` → 전투 시스템 구현
 - `GraphicManager.cpp` → 기본 UI, Console 출력 구현
 - `Character.cpp` → 기본 캐릭터 구현
   - `Player.cpp` → 플레이어 구현
@@ -33,4 +33,5 @@
   - `Inventory.cpp` → 인벤토리 구현
   - `Equipment.cpp` → 장착 아이템 구현
   - `Potion.cpp` → 사용 아이템 구현
+- `ShopManager.cpp` → 상점 시스템 구현
 - `Logger.cpp` → 게임의 출력 시스템 구현
