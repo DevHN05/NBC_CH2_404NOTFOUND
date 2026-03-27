@@ -7,7 +7,8 @@
 
 using namespace std;
 
-class BaseCharacter;
+class PlayerManager;
+class MonsterManager;
 
 class CombatManager
 {
@@ -15,8 +16,6 @@ private:
     CombatManager() {};
 
     DiceSystem Dice;
-    unordered_map<string, int> TotalItems; // 전체 아이템 데이터베이스
-    vector<pair<string, int>> CurrentShopList; // 현재 상점에 진열된 목록
 
 
 public:
@@ -30,14 +29,14 @@ public:
     }
 
 public:
-    void StartBattle(BaseCharacter& Player, BaseCharacter& Monster);
+    void StartBattle(PlayerManager& Player, MonsterManager& Monster);
 
-    void UpdateBattleUI(BaseCharacter& Player, BaseCharacter& Monster);
-    void UpdateStoreUI(BaseCharacter& Player);
-    void UpdateEventUI(BaseCharacter& Player);
+    void UpdateBattleUI(PlayerManager& Player, MonsterManager& Monster);
+    void UpdateStoreUI(PlayerManager& Player);
+    void UpdateEventUI(PlayerManager& Player);
 
 
-    void Reward(BaseCharacter& Player);
+    void Reward(PlayerManager& Player);
     void UpdateStore();
 
 };

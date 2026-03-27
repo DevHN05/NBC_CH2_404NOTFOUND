@@ -1,5 +1,7 @@
 ﻿#include "GameSystem.h"
 #include "BaseCharacter.h"
+#include "PlayerManager.h"
+#include "MonsterManager.h"
 #include "GraphicManager.h"
 #include "CombatManager.h"
 
@@ -33,9 +35,9 @@ void GameSystem::StartGame()
     Gm.SetConsoleSize(110, 32);
 
     string Name = Gm.ShowTitle();
-    
-    BaseCharacter Player(Name);
-    
+
+    PlayerManager Player(Name);
+
     cout << "Is your nickname " << Player.GetNickname() << "?\n";
 
     while (true)
@@ -58,19 +60,19 @@ void GameSystem::StartGame()
         Gm.GoSpace(72, 24); cout << "[ Inventory ]";
         Gm.GoSpace(72, 25); cout << " 1. Recovery (HP)";
 
-        //Gm.GoSpace(0, 30); 
+        //Gm.GoSpace(0, 30);
         Gm.GoSpace(3, 20);
-        cout << " Command(1.Sereach 2.Recovery 3.Quit): ";
+        cout << " Command(1.Seareach 2.Recovery 3.Quit): ";
 
         int choice;
-        if (!(cin >> choice)) 
+        if (!(cin >> choice))
         {
             cin.clear();
             cin.ignore(100, '\n');
             continue;
         }
 
-        if (choice == 1) 
+        if (choice == 1)
         {
             int randomEvent = rand() % 3;
 
@@ -79,7 +81,7 @@ void GameSystem::StartGame()
             case 0:
                 Gm.AddLog(" [!] Monster Detected! Battle Progress ...");
                 {
-                    BaseCharacter Bug("Fatal Error Bug");
+                    MonsterManager Bug("Fatal Error Bug",50,5,5,5);
                     Bug.SetHealth(50);
                     Bug.SetStrength(7);
                     Cm.StartBattle(Player, Bug);
@@ -98,17 +100,17 @@ void GameSystem::StartGame()
             }
 
             Gm.GoSpace(0, 31);
-            // system("pause"); 
+            // system("pause");
             Gm.DrawLayout();
         }
-        else if (choice == 2) 
+        else if (choice == 2)
         {
             Player.SetHealth(100);
             Gm.AddLog(" >> System Recovery Complete.");
             Sleep(1000);
-            Gm.DrawLayout(); 
+            Gm.DrawLayout();
         }
-        else if (choice == 3) 
+        else if (choice == 3)
         {
             Gm.AddLog("[Game Quit.]");
             Gm.GoSpace(0, 31);

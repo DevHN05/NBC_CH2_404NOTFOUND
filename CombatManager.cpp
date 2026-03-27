@@ -1,10 +1,12 @@
 ﻿#include "CombatManager.h"
 #include "BaseCharacter.h"
+#include "PlayerManager.h"
+#include "MonsterManager.h"
 #include "GraphicManager.h"
 #include "DiceSystem.h"
 #include <random>
 
-void CombatManager::StartBattle(BaseCharacter& Player, BaseCharacter& Monster)
+void CombatManager::StartBattle(PlayerManager& Player, MonsterManager& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     Gm.ClearLogs();
@@ -57,7 +59,7 @@ void CombatManager::StartBattle(BaseCharacter& Player, BaseCharacter& Monster)
     }
 }
 
-void CombatManager::UpdateBattleUI(BaseCharacter& Player, BaseCharacter& Monster)
+void CombatManager::UpdateBattleUI(PlayerManager& Player, MonsterManager& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
 
@@ -79,7 +81,7 @@ void CombatManager::UpdateBattleUI(BaseCharacter& Player, BaseCharacter& Monster
     Gm.GoSpace(72, 25); cout << " 1. Recovery (HP)";
 }
 
-void CombatManager::UpdateStoreUI(BaseCharacter& Player)
+void CombatManager::UpdateStoreUI(PlayerManager& Player)
 {
     int choice = -1;
     GraphicManager& Gm = GraphicManager::GetInstance();
@@ -98,49 +100,49 @@ void CombatManager::UpdateStoreUI(BaseCharacter& Player)
 
         Gm.GoSpace(40, 7);  cout << "1. STANDARD ANTIVIRUS (HP +50) : 100 G";
         Gm.GoSpace(40, 9);  cout << "2. ATK ENHANCEMENT PATCH (ATK+5): 250 G";
-        Gm.GoSpace(40, 11); cout << "3. FIREWALL EXPANSION (MAX HP+30): 300 G"; 
-        Gm.GoSpace(40, 13); cout << "0. EXIT TERMINAL"; 
+        Gm.GoSpace(40, 11); cout << "3. FIREWALL EXPANSION (MAX HP+30): 300 G";
+        Gm.GoSpace(40, 13); cout << "0. EXIT TERMINAL";
 
         Gm.GoSpace(72, 21); cout << "[ USER STATUS ]";
-        Gm.GoSpace(72, 22); cout << "- CREDIT : " << Player.GetGold() << " G"; 
+        Gm.GoSpace(72, 22); cout << "- CREDIT : " << Player.GetGold() << " G";
         Gm.GoSpace(72, 23); cout << "- POWER  : " << Player.GetStrength();
 
         Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
         Gm.GoSpace(38, 20);
 
-        if (!(cin >> choice)) 
+        if (!(cin >> choice))
         {
             cin.clear(); cin.ignore(100, '\n');
             continue;
         }
 
-        if (choice == 1 && Player.GetGold() >= 100) 
+        if (choice == 1 && Player.GetGold() >= 100)
         {
             Player.SetGold(Player.GetGold() - 100);
             Player.SetHealth(min(100, Player.GetHealth() + 50));
             Gm.AddLog("[ SUCCESS: ANTIVIRUS DEPLOYED. HP RECOVERED ]");
         }
-        else if (choice == 2 && Player.GetGold() >= 250) 
+        else if (choice == 2 && Player.GetGold() >= 250)
         {
             Player.SetGold(Player.GetGold() - 250);
             Player.SetStrength(Player.GetStrength() + 5);
             Gm.AddLog("[ SUCCESS: ATK PATCH APPLIED. POWER UPGRADED ]");
         }
-        else if (choice == 0) 
+        else if (choice == 0)
         {
             Gm.AddLog("[ SYSTEM: EXITING MERCHANT TERMINAL... ]");
         }
-        else 
+        else
         {
             Gm.AddLog("[ ERROR: INSUFFICIENT CREDITS OR INVALID INPUT ]");
         }
     }
 }
 
-void CombatManager::UpdateEventUI(BaseCharacter& Player)
+void CombatManager::UpdateEventUI(PlayerManager& Player)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    
+
     Gm.ClearLogs();
 
     for (int i = 21; i <= 28; i++) {
@@ -160,9 +162,9 @@ void CombatManager::UpdateEventUI(BaseCharacter& Player)
     int choice;
     cin >> choice;
 
-    if (choice == 1) 
+    if (choice == 1)
     {
-        if (rand() % 2 == 0) 
+        if (rand() % 2 == 0)
         {
             int reward = 150;
             Player.SetGold(Player.GetGold() + reward);
@@ -182,7 +184,7 @@ void CombatManager::UpdateEventUI(BaseCharacter& Player)
     cin.get();
 }
 
-void CombatManager::Reward(BaseCharacter& Player)
+void CombatManager::Reward(PlayerManager& Player)
 {
     //int expGain = RandomDice(50) + 10;
     //int goldGain = RandomDice(100) + 20;
@@ -204,9 +206,3 @@ void CombatManager::Reward(BaseCharacter& Player)
     cout << "--------------------------\n";
 }
 
-void CombatManager::UpdateStore()
-{
-    CurrentShopList.clear();
-
-   
-}
