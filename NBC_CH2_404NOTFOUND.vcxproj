@@ -128,7 +128,6 @@
     <ClCompile Include="CombatManager.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GraphicManager.cpp" />
-    <ClCompile Include="HealthPotion.cpp" />
     <ClCompile Include="LoggerSystem.cpp" />
     <ClCompile Include="DiceSystem.cpp" />
     <ClCompile Include="Equipment.cpp" />
@@ -140,14 +139,12 @@
     <ClCompile Include="Potion.cpp" />
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp" />
     <ClCompile Include="ShopManager.cpp" />
-    <ClCompile Include="StrengthPotion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="CombatManager.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GraphicManager.h" />
-    <ClInclude Include="HealthPotion.h" />
     <ClInclude Include="LoggerSystem.h" />
     <ClInclude Include="DiceSystem.h" />
     <ClInclude Include="Equipment.h" />
@@ -158,7 +155,6 @@
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="Potion.h" />
     <ClInclude Include="ShopManager.h" />
-    <ClInclude Include="StrengthPotion.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
