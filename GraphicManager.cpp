@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void GraphicManager::initialize_assets()
+void GraphicManager::InitializeAssets()
 {
     AsciiAssets["PLAYER"] =
     {
