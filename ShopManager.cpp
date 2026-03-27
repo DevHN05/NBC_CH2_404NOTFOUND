@@ -1,6 +1,8 @@
 ﻿//ShopManager.cpp
 
 #include "ShopManager.h"
+
+#include "PlayerManager.h"
 //#include "HealthPotion.h" //아이템매니저 파생 클래스 필요합니당
 //#include "StrengthPotion.h"
 
@@ -17,7 +19,7 @@ ShopManager::ShopManager() //포션 4개로 고정이라, 하드 코딩할게요
 }
 
 
-void ShopManager::EnterShop(BaseCharacter& Player) { 
+void ShopManager::EnterShop(PlayerManager& Player) {
 	// 상점 입장할건지 물어보는 메시지 출력
 	// 예시. 상점에 입장하시겠습니까? (1: 입장 / 0: 거절)
 
@@ -33,27 +35,27 @@ void ShopManager::EnterShop(BaseCharacter& Player) {
 	int MenuChoice;
 
 	while (InShop) {
-		
+
 		//cout << "\n현재 골드 : " << Player.GetGold() << "G\n";
 		PrintShopMenu();
 
 		cout << "선택 : ";
 		cin >> MenuChoice;
-		
+
 		int ItemChoice;
 		string ItemToSellName;
 
 		switch (MenuChoice) {
-		case 1: 
+		case 1:
 			ShowShopItems(); //1~5 중 선택
 			cout << "선택 : ";
 			cin >> ItemChoice;
 			//BuyItem(ItemChoice, Player, Player.MyInventory); //플레이어클래스가 Inventory를 멤버로 가지기
 			break;
-		case 2: 
+		case 2:
 			cout << "판매할 아이템 이름 : ";
 			getline(cin, ItemToSellName);
-			//SellItem(ItemToSellName, Player, Player.MyInventory); 
+			//SellItem(ItemToSellName, Player, Player.MyInventory);
 			break;
 		case 3:
 			cout << "다음에 또 오시오.\n";
@@ -62,7 +64,7 @@ void ShopManager::EnterShop(BaseCharacter& Player) {
 		default:
 			cout << "잘못된 입력입니다.\n";
 		}
-	
+
 	}
 
 
@@ -78,7 +80,7 @@ void ShopManager::PrintShopMenu() const {
 }
 
 void ShopManager::ShowShopItems() const {
-	
+
 	cout << "===== 아이템 =====\n";
 
 	for (size_t i = 0; i < ShopItems.size(); i++)
@@ -94,20 +96,20 @@ void ShopManager::ShowShopItems() const {
 
 
 
-bool ShopManager::BuyItem(int SelectedNumber, BaseCharacter* Player, Inventory& PlayerInventory) {
-	
+bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player, Inventory& PlayerInventory) {
+
 	int ItemIndex = SelectedNumber - 1;
 	if (ItemIndex < 0 || ItemIndex >= ShopItems.size()) return false;
 
 	auto Item = ShopItems[ItemIndex]; //상점꺼 객체(shared)
 
-	if (Player->GetGold() < Item->GetPrice()) {
+	if (Player.GetGold() < Item->GetPrice()) {
 		// 골드 부족 메시지 출력
 		return false;
 	}
 
-	Player->SetGold(Player->GetGold() - Item->GetPrice());
-	
+	Player.SetGold(Player.GetGold() - Item->GetPrice());
+
 	// 구매 완료 메시지 출력
 
 	/*switch (SelectedMenuNumber) {
@@ -129,7 +131,7 @@ bool ShopManager::BuyItem(int SelectedNumber, BaseCharacter* Player, Inventory& 
 
 }
 
-bool ShopManager::SellItem(const std::string& ItemName, BaseCharacter* Player, Inventory& PlayerInventory) {
+bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player, Inventory& PlayerInventory) {
 
 	auto Item = PlayerInventory.FindItem(ItemName);
 	if (Item == nullptr) {
@@ -138,7 +140,7 @@ bool ShopManager::SellItem(const std::string& ItemName, BaseCharacter* Player, I
 	}
 
 	int SellPrice = Item->GetPrice() * 6 / 10;
-	Player->SetGold(Player->GetGold() + SellPrice);
+	Player.SetGold(Player.GetGold() + SellPrice);
 
 	PlayerInventory.RemoveItem(ItemName);
 	//판매 완료 메시지 출력
