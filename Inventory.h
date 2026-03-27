@@ -13,6 +13,5 @@ public:
 	shared_ptr<ItemManager> FindItem(const string& itemName);
 	void UseItem(const string& itemName, BaseCharacter* character);
 	bool RemoveItem(const string& itemName);
-	void ShowItems() const;
 };
 
