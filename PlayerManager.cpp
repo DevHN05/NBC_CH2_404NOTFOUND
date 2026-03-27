@@ -90,9 +90,9 @@ void PlayerManager::CollectItem(std::shared_ptr<ItemManager> Item)
     PlayerInventory.AddItem(Item);
 }
 
-void PlayerManager::UseItem(const string& ItemName, PlayerManager& Player)
+void PlayerManager::UseItem(const string& ItemName)
 {
-    PlayerInventory.UseItem(ItemName, Player);
+    PlayerInventory.UseItem(ItemName, *this);
 }
 
 void PlayerManager::RemoveItem(const string& ItemName)
