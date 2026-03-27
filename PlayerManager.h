@@ -2,7 +2,9 @@
 
 #include "BaseCharacter.h"
 #include "Inventory.h"
+
 class Inventory;
+
 class PlayerManager : public BaseCharacter
 {
 public:

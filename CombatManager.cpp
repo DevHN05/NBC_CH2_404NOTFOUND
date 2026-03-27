@@ -3,18 +3,26 @@
 #include "PlayerManager.h"
 #include "BaseMonster.h"
 #include "GraphicManager.h"
+#include "LoggerSystem.h"
 #include "DiceSystem.h"
 #include <random>
 
 void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
     Gm.ClearLogs();
-    Gm.AddLog(Monster.GetNickname() + " Detected");
+    Ls.LogMonsterAppear(Monster.GetNickname());
+
+    cin.ignore(100, '\n');
 
     while (Player.GetHealth() > 0 && Monster.GetHealth() > 0)
     {
         UpdateBattleUI(Player, Monster);
+
+        Gm.GoSpace(3, 20);
+        cout << "[ Enter: Player Turn ]";
+        cin.get();
 
         // --- Player Turn ---
         Dice.RollDice(24, 10, 2);
@@ -23,12 +31,17 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 
         int Damage = IsSuccess ? Player.GetStrength() : Player.GetStrength() / 2;
 
+        Ls.LogDiceRoll(DiceValue, IsSuccess);
         Monster.SetHealth(Monster.GetHealth() - Damage);
-        Gm.AddLog(Player.GetNickname() + " Attack ! -" + to_string(Damage));
+        Ls.LogAttack(Player.GetNickname(),Monster.GetNickname(),Damage);
+        //Gm.AddLog(Player.GetNickname() + " Attack ! -" + to_string(Damage));
 
-        Gm.GoSpace(0, 30); cout << " [ Enter: Next Turn ]                                ";
-        cin.ignore(100, '\n');
+
+        Gm.GoSpace(3, 20);
+        cout << "[ Enter: Monster Turn ]";
+        //cin.ignore(100, '\n');
         cin.get();
+
         if (Monster.GetHealth() <= 0) break;
 
         UpdateBattleUI(Player, Monster);
@@ -40,10 +53,9 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 
         Damage = IsSuccess ? Monster.GetStrength() : Monster.GetStrength() / 2;
 
-        Player.SetHealth(Player.GetHealth() - Monster.GetStrength());
-        Gm.AddLog("?? " + Monster.GetNickname() + " Attack ! -" + to_string(Monster.GetStrength()));
-
-        //gm.GoSpace(0, 30); cout << " [ Enter: Next Turn ]                                ";
+        Ls.LogDiceRoll(DiceValue, IsSuccess);
+        Player.SetHealth(Player.GetHealth() - Damage);
+        Ls.LogAttack(Monster.GetNickname(), Player.GetNickname(), Damage);
     }
 
     UpdateBattleUI(Player, Monster);
@@ -75,10 +87,7 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
 
     //gm.d("SLIME", 40, 4);
 
-    Gm.GoSpace(72, 21); cout << "- GOLD: " << Player.GetGold() << "G";
-    Gm.GoSpace(72, 22); cout << "- ATK: " << Player.GetStrength();
-    Gm.GoSpace(72, 24); cout << "[ Inventory ]";
-    Gm.GoSpace(72, 25); cout << " 1. Recovery (HP)";
+    Gm.DrawInventoryData(Player);
 }
 
 void CombatManager::UpdateStoreUI(PlayerManager& Player)
@@ -103,9 +112,7 @@ void CombatManager::UpdateStoreUI(PlayerManager& Player)
         Gm.GoSpace(40, 11); cout << "3. FIREWALL EXPANSION (MAX HP+30): 300 G";
         Gm.GoSpace(40, 13); cout << "0. EXIT TERMINAL";
 
-        Gm.GoSpace(72, 21); cout << "[ USER STATUS ]";
-        Gm.GoSpace(72, 22); cout << "- CREDIT : " << Player.GetGold() << " G";
-        Gm.GoSpace(72, 23); cout << "- POWER  : " << Player.GetStrength();
+        Gm.DrawInventoryData(Player);
 
         Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
         Gm.GoSpace(38, 20);
@@ -151,6 +158,7 @@ void CombatManager::UpdateEventUI(PlayerManager& Player)
     }
 
     Gm.DrawLayout();
+    Gm.DrawInventoryData(Player);
 
     Gm.GoSpace(10, 8);  cout << ">> DISCOVERED: OBSOLETE HARD DRIVE (MODEL: OLD-GEN)";
     Gm.GoSpace(10, 9);  cout << ">> ATTEMPT DATA RECOVERY? (CAUTION: RISK OF CORRUPTION)";
