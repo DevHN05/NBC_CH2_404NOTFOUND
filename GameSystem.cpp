@@ -5,6 +5,7 @@
 #include "BaseBossMonster.h"
 #include "GraphicManager.h"
 #include "CombatManager.h"
+#include <algorithm>
 #include <string>
 
 using namespace std;
@@ -39,10 +40,17 @@ void GameSystem::StartGame()
     string Name = Gm.ShowTitle();
 
     PlayerManager Player(Name);
-    Player.SetHealth(100);
-    Player.SetStrength(7);
+    Player.SetLevel(1);
+    Player.SetHealth(80);
     Player.SetMaxHealth(100);
+    Player.SetStrength(7);
+    Player.SetDexterity(3);
+    Player.SetIntelligence(3);
+    Player.SetLuck(2);
     Player.SetCriticalProbability(20);
+    Player.SetGold(300);
+    Player.SetExperience(20);
+    Player.SetMaxExperience(100);
 
     cout << "Is your nickname " << Player.GetNickname() << "?\n";
 
@@ -50,20 +58,7 @@ void GameSystem::StartGame()
     {
         Gm.DrawLayout();
 
-        Gm.GoSpace(5, 2);  cout << ">> FIELD: SYSTEM CORE";
-        Gm.GoSpace(40, 8); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
-        Gm.GoSpace(40, 9); cout << " HP: " << Player.GetHealth() << " / " << Player.GetMaxHealth();
-
-        Gm.GoSpace(40, 10); cout << " STATUS: [";
-
-        for (int i = 0; i < 20; i++)
-        {
-            if (i < Player.GetHealth() / 5) cout << "■";
-            else cout << " ";
-        }
-
-        cout << "]";
-
+        Gm.DrawLobbyStatus(Player);
         Gm.DrawInventoryData(Player);
 
         int Choice;

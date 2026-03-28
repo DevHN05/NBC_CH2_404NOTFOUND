@@ -13,8 +13,9 @@ class PlayerManager;
 class GraphicManager
 {
 private:
-    GraphicManager() { InitializeAssets(); }
+    GraphicManager() { InitializeAssets(); HOut = GetStdHandle(STD_OUTPUT_HANDLE);}
 
+    HANDLE HOut;
     deque<string> GameLogs;
     unordered_map<string, vector<string>> AsciiAssets;
 
@@ -31,13 +32,16 @@ public:
         return Instance;
     }
 
-    void GoSpace(int X, int Y);
-    void SetConsoleSize(int Width, int Height);
+    void GoSpace(int X, int Y) const;
+    void SetConsoleSize(int Width, int Height) const;
 
     //Draw
-    void DrawLayout();
-    void DrawInventoryData(PlayerManager& Player);
-    string ShowTitle();
+    void DrawLayout() const;
+    void DrawLobbyStatus(PlayerManager& Player) const;
+    void DrawInventoryData(PlayerManager& Player) const;
+
+    string ShowTitle() const;
+
     void DrawAsciiCombatArt(const string& Player,const string& Monster);
     void DrawAsciiArt(const string& Name,const int& X, const int& Y);
 

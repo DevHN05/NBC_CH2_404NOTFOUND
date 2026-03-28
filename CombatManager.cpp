@@ -245,18 +245,18 @@ void CombatManager::UpdateStoreUI(PlayerManager& Player)
     while (choice != 0)
     {
         Gm.DrawLayout();
-        Gm.GoSpace(30, 2); cout << " [ SYSTEM MERCHANT ] ";
+        Gm.GoSpace(30, 3); cout << " [ SYSTEM MERCHANT ] ";
 
         vector<shared_ptr<ItemManager>> ItemsLog = Sm.GetShopItems();
         int LogStartX = 28;
 
         for (int i =0; i < ItemsLog.size(); ++i)
         {
-            Gm.GoSpace(LogStartX, 5 + 2 * i);
+            Gm.GoSpace(LogStartX, 6 + 2 * i);
             cout << to_string(i+1) + ". " + ItemsLog[i]->GetName() + " : " + to_string(ItemsLog[i]->GetPrice()) + "G";
         }
 
-        Gm.GoSpace(LogStartX, 13); cout << "0. EXIT TERMINAL";
+        Gm.GoSpace(LogStartX, 16); cout << "0. EXIT TERMINAL";
 
         Gm.DrawInventoryData(Player);
         Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
