@@ -7,9 +7,10 @@
 #include <random>
 #include <algorithm>
 #include "LoggerSystem.h"
+#include "MonsterData.h"
 
-class LoggerSystem;
 using namespace std;
+CombatManager& cm = CombatManager::GetInstance();
 
 // 일단 현재 준비된 이벤트 목록은 25개! 25개의 순서를 랜덤하게 섞어주는 함수. 25개가 모자라면 최민서에게 말씀!
 EventManager::EventManager(PlayerManager& InPlayer) : Player(InPlayer), CurrentEventIndex(0)
@@ -33,8 +34,8 @@ void EventManager::ShuffleEvents()
 
     EventIds.clear();
 
-    for (int i = 0; i < 5; ++i)
-    {
+    for (int i = 0; i < 5; ++i)     // 다섯씩 묶어서 상점 이벤트를 랜덤하게 하나씩 넣는 구조입니다.
+    {                               // 운이 나쁘면 4전투 2상점 4전투를 만날 수 있지만, 그것도 운 아닐까요?
         vector<int> Chunk;
         for (int j = 0; j < 4; ++j)
         {
@@ -120,7 +121,7 @@ void EventManager::BattleGuardian()
         if (Choice == 1)
         {
             Dice.RollDice(20, 13, DexBonus()); // 보정치를 받아서 13을 굴립니당
-            if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle)로 갑니당
+            if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)로 갑니당
         }
         else if (Choice == 2)
         {
@@ -137,7 +138,7 @@ void EventManager::BattleGuardian()
             IsValid = false;
 
             cin.clear();
-            cin.ignore(100, '\n');
+            cin.ignore(100, '\n');        // 한글 등 잘못된 입력을 지우는 역할의 함수입니당
         }
 
         if (IsValid) break;
@@ -150,8 +151,8 @@ void EventManager::BattleGuardian()
     }
     else
     {
-        // 실패 메세지 출력. 여긴 실패해도 체력 손해는 없음!
-        // 보안봇과 전투 함수
+        // 실패 메세지 출력 들어갈 곳. 여긴 실패해도 체력 손해는 없음!
+        cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
 
