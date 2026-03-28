@@ -1,6 +1,7 @@
 #include "GraphicManager.h"
 #include "PlayerManager.h"
 #include "Inventory.h"
+#include "ItemManager.h"
 #include <windows.h>
 
 using namespace std;
@@ -160,8 +161,11 @@ void GraphicManager::DrawInventoryData(PlayerManager& Player) const
 
     GoSpace(94, 19); cout << "[ Inventory ]";
     GoSpace(94, 20); cout << "- GOLD: " << Player.GetGold() << " G";
-    //for (int i =0; i < Player.)
-}
+    for (int i =0; i < Player.GetPlayerInventory().size(); ++i)
+    {
+        GoSpace(94, 21 + i); cout << "- " << Player.GetPlayerInventory()[i]->GetName();
+    }
+ }
 
 void GraphicManager::AddLog(const string& Log)
 {

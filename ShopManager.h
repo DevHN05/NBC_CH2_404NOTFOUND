@@ -49,5 +49,4 @@ public:
     bool BuyItem(int Index, PlayerManager& Player);
     bool SellItem(const std::string& ItemName, PlayerManager& Player);
 
-    vector<shared_ptr<ItemManager>>& GetShopItems();
 };

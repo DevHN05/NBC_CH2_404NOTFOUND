@@ -230,78 +230,13 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
 
 void CombatManager::UpdateStoreUI(PlayerManager& Player)
 {
-    int choice = -1;
     GraphicManager& Gm = GraphicManager::GetInstance();
     ShopManager& Sm = ShopManager::GetInstance();
 
     Gm.ClearLogs();
     Sm.RandomShuffleShopItems();
 
-    for (int i = 21; i <= 28; i++) {
-        Gm.GoSpace(2, i);
-        cout << "                                                                            ";
-    }
-
-    while (choice != 0)
-    {
-        Gm.DrawLayout();
-        Gm.GoSpace(30, 3); cout << " [ SYSTEM MERCHANT ] ";
-
-        vector<shared_ptr<ItemManager>> ItemsLog = Sm.GetShopItems();
-        int LogStartX = 28;
-
-        for (int i =0; i < ItemsLog.size(); ++i)
-        {
-            Gm.GoSpace(LogStartX, 6 + 2 * i);
-            cout << to_string(i+1) + ". " + ItemsLog[i]->GetName() + " : " + to_string(ItemsLog[i]->GetPrice()) + "G";
-        }
-
-        Gm.GoSpace(LogStartX, 16); cout << "0. EXIT TERMINAL";
-
-        Gm.DrawInventoryData(Player);
-        Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
-
-        string Input;
-
-        while (true)
-        {
-            Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
-            Gm.GoSpace(38, 20);
-
-            getline(cin, Input);
-
-            if (Input.empty())
-            {
-                continue;
-            }
-
-            choice = stoi(Input);
-            break;
-
-        }
-
-        //아이템 구매 및 판매 수정예정
-        if (choice == 1 && Player.GetGold() >= 100)
-        {
-            Player.SetGold(Player.GetGold() - 100);
-            Player.SetHealth(min(100, Player.GetHealth() + 50));
-            Gm.AddLog("[ SUCCESS: ANTIVIRUS DEPLOYED. HP RECOVERED ]");
-        }
-        else if (choice == 2 && Player.GetGold() >= 250)
-        {
-            Player.SetGold(Player.GetGold() - 250);
-            Player.SetStrength(Player.GetStrength() + 5);
-            Gm.AddLog("[ SUCCESS: ATK PATCH APPLIED. POWER UPGRADED ]");
-        }
-        else if (choice == 0)
-        {
-            Gm.AddLog("[ SYSTEM: EXITING MERCHANT TERMINAL... ]");
-        }
-        else
-        {
-            Gm.AddLog("[ ERROR: INSUFFICIENT CREDITS OR INVALID INPUT ]");
-        }
-    }
+    Sm.EnterShop(Player);
 }
 
 void CombatManager::UpdateEventUI(PlayerManager& Player, BaseMonster& Monster)

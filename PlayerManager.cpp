@@ -45,6 +45,11 @@ int PlayerManager::GetGold()
     return Gold;
 }
 
+vector<shared_ptr<ItemManager>> PlayerManager::GetPlayerInventory()
+{
+    return PlayerInventory.GetInventoryItems();
+}
+
 void PlayerManager::SetLevel(int Level)
 {
     this->Level = Level;

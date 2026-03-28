@@ -15,6 +15,8 @@ private:
 	vector<shared_ptr<ItemManager>> Items;
 
 public:
+    vector<shared_ptr<ItemManager>> GetInventoryItems();
+
 	void AddItem(shared_ptr<ItemManager> Item);
 	shared_ptr<ItemManager> FindItem(const string& ItemName);
 	void UseItem(const string& ItemName, PlayerManager& Character);
