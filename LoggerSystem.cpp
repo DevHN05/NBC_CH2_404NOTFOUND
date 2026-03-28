@@ -492,28 +492,31 @@ void LoggerSystem::LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Item
 //처치한 몬스터와 획득한 총 골드와 경험치를 보여주는 함수
 void LoggerSystem::PrintSummary()
 {
-	cout << "======================================\n";
-	cout << "[ DEBUG REPORT ] 디버깅 세션 종료\n";
-	cout << "======================================\n";
+    vector<string> Lines;
+    Lines.push_back("======================================");
+    Lines.push_back("[ DEBUG REPORT ] 디버깅 세션 종료");
+    Lines.push_back("======================================");
+    Lines.push_back("[ 제거된 버그 개체 ]");
 
-	cout << "[ 제거된 버그 개체 ]\n";
+    if (MonsterKillLogs.empty())
+    {
+        Lines.push_back("  제거된 버그 개체 없음");
+    }
+    else
+    {
+        for (auto& Entry : MonsterKillLogs)
+        {
+            Lines.push_back("  >> " + Entry.first + " x" + to_string(Entry.second) + " 제거 완료");
+        }
+    }
 
-	if (MonsterKillLogs.empty())
-	{
-		cout << "  제거된 버그 개체 없음\n";
-	}
-	else
-	{
-		for (auto& Entry : MonsterKillLogs)
-		{
-			cout << "  >> " << Entry.first << " x" << Entry.second << " 제거 완료\n";
-		}
-	}
+    Lines.push_back("[ 총 확보 골드    ] : " + to_string(TotalGold) + " G");
+    Lines.push_back("[ 총 수집 데이터  ] : " + to_string(TotalExp) + " EXP");
+    Lines.push_back("======================================");
 
-	cout << "[ 총 확보 골드    ] : " << TotalGold << " G\n";
-	cout << "[ 총 수집 데이터  ] : " << TotalExp << " EXP\n";
-	cout << "======================================\n";
+    PrintMainArea(Lines);
 }
+
 
 //출력한 로그들을 한번에 보여주는 함수(플레이 이력)
 void LoggerSystem::PrintEventLog()
