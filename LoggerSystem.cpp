@@ -450,12 +450,42 @@ void LoggerSystem::LogSellItem(const string& ItemName, int SellPrice)
     EventLogs.push_back(Log);
 }
 
+//"판매할 아이템 이름" 입력칸 출력 함수
+void LoggerSystem::LogShopSellPrompt()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.AddLog("판매할 아이템 이름을 입력하세요 >> ");
+}
+
 void LoggerSystem::LogItemNotFound(const string& ItemName)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     string Log = "[ ERROR ] " + ItemName + " — 인벤토리에서 찾을 수 없음";
     Gm.AddLog(Log);
     EventLogs.push_back(Log);
+}
+//상점 메뉴 출력 함수
+void LoggerSystem::LogPrintShopMenu()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.ClearLogs();
+    Gm.AddLog("1. 아이템 구매");
+    Gm.AddLog("2. 아이템 판매");
+    Gm.AddLog("3. 상점 나가기");
+    Gm.AddLog("선택 >> ");
+}
+
+//아이템 목록 출력 함수
+void LoggerSystem::LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.ClearLogs();
+    for (int i = 0; i < (int)Items.size(); i++)
+    {
+        Gm.AddLog(to_string(i + 1) + ". " + Items[i]->GetName()
+            + " (" + to_string(Items[i]->GetPrice()) + "G)");
+    }
+    Gm.AddLog("선택 >> ");
 }
 
 //-----------------------------요약----------------------------------
