@@ -162,13 +162,25 @@ string GraphicManager::ShowTitle()
 
     GoSpace(38, StartY + 9); cout << "ENTER YOUR NICKNAME: ";
     string InputName;
-    cin >> InputName;
+    while (true)
+    {
+        GoSpace(59, StartY + 9);
+
+        getline(cin, InputName);
+
+        if (InputName.empty())
+        {
+            continue;
+        }
+
+        break;
+    }
 
     //Gotoxy(35, start_y + 11); cout << ">> CONNECTION ESTABLISHED: " << input_name;
     GoSpace(42, StartY + 13); cout << "[Press Enter to Start]";
 
     cin.ignore(100, '\n');
-    cin.get();
+    //cin.get();
 
     return InputName;
 }
@@ -181,7 +193,7 @@ void GraphicManager::DrawAsciiArt(const string& Player,const string& Monster)
     if (AsciiAssets.count("PLAYER") > 0)
     {
         int StartX = 12;
-        int StartY = 5;  // 기존보다 위로 올림
+        int StartY = 5;
         int LineOffset = 0;
         for (const string& Line : AsciiAssets["PLAYER"])
         {
