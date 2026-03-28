@@ -143,6 +143,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         {
             Ls.LogBossPhaseChange(Boss.GetNickname(), Boss.GetSpecialSkillName(), Boss.GetStrength());
             Rage = true;
+            Sleep(3000);
         }
 
         Dice.RollDice(24, 10, 2);
@@ -201,13 +202,13 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
     int MonsterStartX = 5;
     Gm.GoSpace(MonsterStartX, 2);  cout << "[ ENEMY STATUS ]";
     Gm.GoSpace(MonsterStartX, 3);  cout << "NAME : " << Monster.GetNickname();
-    int MonsterHpBarLen = 20; // 전체 Bar 길이
+    int MonsterHpBarLen = 20;
     int MonsterHpLen = (Monster.GetMaxHealth() == 0) ? 0 : (Monster.GetHealth() * MonsterHpBarLen / Monster.GetMaxHealth());
     Gm.GoSpace(MonsterStartX, 4);  cout << "HP   : [";
     for(int i=0; i<MonsterHpBarLen; i++)
     {
         if(i < MonsterHpLen) cout << "■";
-        else cout << " "; // 깎인 체력
+        else cout << " ";
     }
     cout << "] " << Monster.GetHealth() << " / " << Monster.GetMaxHealth();
 
@@ -216,7 +217,7 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
     Gm.GoSpace(PlayerStartX, 13); cout << "[ PLAYER STATUS ]";
     Gm.GoSpace(PlayerStartX, 14); cout << "NAME : " << Player.GetNickname();
     Gm.GoSpace(PlayerStartX, 15); cout << "Lv." << Player.GetLevel() << "   HP: " << Player.GetHealth() << " / " << Player.GetMaxHealth();
-    int PlayerHpBarLen = 20; // 전체 Bar 길이
+    int PlayerHpBarLen = 20;
     int PlayerHpLen = (Monster.GetMaxHealth() == 0) ? 0 : (Player.GetHealth() * PlayerHpBarLen / Player.GetMaxHealth());
     Gm.GoSpace(PlayerStartX, 16);  cout << "HP   : [";
     for(int i=0; i<PlayerHpBarLen; i++)

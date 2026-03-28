@@ -5,6 +5,7 @@
 #include "BaseBossMonster.h"
 #include "GraphicManager.h"
 #include "CombatManager.h"
+#include <string>
 
 using namespace std;
 
@@ -65,17 +66,24 @@ void GameSystem::StartGame()
 
         Gm.DrawInventoryData(Player);
 
-        //Gm.GoSpace(0, 30);
-        Gm.GoSpace(3, 20);
-        cout << " Command (1.Search 2.Recovery 3.Quit): ";
-
         int Choice;
+        string Input;
 
-        if (!(cin >> Choice))
+        while (true)
         {
-            cin.clear();
-            cin.ignore(100, '\n');
-            continue;
+            Gm.GoSpace(3, 20);
+            cout << " Command (1.Search 2.Recovery 3.Quit): ";
+
+            getline(cin, Input);
+
+            if (Input.empty())
+            {
+                continue;
+            }
+
+            Choice = stoi(Input);
+            break;
+
         }
 
         if (Choice == 1)
