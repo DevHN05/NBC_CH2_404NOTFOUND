@@ -4,6 +4,7 @@
 #include "PlayerManager.h"
 #include "Potion.h"
 #include "LoggerSystem.h"
+#include "GraphicManager.h"
 
 ShopManager::ShopManager()
 {
@@ -18,8 +19,10 @@ ShopManager::ShopManager()
 
 void ShopManager::EnterShop(PlayerManager& Player)
 {
+    GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
     Ls.LogShopPrompt();
+    Gm.GoSpace(65, 21);
 
 	int EnterChoice;
 	cin >> EnterChoice;
@@ -33,31 +36,42 @@ void ShopManager::EnterShop(PlayerManager& Player)
 	bool InShop = true;
 	int MenuChoice;
 
+    Ls.LogShopEnter();
+
 	while (InShop)
 	{
-	    Ls.LogShopEnter();
+	    PrintShopMenu();
 
-		PrintShopMenu(); //-> 이것도 출력필요해요. 밑에는 예시여서
+	    Gm.DrawInventoryData(Player);
+	    Gm.GoSpace(4, 20); cout << "ENTER SHOP MENU >> ";
 
-		cin >> MenuChoice;
+	    cin >> MenuChoice;
 	    cin.ignore();
 
 		int ItemChoice;
 		string ItemToSellName;
 
-		switch (MenuChoice) {
+	    Gm.DrawInventoryData(Player);
+
+		switch (MenuChoice)
+	    {
 		case 1:
 			ShowShopItems(); //-> 이것도 출력필요해요. 밑에는 예시여서
+		    Gm.DrawInventoryData(Player);
+		    Gm.GoSpace(38, 20);
+
 			cin >> ItemChoice;
 			BuyItem(ItemChoice, Player);
 			break;
 		case 2:
-			cout << "판매할 아이템 이름 : "; //-> 이것도 출력필요해요. 밑에는 예시여서
+		    Gm.GoSpace(4, 20);
+		    cout << "판매할 아이템 이름 >> ";
+		    //cout << "판매할 아이템 이름 : "; //-> 이것도 출력필요해요. 밑에는 예시여서
 			getline(cin, ItemToSellName);
 			SellItem(ItemToSellName, Player);
 			break;
 		case 3:
-			//cout << "다음에 또 오시오.\n";
+		    Gm.AddLog("다음에 또 오시오.");
 			InShop = false;
 			break;
 		}
@@ -66,23 +80,40 @@ void ShopManager::EnterShop(PlayerManager& Player)
 
 void ShopManager::PrintShopMenu() const
 {
-    //로거에서 구현하면 여기서는 없어질 함수
-	cout << "===== 상점 =====\n";
-	cout << "1. 아이템 구매\n";
-	cout << "2. 아이템 판매\n";
-	cout << "3. 상점 나가기\n";
-    cout << "선택 : ";
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+    //Gm.ClearLogs();
+
+    int LogStartX = 28;
+    Gm.GoSpace(LogStartX, 6);
+    cout << "[ SHOP MENU ]";
+    Gm.GoSpace(LogStartX, 8);
+    cout << "1. 구매하기";
+    Gm.GoSpace(LogStartX, 10);
+    cout << "2. 판매하기";
+    Gm.GoSpace(LogStartX, 12);
+    cout << "3. 떠나기";
+
+    Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
 }
 
 void ShopManager::ShowShopItems() const
 {
-    //로거에서 구현하면 여기서는 없어질 함수
-    cout << "===== 아이템  =====\n";
-    cout << "1. Minor Healing Potion (100G)\n";
-    cout << "2. Major Healing Potion (250G)\n";
-    cout << "3. Minor Strength Potion (120G)\n";
-    cout << "4. Major Strength Potion (300G)\n";
-    cout << "선택 : ";
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+    Gm.GoSpace(30, 3); cout << " [ SYSTEM MERCHANT ] ";
+
+    int LogStartX = 28;
+
+    for (int i =0; i < CurrentDisplayItems.size(); ++i)
+    {
+        Gm.GoSpace(LogStartX, 6 + 2 * i);
+        cout << to_string(i+1) + ". " + CurrentDisplayItems[i]->GetName() + " : " + to_string(CurrentDisplayItems[i]->GetPrice()) + "G";
+    }
+
+    Gm.GoSpace(LogStartX, 16); cout << "0. EXIT TERMINAL";
+    Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
+    Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
 }
 
 void ShopManager::RandomShuffleShopItems()
@@ -110,16 +141,17 @@ bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
 	int ItemIndex = SelectedNumber - 1;
-	if (ItemIndex < 0 || ItemIndex >= ShopItems.size()) return false;
+	if (ItemIndex < 0 || ItemIndex >= CurrentDisplayItems.size()) return false;
 
-	auto Item = ShopItems[ItemIndex]; //상점꺼 객체(shared)
+	auto Item = CurrentDisplayItems[ItemIndex]; //상점꺼 객체(shared)
 
-	if (Player.GetGold() < Item->GetPrice()) {
+	if (Player.GetGold() < Item->GetPrice())
+	{
 	    Ls.LogInsufficientGold(Player.GetGold(), Item->GetPrice());
 		return false;
 	}
 
-    Player.CollectItem(ShopItems[ItemIndex]->Clone()); //복제본 만들기
+    Player.CollectItem(CurrentDisplayItems[ItemIndex]->Clone()); //복제본 만들기
 
     Player.SetGold(Player.GetGold() - Item->GetPrice());
 
@@ -133,7 +165,8 @@ bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player)
     LoggerSystem& Ls = LoggerSystem::GetInstance();
 	auto Item = Player.FindItem(ItemName);
 
-    if (Item == nullptr) {
+    if (Item == nullptr)
+    {
 		Ls.LogItemNotFound(ItemName);
 		return false;
 	}
@@ -147,7 +180,3 @@ bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player)
 	return true;
 }
 
-vector<shared_ptr<ItemManager>>& ShopManager::GetShopItems()
-{
-    return CurrentDisplayItems;
-}

@@ -3,6 +3,8 @@
 #include "BaseCharacter.h"
 #include "Inventory.h"
 
+class ItemManager;
+
 class PlayerManager : public BaseCharacter
 {
 public:
@@ -16,6 +18,7 @@ public:
     int GetLuck();
     int GetCriticalProbability();
     int GetGold();
+    vector<shared_ptr<ItemManager>> GetPlayerInventory();
 
     void SetLevel(int Level);
     void SetExperience(int Experience);

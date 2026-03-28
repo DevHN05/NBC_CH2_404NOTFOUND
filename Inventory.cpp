@@ -2,6 +2,11 @@
 
 using namespace std;
 
+vector<shared_ptr<ItemManager>> Inventory::GetInventoryItems()
+{
+    return Items;
+}
+
 void Inventory::AddItem(shared_ptr<ItemManager> Item)
 {
     Items.push_back(Item);
