@@ -1,5 +1,6 @@
 #include "GraphicManager.h"
 #include "PlayerManager.h"
+#include "Inventory.h"
 #include <windows.h>
 
 using namespace std;
@@ -23,40 +24,65 @@ void GraphicManager::InitializeAssets()
         "             /__|__|__\\               '     ", // 13. 지지대 (13줄 제한)
     };
 
-    AsciiAssets["SHOPKEEPER"] = {
-        "      .---------.      ", // 1. 상점 간판/지붕 느낌
-        "   .-'           '-.   ", // 2. 지붕 곡선
-        " /___________________\\ ", // 3. 지붕 마감
-        " |  [S H O P P E]    | ", // 4. 상점 간판 텍스트
-        " |___________________| ", // 5. 천장 라인
-        "     | (o_o) |         ", // 6. 주인장 머리 (안경 쓴 모습)
-        "     |__/ \\__|  [#]    ", // 7. 주인장 몸통 & 진열된 물건 1
-        "   .---|   |---. [_]   ", // 8. 카운터 상단 & 진열된 물건 2
-        "  /====[===]====\\      ", // 9. 카운터 전면 디자인
-        " /______________\\     ", // 10. 카운터 하단
-        " |  GOLD: 9999  |     ", // 11. 카운터 앞 정보 (소지금)
-        " |  [ ] [ ] [ ] |     ", // 12. 아래쪽 진열 상자들
-        " |______________|     ", // 13. 바닥 라인 1
-        " \\______________/     ", // 14. 바닥 라인 2
-        "                      ", // 15. 여백/마감 (총 15줄)
+    AsciiAssets["SLIME"] =
+    {
+        "        .-----------.          ", // 1. 상단 안테나/돌기
+        "     .-'             '-.       ", // 2. 부드러운 상단 라인
+        "   /     .---------.     \\     ", // 3. 내부 코어 보호막
+        "  |     /   [X_X]   \\     |    ", // 4. 에러 발생한 코어 눈
+        " /     |    ERROR    |     \\   ", // 5. 상태 메시지
+        "|      \\____________/      |   ", // 6. 코어 하단부
+        "|   .-------------------.   |   ", // 7. 내부 전선/회로 느낌
+        "\\  /                     \\  /   ", // 8. 출렁이는 몸체 옆면
+        " '|      01011010110      |'    ", // 9. 흘러나오는 데이터 코드
+        "  \\      ___________      /     ", // 10. 바닥 접촉면 시작
+        "   '----/           \\----'      ", // 11. 바닥에 퍼진 질감
+        "       '-------------'          ", // 12. 마감 (12줄 제한)
+    };
+
+    AsciiAssets["SHOPKEEPER"] =
+    {
+        "      ╔══════════════════════╗      ", // 1. 상점 간판 상단
+        "      ║   💰 MYSTERY SHOP 💰 ║      ", // 2. 유니코드 아이콘 활용
+        "      ╚══════════╦═══════════╝      ", // 3. 간판 하단 연결
+        "   __________   _║_     __________   ", // 4. 지붕 및 천장 구조
+        "  /          \\ ( ●_● ) /          \\  ", // 5. 상점 주인 (안경 쓴 현자 느낌)
+        " |    [⚔️]    |   /█\\  |    [🧪]   | ", // 6. 좌우 진열대 (검과 포션)
+        " |    [🛡️]    | _/   \\_|    [📜]   | ", // 7. 좌우 진열대 (방패와 주문서)
+        " 🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱 ", // 8. 카운터 뒷배경 벽돌
+        " ╔════════════════════════════════╗ ", // 9. 메인 카운터 상단
+        " ║ 📂 [Buy] 📂 [Sell]  📂[Exit]   ║ ", // 10. 상점 UI 메뉴 버튼 느낌
+        " ╠════════════════════════════════╣ ", // 11. 카운터 중간 구분선
+        " ║  Welcome! What do you need?    ║ ", // 12. 주인의 대사 텍스트
+        " ║  [ G: 1,250 ]        [ W: 45 ] ║ ", // 13. 소지금 및 무게 정보
+        " ╚════════════════════════════════╝ ", // 14. 카운터 하단 마감
+        "   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ", // 15. 바닥 그림자/질감 (15줄)
     };
 }
 
-void GraphicManager::GoSpace(int X, int Y)
+void GraphicManager::GoSpace(int X, int Y) const
 {
-    HANDLE HOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD Coord = { (short)X, (short)Y };
+    COORD Coord = { static_cast<short>(X), static_cast<short>(Y) };
     SetConsoleCursorPosition(HOut, Coord);
 }
 
-void GraphicManager::SetConsoleSize(int Width, int Height)
+void GraphicManager::SetConsoleSize(int Width, int Height) const
 {
-    HANDLE HOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD BufferSize = { (short)Width, (short)Height };
-    SMALL_RECT WindowSize = { 0, 0, (short)(Width - 1), (short)(Height - 1) };
+    if (HOut == INVALID_HANDLE_VALUE) return;
+
+    COORD BufferSize = { static_cast<short>(Width), static_cast<short>(Height) };
+
+    //창 크기 설정
+    SMALL_RECT WindowSize = { 0, 0, static_cast<short>(Width - 1), static_cast<short>(Height - 1) };
+
+    SMALL_RECT MinWindow = { 0, 0, 1, 1 };
+    SetConsoleWindowInfo(HOut, TRUE, &MinWindow);
+
+    SetConsoleScreenBufferSize(HOut, BufferSize);
+    SetConsoleWindowInfo(HOut, TRUE, &WindowSize);
 }
 
-void GraphicManager::DrawLayout()
+void GraphicManager::DrawLayout() const
 {
     system("cls");
 
@@ -79,9 +105,6 @@ void GraphicManager::DrawLayout()
         GoSpace(i, 28); cout << "=";
     }
 
-    GoSpace(2, 19); cout << "[ SYSTEM LOG ]";
-    GoSpace(78, 19); cout << "[ STATUS & INVENTORY ]";
-
     int Line = 0;
     for (const string& Log : GameLogs)
     {
@@ -90,24 +113,68 @@ void GraphicManager::DrawLayout()
     }
 }
 
-void GraphicManager::DrawInventoryData(PlayerManager& Player)
+void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
 {
-    GoSpace(78, 21); cout << "- GOLD: " << Player.GetGold() << "G";
-    GoSpace(78, 22); cout << "- ATK: " << Player.GetStrength();
-    GoSpace(78, 24); cout << "[ Inventory ]";
-    GoSpace(78, 25); cout << " 1. Recovery (HP)";
+    GoSpace(40, 8); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
+    GoSpace(5, 2);  cout << ">> FIELD: SYSTEM CORE";
+    GoSpace(40, 9); cout << " HP:  [ ";
+    int MaxHpBar = 20;
+    int FilledHPGauge = (int)(Player.GetHealth() * MaxHpBar / Player.GetMaxHealth());
+    FilledHPGauge = min(FilledHPGauge, MaxHpBar);
+
+    for (int i = 0; i < MaxHpBar; i++)
+    {
+        if (i < FilledHPGauge)
+            cout << "■";
+        else
+            cout << " ";
+    }
+    cout << " ] " << Player.GetHealth() << " / " << Player.GetMaxHealth();
+
+    GoSpace(40, 10); cout << " EXP: [ ";
+    int MaxExpBar = 20;
+    int FilledExpGauge = (int)(Player.GetExperience() * MaxExpBar / Player.GetMaxExperience());
+    FilledExpGauge = min(FilledExpGauge, MaxExpBar);
+
+    for (int i = 0; i < MaxExpBar; i++)
+    {
+        if (i < FilledExpGauge)
+            cout << "■";
+        else
+            cout << " ";
+    }
+    cout << " ] " << Player.GetExperience() << " / " << Player.GetMaxExperience();
+}
+
+void GraphicManager::DrawInventoryData(PlayerManager& Player) const
+{
+    GoSpace(2, 19); cout << "[ SYSTEM LOG ]";
+
+    GoSpace(78, 19); cout << "[ STATUS]";
+    //oSpace(78, 20); cout << "- LV: " << Player.GetLevel();
+    //GoSpace(78, 21); cout << "- EXP: " << Player.GetExperience() << " / " << Player.GetMaxExperience();
+    GoSpace(78, 20); cout << "- ATK: " << Player.GetStrength();
+    GoSpace(78, 21); cout << "- Dex: " << Player.GetDexterity();
+    GoSpace(78, 22); cout << "- Int: " << Player.GetIntelligence();
+    GoSpace(78, 23); cout << "- Lux: " << Player.GetLuck();
+
+    GoSpace(94, 19); cout << "[ Inventory ]";
+    GoSpace(94, 20); cout << "- GOLD: " << Player.GetGold() << " G";
+    //for (int i =0; i < Player.)
 }
 
 void GraphicManager::AddLog(const string& Log)
 {
     GameLogs.push_back(Log);
-    if (GameLogs.size() > 7) GameLogs.pop_front();
+    if (GameLogs.size() > 7)
+        GameLogs.pop_front();
 
     for (int i = 0; i < 7; i++)
     {
         GoSpace(2, 21 + i);
         cout << "                                                                 ";
-        if (i < GameLogs.size()) {
+        if (i < GameLogs.size())
+        {
             GoSpace(2, 21 + i);
             cout << "> " << GameLogs[i];
         }
@@ -150,7 +217,7 @@ void GraphicManager::HitShake(const string& TargetKey, int StartX, int StartY, i
     SetConsoleTextAttribute(hConsole, 0x0F);
 }
 
-string GraphicManager::ShowTitle()
+string GraphicManager::ShowTitle() const
 {
     system("cls");
     int StartX = 25, StartY = 10;
@@ -179,7 +246,6 @@ string GraphicManager::ShowTitle()
         break;
     }
 
-    //Gotoxy(35, start_y + 11); cout << ">> CONNECTION ESTABLISHED: " << input_name;
     GoSpace(42, StartY + 13); cout << "[Press Enter to Start]";
 
     cin.ignore(100, '\n');
@@ -195,11 +261,11 @@ void GraphicManager::DrawAsciiCombatArt(const string& Player,const string& Monst
 
     if (AsciiAssets.count("PLAYER") > 0)
     {
-        int StartX = 12;
-        int StartY = 5;
         int LineOffset = 0;
         for (const string& Line : AsciiAssets["PLAYER"])
         {
+            int StartY = 5;
+            int StartX = 12;
             GoSpace(StartX, StartY + LineOffset++);
             cout << Line;
         }
@@ -207,11 +273,11 @@ void GraphicManager::DrawAsciiCombatArt(const string& Player,const string& Monst
 
     if (AsciiAssets.count(Monster) > 0)
     {
-        int StartX = 74;
-        int StartY = 1;
         int LineOffset = 0;
         for (const string& Line : AsciiAssets[Monster])
         {
+            int StartY = 1;
+            int StartX = 74;
             GoSpace(StartX, StartY + LineOffset++);
             cout << Line;
         }
