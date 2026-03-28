@@ -11,6 +11,9 @@ ShopManager::ShopManager()
     ShopItems.push_back(make_shared<Potion>("Major Healing Potion", 250, Potion::EPotionType::Health, 80));
     ShopItems.push_back(make_shared<Potion>("Minor Strength Potion", 120, Potion::EPotionType::Strength, 5));
     ShopItems.push_back(make_shared<Potion>("Major Strength Potion", 300, Potion::EPotionType::Strength, 15));
+    ShopItems.push_back(make_shared<Potion>("Major Jin Potion", 250, Potion::EPotionType::Health, 80));
+    ShopItems.push_back(make_shared<Potion>("Minor Hui Potion", 120, Potion::EPotionType::Strength, 5));
+    ShopItems.push_back(make_shared<Potion>("Major Jang Potion", 300, Potion::EPotionType::Strength, 15));
 }
 
 void ShopManager::EnterShop(PlayerManager& Player)
@@ -82,6 +85,27 @@ void ShopManager::ShowShopItems() const
     cout << "선택 : ";
 }
 
+void ShopManager::RandomShuffleShopItems()
+{
+    if (ShopItems.empty())
+        return;
+
+    CurrentDisplayItems.clear();
+
+    static random_device rd;
+    static mt19937 g(rd());
+
+    auto ShuffledItems = ShopItems;
+    shuffle(ShuffledItems.begin(), ShuffledItems.end(), g);
+
+    int DisplayCount = min((int)ShuffledItems.size(), 5);
+
+    for (int i = 0; i < DisplayCount; ++i)
+    {
+        CurrentDisplayItems.push_back(ShuffledItems[i]);
+    }
+}
+
 bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
@@ -121,4 +145,9 @@ bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player)
 	Player.RemoveItem(ItemName);
 
 	return true;
+}
+
+vector<shared_ptr<ItemManager>>& ShopManager::GetShopItems()
+{
+    return CurrentDisplayItems;
 }

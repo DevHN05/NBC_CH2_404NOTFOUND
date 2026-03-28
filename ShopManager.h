@@ -3,6 +3,8 @@
 #pragma once
 #include "ItemManager.h"
 #include <vector>
+#include <algorithm>
+#include <random>
 
 // =====================================================
 // 상점은 독립 매니저 클래스
@@ -24,15 +26,28 @@ class PlayerManager;
 class ShopManager
 {
 private:
+    ShopManager();
+
     vector<shared_ptr<ItemManager>> ShopItems;
+    vector<shared_ptr<ItemManager>> CurrentDisplayItems;
 
 public:
-    ShopManager();
+    ShopManager(const ShopManager&) = delete;
+    void operator=(const ShopManager&) = delete;
+
+    static ShopManager& GetInstance()
+    {
+        static ShopManager Instance;
+        return Instance;
+    }
 
     void EnterShop(PlayerManager& Player); //입장 여부 확인 → 메뉴 루프
     void PrintShopMenu() const;
     void ShowShopItems() const;
+    void RandomShuffleShopItems();
 
     bool BuyItem(int Index, PlayerManager& Player);
     bool SellItem(const std::string& ItemName, PlayerManager& Player);
+
+    vector<shared_ptr<ItemManager>>& GetShopItems();
 };

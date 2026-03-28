@@ -38,7 +38,8 @@ public:
     void DrawLayout();
     void DrawInventoryData(PlayerManager& Player);
     string ShowTitle();
-    void DrawAsciiArt(const string& Player,const string& Monster);
+    void DrawAsciiCombatArt(const string& Player,const string& Monster);
+    void DrawAsciiArt(const string& Name,const int& X, const int& Y);
 
     //System Log
     void AddLog(const string& Log);

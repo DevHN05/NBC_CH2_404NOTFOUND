@@ -6,6 +6,8 @@
 #include "GraphicManager.h"
 #include "LoggerSystem.h"
 #include "DiceSystem.h"
+#include "ShopManager.h"
+#include "ItemManager.h"
 #include <random>
 
 void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
@@ -17,8 +19,6 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
     Ls.LogMonsterAppear(Monster.GetNickname());
 
     UpdateBattleUI(Player, Monster);
-
-    cin.ignore(100, '\n');
 
     while (Player.GetHealth() > 0 && Monster.GetHealth() > 0)
     {
@@ -96,8 +96,6 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
 
     UpdateBattleUI(Player, Boss);
 
-    cin.ignore(100, '\n');
-
     while (Player.GetHealth() > 0 && Boss.GetHealth() > 0)
     {
 
@@ -143,7 +141,6 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         {
             Ls.LogBossPhaseChange(Boss.GetNickname(), Boss.GetSpecialSkillName(), Boss.GetStrength());
             Rage = true;
-            Sleep(3000);
         }
 
         Dice.RollDice(24, 10, 2);
@@ -227,7 +224,7 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
     }
     cout << "] " << Player.GetHealth() << " / " << Player.GetMaxHealth();
 
-    Gm.DrawAsciiArt("PLAYER", "SLIME"); //전자는 고정 후자는 몬스터 이름 넣어야댐
+    Gm.DrawAsciiCombatArt("PLAYER", "SLIME"); //전자는 고정 후자는 몬스터 이름 넣어야댐
     Gm.DrawInventoryData(Player);
 }
 
@@ -235,8 +232,10 @@ void CombatManager::UpdateStoreUI(PlayerManager& Player)
 {
     int choice = -1;
     GraphicManager& Gm = GraphicManager::GetInstance();
+    ShopManager& Sm = ShopManager::GetInstance();
 
     Gm.ClearLogs();
+    Sm.RandomShuffleShopItems();
 
     for (int i = 21; i <= 28; i++) {
         Gm.GoSpace(2, i);
@@ -246,24 +245,42 @@ void CombatManager::UpdateStoreUI(PlayerManager& Player)
     while (choice != 0)
     {
         Gm.DrawLayout();
-        Gm.GoSpace(35, 2); cout << " [ SYSTEM MERCHANT ] ";
+        Gm.GoSpace(30, 2); cout << " [ SYSTEM MERCHANT ] ";
 
-        Gm.GoSpace(40, 7);  cout << "1. STANDARD ANTIVIRUS (HP +50) : 100 G";
-        Gm.GoSpace(40, 9);  cout << "2. ATK ENHANCEMENT PATCH (ATK+5): 250 G";
-        Gm.GoSpace(40, 11); cout << "3. FIREWALL EXPANSION (MAX HP+30): 300 G";
-        Gm.GoSpace(40, 13); cout << "0. EXIT TERMINAL";
+        vector<shared_ptr<ItemManager>> ItemsLog = Sm.GetShopItems();
+        int LogStartX = 28;
 
-        Gm.DrawInventoryData(Player);
-
-        Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
-        Gm.GoSpace(38, 20);
-
-        if (!(cin >> choice))
+        for (int i =0; i < ItemsLog.size(); ++i)
         {
-            cin.clear(); cin.ignore(100, '\n');
-            continue;
+            Gm.GoSpace(LogStartX, 5 + 2 * i);
+            cout << to_string(i+1) + ". " + ItemsLog[i]->GetName() + " : " + to_string(ItemsLog[i]->GetPrice()) + "G";
         }
 
+        Gm.GoSpace(LogStartX, 13); cout << "0. EXIT TERMINAL";
+
+        Gm.DrawInventoryData(Player);
+        Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
+
+        string Input;
+
+        while (true)
+        {
+            Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
+            Gm.GoSpace(38, 20);
+
+            getline(cin, Input);
+
+            if (Input.empty())
+            {
+                continue;
+            }
+
+            choice = stoi(Input);
+            break;
+
+        }
+
+        //아이템 구매 및 판매 수정예정
         if (choice == 1 && Player.GetGold() >= 100)
         {
             Player.SetGold(Player.GetGold() - 100);

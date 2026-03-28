@@ -23,19 +23,22 @@ void GraphicManager::InitializeAssets()
         "             /__|__|__\\               '     ", // 13. 지지대 (13줄 제한)
     };
 
-    AsciiAssets["SLIME"] = {
-        "        .-----------.        ", // 1. 상단 안테나/돌기
-        "     .-'             '-.      ", // 2. 부드러운 상단 라인
-        "   /     .---------.     \\     ", // 3. 내부 코어 보호막
-        "  |     /   [X_X]   \\     |    ", // 4. 에러 발생한 코어 눈
-        " /     |    ERROR    |     \\   ", // 5. 상태 메시지
-        "|      \\____________/      |   ", // 6. 코어 하단부
-        "|   .-------------------.   |   ", // 7. 내부 전선/회로 느낌
-        "\\  /                     \\  /  ", // 8. 출렁이는 몸체 옆면
-        " '|      01011010110      |'    ", // 9. 흘러나오는 데이터 코드
-        "  \\      ___________      /     ", // 10. 바닥 접촉면 시작
-        "   '----/           \\----'      ", // 11. 바닥에 퍼진 질감
-        "       '-------------'          ", // 12. 마감 (12줄 제한)
+    AsciiAssets["SHOPKEEPER"] = {
+        "      .---------.      ", // 1. 상점 간판/지붕 느낌
+        "   .-'           '-.   ", // 2. 지붕 곡선
+        " /___________________\\ ", // 3. 지붕 마감
+        " |  [S H O P P E]    | ", // 4. 상점 간판 텍스트
+        " |___________________| ", // 5. 천장 라인
+        "     | (o_o) |         ", // 6. 주인장 머리 (안경 쓴 모습)
+        "     |__/ \\__|  [#]    ", // 7. 주인장 몸통 & 진열된 물건 1
+        "   .---|   |---. [_]   ", // 8. 카운터 상단 & 진열된 물건 2
+        "  /====[===]====\\      ", // 9. 카운터 전면 디자인
+        " /______________\\     ", // 10. 카운터 하단
+        " |  GOLD: 9999  |     ", // 11. 카운터 앞 정보 (소지금)
+        " |  [ ] [ ] [ ] |     ", // 12. 아래쪽 진열 상자들
+        " |______________|     ", // 13. 바닥 라인 1
+        " \\______________/     ", // 14. 바닥 라인 2
+        "                      ", // 15. 여백/마감 (총 15줄)
     };
 }
 
@@ -185,7 +188,7 @@ string GraphicManager::ShowTitle()
     return InputName;
 }
 
-void GraphicManager::DrawAsciiArt(const string& Player,const string& Monster)
+void GraphicManager::DrawAsciiCombatArt(const string& Player,const string& Monster)
 {
     if (AsciiAssets.find(Player) == AsciiAssets.end()) return;
     if (AsciiAssets.find(Monster) == AsciiAssets.end()) return;
@@ -213,4 +216,20 @@ void GraphicManager::DrawAsciiArt(const string& Player,const string& Monster)
             cout << Line;
         }
     }
+}
+
+void GraphicManager::DrawAsciiArt(const string& Name, const int& X,const int& Y)
+{
+    if (AsciiAssets.find(Name) == AsciiAssets.end()) return;
+
+    if (AsciiAssets.count(Name) > 0)
+    {
+        int LineOffset = 0;
+        for (const string& Line : AsciiAssets[Name])
+        {
+            GoSpace(X, Y + LineOffset++);
+            cout << Line;
+        }
+    }
+
 }

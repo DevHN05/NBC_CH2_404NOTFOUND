@@ -88,7 +88,7 @@ void GameSystem::StartGame()
 
         if (Choice == 1)
         {
-            int RandomEvent = 0; //rand() % 3;
+            int RandomEvent = 1; //rand() % 3;
 
             switch (RandomEvent)
             {
