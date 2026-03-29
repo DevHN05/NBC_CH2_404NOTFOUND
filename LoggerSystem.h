@@ -48,29 +48,57 @@ public:
     void LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items, const vector<shared_ptr<ItemManager>>& CurrentDisplayItems); //상점의 아이템 목록
     void LogPrintShopMenu(); //상점 메뉴
 
-    //전투 이벤트 내러티브
+    //전투 이벤트
     void LogEventWanderer(int StrBonus, int DexBonus); //방랑자
-    void LogEventGuardian(int DexBonus, int IntBonus); //파수꾼
-    void LogEventBreaker(int StrBonus, int IntBonus); //분쇄자
-    void LogEventInvader(int DexBonus, int LukBonus); //침략자
-    void LogEventAssassin(int StrBonus, int IntBonus); //암살자
-    void LogEventBridge(int DexBonus, int LukBonus, int StrBonus); //아래로 쭉 재활용 몬스터
-    void LogEventForest(int IntBonus, int LukBonus);
-    void LogEventDataNoise(int IntBonus, int LukBonus);
-    void LogEventGravity(int LukBonus, int IntBonus);
-    void LogEventCliff(int DexBonus, int IntBonus);
-
-    //전투 이벤트 실패 메시지
     void LogEventFailWanderer();
+
+    void LogEventGuardian(int DexBonus, int IntBonus); //파수꾼
     void LogEventFailGuardian();
+
+    void LogEventBreaker(int StrBonus, int IntBonus); //분쇄자
     void LogEventFailBreaker();
+
+    void LogEventInvader(int DexBonus, int LukBonus); //침략자
     void LogEventFailInvader();
+
+    void LogEventAssassin(int StrBonus, int IntBonus); //암살자
     void LogEventFailAssassin();
+
+    void LogEventBridge(int DexBonus, int LukBonus, int StrBonus); //아래로 쭉 재활용 몬스터
     void LogEventFailBridge();
+
+    void LogEventForest(int IntBonus, int LukBonus);
     void LogEventFailForest();
+
+    void LogEventDataNoise(int IntBonus, int LukBonus);
     void LogEventFailDataNoise();
+
+    void LogEventGravity(int LukBonus, int IntBonus);
     void LogEventFailGravity();
+
+    void LogEventCliff(int DexBonus, int IntBonus);
     void LogEventFailCliff();
+
+    //보상/전투/회피 이벤트(
+    void ChoiceGarbageCollector(int DexBonus); //제일 쎔 - 처형자 :: 가비지 컬렉션
+    void ChoiceGarbageCollectorSuccess();
+    void ChoiceGarbageCollectorFail();
+
+    void ChoiceUndeclared(int StrBonus); //중간 - 소거자 :: 언디클레어드
+    void ChoiceUndeclaredSuccess();
+    void ChoiceUndeclaredFail();
+
+    void ChoiceDanglingPointer(int StrBonus); //중간 - 투영자 :: 댕글링 포인터
+    void ChoiceDanglingPointerSuccess();
+    void ChoiceDanglingPointerFail();
+
+    void ChoiceBrokenActor(int LukBonus, int IntBonus);
+    void ChoiceBrokenActorSuccess();
+    void ChoiceBrokenActorFail();
+
+    void ChoiceUninitArray(int IntBonus);
+    void ChoiceUninitArraySuccess();
+    void ChoiceUninitArrayFail();
 
     //요약
     void PrintSummary(); //처치 몬스터 수, 획득 골드, 획득 경험치

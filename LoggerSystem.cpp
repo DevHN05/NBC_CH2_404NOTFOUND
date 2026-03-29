@@ -348,6 +348,172 @@ void LoggerSystem::LogEventFailCliff()
     });
 }
 
+//-----------------------------보상/전투/회피 이벤트----------------------------------
+//처형자::가비지 컬렉션
+void LoggerSystem::ChoiceGarbageCollector(int DexBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "당신은 오래된 데이터들이 쌓여 있는 캐시 메모리 저장소에 도착했습니다.",
+        "이곳에는 수많은 아이템 데이터들이 버그로 인해 버려져 있고,",
+        "버그가 난 가비지 컬렉션이 주기적으로 돌아다니며 필요한 데이터까지 삭제하고 있습니다.",
+        "운이 좋으면 유용한 아이템 코드를 복구할 수 있겠지만,",
+        "가비지 컬렉션의 눈에 띄면 당신마저 쓰레기 데이터로 분류되어 삭제될수도 있습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 가비지 컬렉션에게 걸리지 않도록 주의하며 데이터를 챙겨봅니다. (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 가비지 컬렉션도 결국 코드덩어리. 정면으로 싸움을 겁니다. (전투 발생)");
+    Gm.AddLog("3. 삭제당할 위험을 감수할 수 없습니다. 빙 돌아서 지나갑니다. (전투 회피)");
+}
+
+void LoggerSystem::ChoiceGarbageCollectorSuccess()
+{
+    PrintMainArea({
+        "조심스럽게 데이터 파편들을 훑어보니, 꽤 쓸만한 코드 조각들이 남아 있었습니다.",
+        "가비지 컬렉션의 눈을 피해 소득을 챙겼습니다. 오늘은 운이 좋군요."
+    });
+}
+
+void LoggerSystem::ChoiceGarbageCollectorFail()
+{
+    PrintMainArea({
+        "파편을 열심히 챙기던 중, 가비지 컬렉션에게 발각당합니다!",
+        "즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다."
+    });
+}
+
+//소거자::언디클레어드
+void LoggerSystem::ChoiceUndeclared(int StrBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "여정을 이어가던 당신은 이내 수많은 책이 쌓여있는 곳을 마주합니다. 이곳은 모든 책의 제목이 지워져 있었습니다.",
+        "그야말로 책들의 무덤같은 풍경. 그 한가운데에 얼굴이 없는 기사가 서 있습니다.",
+        "녀석은 당신이 휘두르는 칼이 무엇인지, 당신의 이름이 무엇인지조차 인식하지 못합니다.",
+        "선언되지 않은 존재는 이곳에 있을 수 없다며 녀석의 칼날이 당신의 데이터 라인을 직접 조준합니다.",
+        "녀석의 뒤에서 본래 이곳을 관리해야 했던 #include <stdio.h>가 비웃고 있습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 힘으로 #include <stdio.h>를 제압해 이곳을 다시 관리하도록 제자리에 둡니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 헤더를 고치기엔 너무 멀리 왔습니다. 저 버그 덩어리를 제압하는 수 밖에요. (전투 발생)");
+    Gm.AddLog("3. 이 지역을 지금 구할 필요가 있을까요? 빙 돌아서 지나갑니다. (전투 회피)");
+}
+
+void LoggerSystem::ChoiceUndeclaredSuccess()
+{
+    PrintMainArea({
+        "#include <stdio.h>를 제자리로 돌려놓자, 책들의 제목이 하나둘 복구되기 시작합니다.",
+        "얼굴 없는 기사도 인식 오류가 해소되며 그 자리에서 소멸합니다. 이 지역이 안정을 되찾았습니다."
+    });
+}
+
+void LoggerSystem::ChoiceUndeclaredFail()
+{
+    PrintMainArea({
+        "'Player': undeclared identifier 에러 발생! 시스템이 당신을 인식할 수 없습니다.",
+        "즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다."
+    });
+}
+
+//투영자::댕글링 포인터
+void LoggerSystem::ChoiceDanglingPointer(int StrBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "당신이 파괴한 버그는 데이터로 분해되어 사라졌지만,",
+        "그 자리에 여전히 적의 '공격 판정'이 유령처럼 남아 주변 데이터를 오염시키고 있습니다.",
+        "아무래도 유효하지 않은 주소를 참조하고 있는 잔상인 것 같습니다.",
+        "시스템이 리소스를 완전히 회수하지 못해 발생한 댕글링 포인터 현상이 벌어지고 있군요.",
+        "이 유령 데이터를 정리하지 않고는 지나갈 순 없겠습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 직접 댕글링 포인터에 nullptr를 대입하여 원상 복구를 시도합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 실체가 없더라도 디버깅하면 그만이죠. 정면으로 싸움을 겁니다. (전투 발생)");
+    Gm.AddLog("3. 시스템 크래시는 무섭습니다. 욕심을 버리고 빙 돌아서 지나갑니다. (전투 회피)");
+}
+
+void LoggerSystem::ChoiceDanglingPointerSuccess()
+{
+    PrintMainArea({
+        "데이터 잔상이 소멸하며 안전한 경로가 확보됩니다.",
+        "근처에 휘말려있던 보물 상자도 정상화되어, 수익을 기대할 수 있겠습니다."
+    });
+}
+
+void LoggerSystem::ChoiceDanglingPointerFail()
+{
+    PrintMainArea({
+        "NullPtr을 잘못 넣었고, 녀석은 여전히 존재하지 않는 주소를 읽으려 시도했습니다.",
+        "시스템 크래시와 함께 유령 데이터가 실체화되어 당신을 덮칩니다."
+    });
+}
+
+//재활용? - 브로큰 액터
+void LoggerSystem::ChoiceBrokenActor(int LukBonus, int IntBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "당신은 계속해서 여정을 나아가던 중, 버그가 발생해 데이터가 완전히 깨져버린 액터를 발견합니다.",
+        "액터는 텍스쳐가 완전히 깨져서 원형을 알아볼 수 없게 되어 있습니다. 버그에게 습격당한 모양인데요.",
+        "아직 근처에 습격한 버그가 남아있을지도 모르지만, 위험을 감수할 가치가 있어보입니다.",
+        "범인이 버그라면 아직 버그가 걸리지 않은 액터의 부산물을 주울 수 있을지도 모릅니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 난 운이 좋으니 버그가 떠났을거야. 운에게 맡기며 액터를 살펴봅니다. (판정값 10, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("2. 망가진 액터의 원형을 상상하며 쓸만한 아이템 코드가 있는지 살펴봅니다. (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("3. 위험을 감수할 순 없죠. 그냥 지나칩니다. (이벤트 종료)");
+}
+
+void LoggerSystem::ChoiceBrokenActorSuccess()
+{
+    PrintMainArea({
+        "이 액터는 원래 전리품 상자였던 모양입니다. 귀중한 물품이 제법 많이 들어있군요.",
+        "하지만 버그의 습격으로 상당수가 훼손됐습니다. 살아남은 것만 대충 챙겨야겠군요."
+    });
+}
+
+void LoggerSystem::ChoiceBrokenActorFail()
+{
+    PrintMainArea({
+        "이런, 놈은 아직 멀리 가지 않았던 모양입니다.",
+        "아무래도 망가진 액터처럼 당신도 망가뜨리려는 모양인데요... 싸움을 피할 순 없겠습니다."
+    });
+}
+
+//재활용? - 미초기화 배열
+void LoggerSystem::ChoiceUninitArray(int IntBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "저 멀리서 Array[6]이라고 적힌 거대한 아파트가 걸어옵니다.",
+        "저 배열은 건설될 때 초기화 과정을 거치지 않았습니다.",
+        "덕분에 이전에 이곳을 거쳐 간 수많은 망령 데이터들이 남긴 쓰레기 값들이 아파트의 방에 들어차있습니다.",
+        "녀석은 각 Index에 버그를 가득 채우고 당신을 덮치려 합니다.",
+        "왠지 잘 찾아보면 하나쯤은 NULL 값이 있는 방이 있을수도 있을 것 같습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 방 번호 중 NULL이나 0이 저장된 빈방을 찾아봅니다. (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 고작해야 배열에게 막힐 순 없습니다. 정면으로 싸움을 겁니다. (전투 발생)");
+    Gm.AddLog("3. 쓰레기값은 예측할 수 없습니다. 빙 돌아서 지나갑니다. (전투 회피)");
+}
+
+void LoggerSystem::ChoiceUninitArraySuccess()
+{
+    PrintMainArea({
+        "빈방을 찾아냈습니다. 배열 안으로 조용히 들어가 이동 수단으로 활용하는데 성공했습니다.",
+        "쓰레기값들이 눈치채기 전에 빠르게 다음 구역으로 이동했습니다."
+    });
+}
+
+void LoggerSystem::ChoiceUninitArrayFail()
+{
+    PrintMainArea({
+        "이런, 하필 당신이 연 방은 쓰레기값이 가득 찬 방이었습니다!",
+        "방 전체를 장악한 쓰레기값이 당신의 침입을 감지해 전투를 걸어옵니다."
+    });
+}
+
+
 //-----------------------------캐릭터 관련--------------------------------------
 void LoggerSystem::LogLevelUp(int NewLevel) //레벨업 했을때 로그 출력하는 함수
 {
@@ -395,7 +561,7 @@ void LoggerSystem::LogGoldGain(int Amount, int MyGold)
 {
 	TotalGold += Amount;
     GraphicManager& Gm = GraphicManager::GetInstance();
-	string Log = "[ RESOURCE ] " + to_string(Amount) + " 골드 확보 / 누적 골드: " + to_string(MyGold);
+	string Log = "[ RESOURCE ] " + to_string(Amount) + "G 확보 / 누적 골드: " + to_string(MyGold) + "G";
 
     Gm.AddLog(Log);
     EventLogs.push_back(Log);
@@ -429,7 +595,7 @@ void LoggerSystem::LogShopDecline()
 void LoggerSystem::LogBuyItem(const string& ItemName, int Price)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    string Log = "[ PURCHASE ] " + ItemName + " 획득 / " + to_string(Price) + "골드 소모";
+    string Log = "[ PURCHASE ] " + ItemName + " 획득 / " + to_string(Price) + "G 소모";
     Gm.AddLog(Log);
     EventLogs.push_back(Log);
 }
@@ -437,7 +603,7 @@ void LoggerSystem::LogBuyItem(const string& ItemName, int Price)
 void LoggerSystem::LogInsufficientGold(int MyGold, int RequiredGold)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    string Log = "[ ERROR ] 골드 부족 — 보유: " + to_string(MyGold) + "골드 / 필요: " + to_string(RequiredGold) + "골드";
+    string Log = "[ ERROR ] 골드 부족 — 보유: " + to_string(MyGold) + "G / 필요: " + to_string(RequiredGold) + "G";
     Gm.AddLog(Log);
     EventLogs.push_back(Log);
 }
@@ -445,7 +611,7 @@ void LoggerSystem::LogInsufficientGold(int MyGold, int RequiredGold)
 void LoggerSystem::LogSellItem(const string& ItemName, int SellPrice)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    string Log = "[ SELL ] " + ItemName + " 판매 완료 / +" + to_string(SellPrice) + "골드";
+    string Log = "[ SELL ] " + ItemName + " 판매 완료 / +" + to_string(SellPrice) + "G";
     Gm.AddLog(Log);
     EventLogs.push_back(Log);
 }
