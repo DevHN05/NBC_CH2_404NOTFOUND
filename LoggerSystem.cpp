@@ -235,7 +235,7 @@ void LoggerSystem::LogEventBridge(int DexBonus, int LukBonus, int StrBonus)
     Gm.ClearLogs();
     Gm.AddLog("1. 버그가 앞길을 막기 전에 다리를 빠르게 건너갑니다. (판정값 14, 민첩 보정 +" + to_string(DexBonus) + ")");
     Gm.AddLog("2. 버그가 나타나지 않길 바라며 다리를 건넙니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
-    Gm.AddLog("3. 힘으로 절벽을 한 번에 뛰어넘어봅니다. (판정값 14, 힘 보정 +" + to_string(StrBonus - 5) + ")");
+    Gm.AddLog("3. 힘으로 절벽을 한 번에 뛰어넘어봅니다. (판정값 14, 힘 보정 +" + to_string(StrBonus) + ")");
 }
 
 //실패 메세지 - 통나무 다리

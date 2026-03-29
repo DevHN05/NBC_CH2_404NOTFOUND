@@ -60,7 +60,7 @@ void EventManager::TriggerNextEvent()
 
     int id = EventIds[CurrentEventIndex++];     // 이번 차례의 이벤트 번호를 꺼내고, 다음 차례로 넘기는 함수
 
-    id = 11;
+    id = 1;
     switch (id)
     {
         // [1~10] 일반 전투 이벤트
@@ -112,7 +112,7 @@ void EventManager::BattleGuardian()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventGuardian(DexBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -171,7 +171,7 @@ void EventManager::BattleWanderer()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventWanderer(Player.GetStrength() / 5, Player.GetDexterity() / 5);
 
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -234,7 +234,7 @@ void EventManager::BattleBreaker()
     // 무한 루프 메세지 출력 함수란
 
     // 무한 루프 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -291,7 +291,7 @@ void EventManager::BattleInvader()
     // 오버플로우 메세지 출력 함수란
 
     // 오버플로우 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -325,7 +325,7 @@ void EventManager::BattleInvader()
     if (!IsBattle)
     {
         // 성공 메세지
-        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
@@ -348,7 +348,7 @@ void EventManager::BattleAssassin()
     // 세그폴트 메세지 출력 함수란
 
     // 세그폴트 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -405,7 +405,7 @@ void EventManager::BattleBridge()
     // 구역 메세지 출력 함수란
 
     // 구역 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -423,6 +423,12 @@ void EventManager::BattleBridge()
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, IntBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+            if (!Dice.GetResult()) IsBattle = true;
+        }
+        else if (Choice == 3)
+        {
+            Dice.RollDice(20, 15, StrBonus());
             Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
@@ -461,7 +467,7 @@ void EventManager::BattleForest()
     // 숲 메세지 출력 함수란
 
     // 숲 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -522,7 +528,7 @@ void EventManager::BattleDataNoise()
     // 데이터 노이즈 메세지 출력 함수란
 
     // 데이터 노이즈 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -584,7 +590,7 @@ void EventManager::BattleGravity()
     // 중력 역전 메세지 출력 함수란
 
     // 중력 역전 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -646,7 +652,7 @@ void EventManager::BattleCliff()
     // 훼손 데이터 메세지 출력 함수란
 
     // 훼손 데이터 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -706,6 +712,7 @@ void EventManager::ChoiceGarbageCollector()
 
     // 가비지 컬렉션 메세지 출력 함수란
     // 가비지 컬렉션 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -761,6 +768,7 @@ void EventManager::ChoiceUndeclared()
 
     // 언디클레어드 메세지 출력 함수란
     // 언디클레어드 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -814,6 +822,7 @@ void EventManager::ChoiceDanglingPointer()
 
     // 댕글링 포인터 메세지 출력 함수란
     // 댕글링 포인터 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -868,6 +877,7 @@ void EventManager::ChoiceBrokenActor()
 
     // 깨진 액터 메세지 출력 함수란
     // 깨진 액터 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -922,6 +932,7 @@ void EventManager::ChoiceUninitArray()
 
     // 배열 메세지 출력 함수란
     // 배열 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -980,6 +991,7 @@ void EventManager::ChestNormal()
 
     // 평범한 보물상자 이벤트 출력 함수란
     // 평범한 보물상자 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1028,6 +1040,7 @@ void EventManager::ChestConstLock()
 
     // const 상자 이벤트 출력 함수란
     // const 상자 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1076,6 +1089,7 @@ void EventManager::ChestAndLogic()
 
     // 논리 상자 이벤트 출력 함수란
     // 논리 상자 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1130,6 +1144,7 @@ void EventManager::ChestPointerSearch()
 
     // 포인터 보물찾기 이벤트 출력 함수란
     // 포인터 보물찾기 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1178,6 +1193,7 @@ void EventManager::ChestBugActorFix()
 
     // 버그 액터 수리 이벤트 출력 함수란
     // 버그 액터 수리 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1231,6 +1247,7 @@ void EventManager::ShopChoiceEvent()
 
     // 갈림길 메세지 출력 함수란
     // 갈림길 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1279,6 +1296,7 @@ void EventManager::ShopVillageWay()
 
     // 바위 길막기 메세지 출력 함수란
     // 바위 길막기 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1333,6 +1351,7 @@ void EventManager::ShopGamblerBet()
 
     // 보부상 메세지 출력 함수란
     // 보부상 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1387,6 +1406,7 @@ void EventManager::ShopBugStoreFix()
 
     // 상점 디버깅 메세지 출력 함수란
     // 상점 디버깅 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
@@ -1441,6 +1461,7 @@ void EventManager::ShopAccessDenied()
 
     // 접근 거부 메세지 출력 함수란
     // 접근 거부 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
     {
