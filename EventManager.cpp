@@ -155,11 +155,17 @@ void EventManager::BattleGuardian()
         // 경험치 오르고 골드 보상 없이 종료
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp,Player.GetExperience(),Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 출력 들어갈 곳. 여긴 실패해도 체력 손해는 없음!
         Logger.LogEventFailGuardian();
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
@@ -214,10 +220,16 @@ void EventManager::BattleWanderer()
         // 경험치 오르고 골드 보상 없이 종료
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else if (IsBattle) {
         // 실패 메세지 + hp 5 차감
         Logger.LogEventFailWanderer();
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         Player.SetHealth(Player.GetHealth() - 5);
         cm.StartBattle(Player, *MonsterData::CreateDeletePtr());
     }
@@ -271,12 +283,18 @@ void EventManager::BattleBreaker()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 및 전투 발생
         Logger.LogEventFailBreaker();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateBreak());
     }
 }
@@ -325,8 +343,11 @@ void EventManager::BattleInvader()
     if (!IsBattle)
     {
         // 성공 메세지
-        Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
@@ -334,6 +355,9 @@ void EventManager::BattleInvader()
         // 실패 메세지 및 전투 발생
         Logger.LogEventFailInvader();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateOverflow());
     }
 }
@@ -385,12 +409,18 @@ void EventManager::BattleAssassin()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 및 전투 발생
         Logger.LogEventFailAssassin();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateSemicolon());
     }
 }
@@ -448,11 +478,17 @@ void EventManager::BattleBridge()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 및 전투 발생
         Logger.LogEventFailBridge();
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
@@ -507,6 +543,9 @@ void EventManager::BattleForest()
         // 경험치 오르고 골드 보상 없이 종료
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
@@ -514,6 +553,9 @@ void EventManager::BattleForest()
         // [당신의 방안은 탁월한 효과를 보였습니다. 버그를 찾아내는데 말입니다... 너무 탁월해서 버그가 바로 앞에 있었거든요...]
         // 전용 메세지 출력 및 몬스터 랜덤 전투 발생
         Logger.LogEventFailForest();
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
@@ -563,11 +605,13 @@ void EventManager::BattleDataNoise()
 
     if (!IsBattle)
     {
-        // 성공 메세지 출력 (전투 미 발생, 패널티 면제)
+        // 성공 메세지 출력
         Gm.GoSpace(2, 26); cout << "판정 성공!";
-        // 경험치 오르고 골드 보상 없이 종료
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
@@ -576,6 +620,9 @@ void EventManager::BattleDataNoise()
         // HP 10 차감, 전용 메세지 출력 및 몬스터 랜덤 전투 발생
         Logger.LogEventFailDataNoise();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
@@ -625,11 +672,13 @@ void EventManager::BattleGravity()
 
     if (!IsBattle)
     {
-        // 성공 메세지 출력 (전투 미 발생, 패널티 면제)
+        // 성공 메세지 출력
         Gm.GoSpace(2, 26); cout << "판정 성공!";
-        // 경험치 오르고 골드 보상 없이 종료
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
@@ -638,6 +687,9 @@ void EventManager::BattleGravity()
         // HP 5 차감, 전용 메세지 출력 및 몬스터 랜덤 전투 발생
         Logger.LogEventFailGravity();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
@@ -689,11 +741,17 @@ void EventManager::BattleCliff()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 및 전투 발생
         Logger.LogEventFailCliff();
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
@@ -733,8 +791,11 @@ void EventManager::ChoiceGarbageCollector()
         }
         else if (Choice == 3)
         {
-           // 삭제당할 위험을 감수할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
-           return; // 전투 회피 후 즉시 이벤트 종료
+            // 삭제당할 위험을 감수할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
+            cin.clear();
+            std::cin.ignore(LLONG_MAX, '\n');
+            std::cin.get();
+            return; // 전투 회피 후 즉시 이벤트 종료
         }
         else
         {
@@ -750,14 +811,20 @@ void EventManager::ChoiceGarbageCollector()
     {
         // 성공 메세지 출력
         // 보상 (골드 지급, 특별 장비)
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 출력
         // 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다.
         Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 보스 전투 시작
-        //cm.StartBossBattle(Player, *MonsterData::CreateSemicolon());
+        cm.StartBossBattle(Player, *MonsterData::CreateShadowLord());
     }
 }
 
@@ -789,8 +856,11 @@ void EventManager::ChoiceUndeclared()
         }
         else if (Choice == 3)
         {
-           // 이 지역을 지금 구할 필요가 있을까요? 욕심을 버리고 빙 돌아서 지나갑니다.
-           return;
+            // 이 지역을 지금 구할 필요가 있을까요? 욕심을 버리고 빙 돌아서 지나갑니다.
+            cin.clear();
+            std::cin.ignore(LLONG_MAX, '\n');
+            std::cin.get();
+            return;
         }
         else
         {
@@ -805,12 +875,18 @@ void EventManager::ChoiceUndeclared()
     if (!IsBattle)
     {
         // 성공 메세지 출력
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 출력
         // 시스템이 당신을 인식할 수 없습니다. 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다.
         Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 보스 전투 시작
     }
 }
@@ -860,12 +936,18 @@ void EventManager::ChoiceDanglingPointer()
     {
         // 성공 메세지 출력
         // 데이터 잔상이 소멸하며 안전한 경로가 확보됩니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 출력
         // 녀석은 여전히 존재하지 않는 주소를 읽으려 시도했습니다. 시스템 크래시와 함께 유령 데이터가 실체화되어 당신을 덮칩니다.
         Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 보스 전투 시작
     }
 }
@@ -899,8 +981,11 @@ void EventManager::ChoiceBrokenActor()
         }
         else if (Choice == 3)
         {
-           // 위험을 감수할 순 없죠. 그냥 지나칩니다.
-           return; // 전투 미발생, 이벤트 종료
+            // 위험을 감수할 순 없죠. 그냥 지나칩니다.
+            cin.clear();
+            std::cin.ignore(LLONG_MAX, '\n');
+            std::cin.get();
+            return; // 전투 미발생, 이벤트 종료
         }
         else
         {
@@ -916,11 +1001,17 @@ void EventManager::ChoiceBrokenActor()
     {
         // 성공 메세지 출력
         // 귀중한 물품이 제법 많이 들어있군요. 살아남은 것만 대충 챙겨야겠군요.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 출력
         // 아무래도 망가진 액터처럼 당신도 망가뜨리려는 모양인데요... 싸움을 피할 순 없겠습니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 전투 발생
     }
 }
@@ -953,8 +1044,11 @@ void EventManager::ChoiceUninitArray()
         }
         else if (Choice == 3)
         {
-           // 쓰레기값은 예측할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
-           return;
+            // 쓰레기값은 예측할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
+            cin.clear();
+            std::cin.ignore(LLONG_MAX, '\n');
+            std::cin.get();
+            return;
         }
         else
         {
@@ -969,12 +1063,18 @@ void EventManager::ChoiceUninitArray()
     if (!IsBattle)
     {
         // 성공 메세지 출력
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 실패 메세지 출력
         // 방 전체를 장악한 쓰레기값이 당신의 침입을 감지해 전투를 걸어옵니다.
         Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 보스 전투 시작
     }
 }
@@ -1025,11 +1125,17 @@ void EventManager::ChestNormal()
     {
         // 판정 성공 메세지
         // 당신은 신이 나서 안에 있는 금화를 모두 챙깁니다
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 판정 실패 메세지
         // 이런, 상자가 파손되며 내용물도 파손되고 말았습니다..
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
 }
 
@@ -1074,11 +1180,17 @@ void EventManager::ChestConstLock()
     {
         // 판정 성공 메세지
         // 당신은 신이 나서 안에 있는 금화를 모두 챙깁니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 판정 실패 메세지
         // 이런, const는 강력하군요...
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
 }
 
@@ -1129,11 +1241,17 @@ void EventManager::ChestAndLogic()
     {
         // 판정 성공 메세지
         // 두 논리가 맞물리며 상자가 열립니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 판정 실패 메세지
         // 이런, 타이밍이 맞지 않았던걸까요... 논리가 부정당해 상자가 열리지 않습니다
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
 }
 
@@ -1178,11 +1296,17 @@ void EventManager::ChestPointerSearch()
     {
         // 판정 성공 메세지
         // 당신이 생각한 자료형이 맞았습니다! 바닥을 파니 상자가 나옵니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 판정 실패 메세지
         // 이런, 자료형이 맞지 않았던걸까요... 바닥을 파도 아무것도 나오지 않습니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
 }
 
@@ -1227,11 +1351,17 @@ void EventManager::ChestBugActorFix()
     {
         // 판정 성공 메세지
         // 성공적으로 액터의 버그가 제거됩니다. 액터는 마을주민 NPC였습니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
     else
     {
         // 판정 실패 메세지
         // 이런, 오류의 원인을 잘못 짚은 모양입니다. 아예 충돌해서 소멸합니다...
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
     }
 }
 
@@ -1279,12 +1409,17 @@ void EventManager::ShopChoiceEvent()
     if (!IsBattle)
     {
         // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
-        // 상점 진입 코드 작성
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 전투 발생 코드 작성
     }
 }
@@ -1334,12 +1469,17 @@ void EventManager::ShopVillageWay()
     if (!IsBattle)
     {
         // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
-        // 상점 진입 코드 작성
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 전투 발생 코드 작성
     }
 }
@@ -1389,12 +1529,17 @@ void EventManager::ShopGamblerBet()
     if (!IsBattle)
     {
         // 주사위 값으로 6이 나오며, 5를 굴린 보부상을 이깁니다. 보부상이 킥킥 웃으며 보따리를 풀기 시작합니다.
-        // 상점 진입 코드 작성
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 이런, 주사위가 1이 나옵니다. 보부상이 기분 나쁘게 웃습니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 전투 발생 코드 작성
     }
 }
@@ -1444,12 +1589,17 @@ void EventManager::ShopBugStoreFix()
     if (!IsBattle)
     {
         // 디버깅에 성공했습니다! 상점이 원래의 모습을 되찾습니다. 이제 이용할 수 있겠군요.
-        // 상점 진입 코드 작성
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 디버깅에 실패했습니다! 오히려 버그가 급증했습니다. 버그가 당신에게 달려듭니다.
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 전투 발생 코드 작성
     }
 }
@@ -1499,12 +1649,17 @@ void EventManager::ShopAccessDenied()
     if (!IsBattle)
     {
         // 성공적으로 문이 열리며 상점 주인이 제 자리를 되찾습니다. 이제 이용할 수 있겠군요.
-        // 상점 진입 코드 작성
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 문에서 버그가 튀어나옵니다! 버그가 당신을 노립니다...
+        cin.clear();
+        std::cin.ignore(LLONG_MAX, '\n');
+        std::cin.get();
         // 전투 발생 코드 작성
     }
 }
