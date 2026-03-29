@@ -13,6 +13,8 @@
 #include "BaseMonster.h"
 #include "BaseBossMonster.h"
 #include <memory>
+#include <random>
+#include <vector>
 
 namespace MonsterData
 {
@@ -89,5 +91,25 @@ namespace MonsterData
             "부모 클래스의 가호", 100,
             "(예시)~~~~~한 처형자. HP 50% 이하에서 각성한다."
         );
+    }
+
+    // =====================================================
+    //  일반 몬스터 중 랜덤 1마리 반환
+    // =====================================================
+
+    inline shared_ptr<BaseMonster> CreateRandomMonster()
+    {
+        static random_device rd;
+        static mt19937 g(rd());
+
+        using CreatorType = shared_ptr<BaseMonster>(*)();
+
+        static const vector<CreatorType> MonsterCreators = {
+            CreateBot, CreateDeletePtr, CreateBreak, CreateSemicolon, CreateOverflow
+        };
+
+        uniform_int_distribution<int> Dist(0, (int)MonsterCreators.size() - 1);
+
+        return MonsterCreators[Dist(g)]();
     }
 }
