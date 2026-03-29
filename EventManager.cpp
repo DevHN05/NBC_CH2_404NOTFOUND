@@ -108,9 +108,8 @@ void EventManager::TriggerNextEvent()
 void EventManager::BattleGuardian()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    LoggerSystem& Logger = LoggerSystem::GetInstance(); // 이벤트 출력 함수입니당
-    Gm.ClearLogs();
-    Logger.LogEventGuardian(DexBonus(), IntBonus());    // 선택지 출력 함수입니당
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventGuardian(DexBonus(), IntBonus());
 
     Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
@@ -124,16 +123,18 @@ void EventManager::BattleGuardian()
         if (Choice == 1)
         {
             Dice.RollDice(20, 13, DexBonus()); // 보정치를 받아서 13을 굴립니당
+             Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)로 갑니당
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 13, IntBonus());
-            if (!Dice.GetResult()) IsBattle = true;
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+           if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)로 갑니당
         }
-        else if (Choice == 3)
+        else if (Choice == 3)                           // 3번 선택 시 즉시 전투 출력
         {
-            // 3번 선택 시 즉시 전투 출력
+            cm.StartBattle(Player, *MonsterData::CreateBot());
         }
         else
         {
@@ -149,7 +150,7 @@ void EventManager::BattleGuardian()
 
     if (!IsBattle)
     {
-        // 성공 메세지
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
         // 경험치 오르고 골드 보상 없이 종료
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp,Player.GetExperience(),Player.GetMaxExperience());
@@ -157,6 +158,7 @@ void EventManager::BattleGuardian()
     else
     {
         // 실패 메세지 출력 들어갈 곳. 여긴 실패해도 체력 손해는 없음!
+        Logger.LogEventFailGuardian();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
@@ -165,10 +167,10 @@ void EventManager::BattleGuardian()
 void EventManager::BattleWanderer()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventWanderer(Player.GetStrength() / 5, Player.GetDexterity() / 5);
 
-    // 메모리 누수 메세지 출력 함수란
-
-    // 메모리 누수 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -180,16 +182,18 @@ void EventManager::BattleWanderer()
         if (Choice == 1)
         {
             Dice.RollDice(20, 13, Player.GetStrength() / 5);
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 13, Player.GetDexterity() / 5);
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
-        else if (Choice == 3)
+        else if (Choice == 3)                            // 3번 선택 시 즉시 전투 출력
         {
-            IsBattle = true; // 3번 선택 시 즉시 전투
+            cm.StartBattle(Player, *MonsterData::CreateDeletePtr()); break;
         }
         else
         {
@@ -203,13 +207,18 @@ void EventManager::BattleWanderer()
         if (IsValid) break;
     }
 
-    if (!IsBattle) {
+    if (!IsBattle && Choice != 3) {
         // 성공 메세지
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
         // 경험치 오르고 골드 보상 없이 종료
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
-    else {
-        // 실패 메세지
-        // 아마도 이곳에서 함수로 방랑자 :: delete ptr과 전투
+    else if (IsBattle) {
+        // 실패 메세지 + hp 5 차감
+        Logger.LogEventFailWanderer();
+        Player.SetHealth(Player.GetHealth() - 5);
+        cm.StartBattle(Player, *MonsterData::CreateDeletePtr());
     }
 }
 
@@ -218,10 +227,13 @@ void EventManager::BattleWanderer()
 void EventManager::BattleBreaker()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventBreaker(StrBonus(), IntBonus());
 
     // 무한 루프 메세지 출력 함수란
 
     // 무한 루프 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -233,11 +245,13 @@ void EventManager::BattleBreaker()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, StrBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, IntBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -253,11 +267,16 @@ void EventManager::BattleBreaker()
     if (!IsBattle)
     {
         // 성공 메세지
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
-        Player.SetHealth(max(0, Player.GetHealth() - 5));
         // 실패 메세지 및 전투 발생
+        Logger.LogEventFailBreaker();
+        Player.SetHealth(max(0, Player.GetHealth() - 5));
+        cm.StartBattle(Player, *MonsterData::CreateBreak());
     }
 }
 
@@ -265,10 +284,13 @@ void EventManager::BattleBreaker()
 void EventManager::BattleInvader()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventInvader(DexBonus(), LukBonus());
 
     // 오버플로우 메세지 출력 함수란
 
     // 오버플로우 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -280,11 +302,13 @@ void EventManager::BattleInvader()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, IntBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, DexBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -300,11 +324,16 @@ void EventManager::BattleInvader()
     if (!IsBattle)
     {
         // 성공 메세지
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
-        Player.SetHealth(max(0, Player.GetHealth() - 10));
         // 실패 메세지 및 전투 발생
+        Logger.LogEventFailInvader();
+        Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cm.StartBattle(Player, *MonsterData::CreateOverflow());
     }
 }
 
@@ -312,10 +341,13 @@ void EventManager::BattleInvader()
 void EventManager::BattleAssassin()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventAssassin(StrBonus(), IntBonus());
 
     // 세그폴트 메세지 출력 함수란
 
     // 세그폴트 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -327,11 +359,13 @@ void EventManager::BattleAssassin()
         if (Choice == 1)
         {
             Dice.RollDice(20, 12, IntBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 12, DexBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -347,11 +381,16 @@ void EventManager::BattleAssassin()
     if (!IsBattle)
     {
         // 성공 메세지
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
-        Player.SetHealth(max(0, Player.GetHealth() - 10));
         // 실패 메세지 및 전투 발생
+        Logger.LogEventFailAssassin();
+        Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cm.StartBattle(Player, *MonsterData::CreateSemicolon());
     }
 }
 
@@ -359,10 +398,13 @@ void EventManager::BattleAssassin()
 void EventManager::BattleBridge()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventBridge(DexBonus(), LukBonus(), StrBonus());
 
     // 구역 메세지 출력 함수란
 
     // 구역 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -374,11 +416,13 @@ void EventManager::BattleBridge()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, LukBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, IntBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -394,10 +438,15 @@ void EventManager::BattleBridge()
     if (!IsBattle)
     {
         // 성공 메세지
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
         // 실패 메세지 및 전투 발생
+        Logger.LogEventFailBridge();
+        cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
 
@@ -405,10 +454,13 @@ void EventManager::BattleBridge()
 void EventManager::BattleForest()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventForest(IntBonus(), LukBonus());
 
     // 숲 메세지 출력 함수란
 
     // 숲 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -420,11 +472,13 @@ void EventManager::BattleForest()
         if (Choice == 1)
         {
             Dice.RollDice(20, 14, IntBonus()); // 지능 보정치
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 14, LukBonus()); // 행운 보정치
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -442,13 +496,18 @@ void EventManager::BattleForest()
     if (!IsBattle)
     {
         // 성공 메세지 출력 (전투 미 발생, 패널티 면제)
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
         // 경험치 오르고 골드 보상 없이 종료
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
         // 실패 메세지 출력
         // [당신의 방안은 탁월한 효과를 보였습니다. 버그를 찾아내는데 말입니다... 너무 탁월해서 버그가 바로 앞에 있었거든요...]
         // 전용 메세지 출력 및 몬스터 랜덤 전투 발생
+        Logger.LogEventFailForest();
+        cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
 
@@ -456,10 +515,13 @@ void EventManager::BattleForest()
 void EventManager::BattleDataNoise()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventDataNoise(IntBonus(), LukBonus());
 
     // 데이터 노이즈 메세지 출력 함수란
 
     // 데이터 노이즈 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -471,11 +533,13 @@ void EventManager::BattleDataNoise()
         if (Choice == 1)
         {
             Dice.RollDice(20, 14, IntBonus()); // 지식 보정치
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 14, LukBonus()); // 행운 보정치
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -493,13 +557,19 @@ void EventManager::BattleDataNoise()
     if (!IsBattle)
     {
         // 성공 메세지 출력 (전투 미 발생, 패널티 면제)
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
         // 경험치 오르고 골드 보상 없이 종료
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
         // 실패 메세지 출력
         // [아무래도 잘못 건드린 모양입니다. 깨진 데이터가 당신의 데이터마저 조금 깨뜨립니다...]
         // HP 10 차감, 전용 메세지 출력 및 몬스터 랜덤 전투 발생
+        Logger.LogEventFailDataNoise();
+        Player.SetHealth(max(0, Player.GetHealth() - 10));
+        cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
 
@@ -507,10 +577,13 @@ void EventManager::BattleDataNoise()
 void EventManager::BattleGravity()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventGravity(LukBonus(), IntBonus());
 
     // 중력 역전 메세지 출력 함수란
 
     // 중력 역전 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -522,11 +595,13 @@ void EventManager::BattleGravity()
         if (Choice == 1)
         {
             Dice.RollDice(20, 12, LukBonus()); // 행운 보정치
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 12, IntBonus()); // 지식 보정치
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -544,13 +619,19 @@ void EventManager::BattleGravity()
     if (!IsBattle)
     {
         // 성공 메세지 출력 (전투 미 발생, 패널티 면제)
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
         // 경험치 오르고 골드 보상 없이 종료
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
         // 실패 메세지 출력
         // [이런, 엄청난 속도로 추락한 거대 버그와 정면으로 충돌했습니다! 충격으로 인해 시야가 흔들리는 가운데...]
         // HP 5 차감, 전용 메세지 출력 및 몬스터 랜덤 전투 발생
+        Logger.LogEventFailGravity();
+        Player.SetHealth(max(0, Player.GetHealth() - 5));
+        cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
 
@@ -558,10 +639,13 @@ void EventManager::BattleGravity()
 void EventManager::BattleCliff()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.LogEventCliff(DexBonus(), IntBonus());
 
     // 훼손 데이터 메세지 출력 함수란
 
     // 훼손 데이터 선택지 출력 함수란
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -573,11 +657,13 @@ void EventManager::BattleCliff()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, DexBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, StrBonus());
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -593,10 +679,15 @@ void EventManager::BattleCliff()
     if (!IsBattle)
     {
         // 성공 메세지
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
         // 실패 메세지 및 전투 발생
+        Logger.LogEventFailCliff();
+        cm.StartBattle(Player, *MonsterData::CreateBot());
     }
 }
 
@@ -623,18 +714,18 @@ void EventManager::ChoiceGarbageCollector()
 
         if (Choice == 1)
         {
-            // 가비지 컬렉션에게 걸리지 않도록 주의하며 데이터를 챙겨봅니다. [cite: 4]
-            Dice.RollDice(20, 10, DexBonus()); // 민첩 보정치 [cite: 5]
+            // 가비지 컬렉션에게 걸리지 않도록 주의하며 데이터를 챙겨봅니다.
+            Dice.RollDice(20, 10, DexBonus()); // 민첩 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 가비지 컬렉션도 결국 코드덩어리. 정면으로 싸움을 겁니다. [cite: 5, 6]
+            // 가비지 컬렉션도 결국 코드덩어리. 정면으로 싸움을 겁니다.
             IsBattle = true;
         }
         else if (Choice == 3)
         {
-           // 삭제당할 위험을 감수할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다. [cite: 6, 7]
+           // 삭제당할 위험을 감수할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
            return; // 전투 회피 후 즉시 이벤트 종료
         }
         else
@@ -655,8 +746,8 @@ void EventManager::ChoiceGarbageCollector()
     else
     {
         // 실패 메세지 출력
-        // 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다. [cite: 8, 9]
-        Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감 [cite: 9]
+        // 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다.
+        Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
         // 보스 전투 시작
     }
 }
@@ -677,18 +768,18 @@ void EventManager::ChoiceUndeclared()
 
         if (Choice == 1)
         {
-            // 힘으로 #include <stdio.h>를 제압해 이곳을 다시 관리하도록 제자리에 둡니다. [cite: 17]
-            Dice.RollDice(20, 10, StrBonus()); // 근력 보정치 [cite: 18]
+            // 힘으로 #include <stdio.h>를 제압해 이곳을 다시 관리하도록 제자리에 둡니다.
+            Dice.RollDice(20, 10, StrBonus()); // 근력 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 헤더를 고치기엔 너무 멀리 왔습니다. 저 버그 덩어리를 제압하는 수 밖에요. [cite: 18, 19]
+            // 헤더를 고치기엔 너무 멀리 왔습니다. 저 버그 덩어리를 제압하는 수 밖에요.
             IsBattle = true;
         }
         else if (Choice == 3)
         {
-           // 이 지역을 지금 구할 필요가 있을까요? 욕심을 버리고 빙 돌아서 지나갑니다. [cite: 19, 20]
+           // 이 지역을 지금 구할 필요가 있을까요? 욕심을 버리고 빙 돌아서 지나갑니다.
            return;
         }
         else
@@ -708,7 +799,7 @@ void EventManager::ChoiceUndeclared()
     else
     {
         // 실패 메세지 출력
-        // 시스템이 당신을 인식할 수 없습니다. 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다. [cite: 21, 22]
+        // 시스템이 당신을 인식할 수 없습니다. 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다.
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         // 보스 전투 시작
     }
@@ -730,18 +821,18 @@ void EventManager::ChoiceDanglingPointer()
 
         if (Choice == 1)
         {
-            // 위험하지만, 직접 댕글링 포인터에 nullptr를 대입하여 원상 복구를 시도합니다 [cite: 27]
-            Dice.RollDice(20, 10, StrBonus()); // 근력 보정치 [cite: 27]
+            // 위험하지만, 직접 댕글링 포인터에 nullptr를 대입하여 원상 복구를 시도합니다
+            Dice.RollDice(20, 10, StrBonus()); // 근력 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 실체가 없더라도 디버깅하면 그만이죠. 정면으로 싸움을 겁니다. [cite: 27, 28]
+            // 실체가 없더라도 디버깅하면 그만이죠. 정면으로 싸움을 겁니다.
             IsBattle = true;
         }
         else if (Choice == 3)
         {
-           // 시스템 크래시는 무섭습니다. 욕심을 버리고 빙 돌아서 지나갑니다. [cite: 28, 29]
+           // 시스템 크래시는 무섭습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
            return;
         }
         else
@@ -757,12 +848,12 @@ void EventManager::ChoiceDanglingPointer()
     if (!IsBattle)
     {
         // 성공 메세지 출력
-        // 데이터 잔상이 소멸하며 안전한 경로가 확보됩니다. [cite: 29]
+        // 데이터 잔상이 소멸하며 안전한 경로가 확보됩니다.
     }
     else
     {
         // 실패 메세지 출력
-        // 녀석은 여전히 존재하지 않는 주소를 읽으려 시도했습니다. 시스템 크래시와 함께 유령 데이터가 실체화되어 당신을 덮칩니다. [cite: 31]
+        // 녀석은 여전히 존재하지 않는 주소를 읽으려 시도했습니다. 시스템 크래시와 함께 유령 데이터가 실체화되어 당신을 덮칩니다.
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         // 보스 전투 시작
     }
@@ -784,20 +875,20 @@ void EventManager::ChoiceBrokenActor()
 
         if (Choice == 1)
         {
-            // 난 운이 좋으니 버그가 떠났을거야. 운에게 맡기며 액터를 살펴봅니다. [cite: 37]
-            Dice.RollDice(20, 10, LukBonus()); // 행운 보정치 [cite: 38]
+            // 난 운이 좋으니 버그가 떠났을거야. 운에게 맡기며 액터를 살펴봅니다.
+            Dice.RollDice(20, 10, LukBonus()); // 행운 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 망가진 액터의 원형을 상상하며 쓸만한 아이템 코드가 남아있는지 살펴봅니다. [cite: 38]
-            Dice.RollDice(20, 10, IntBonus()); // 지식 보정치 [cite: 39]
+            // 망가진 액터의 원형을 상상하며 쓸만한 아이템 코드가 남아있는지 살펴봅니다.
+            Dice.RollDice(20, 10, IntBonus()); // 지식 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 3)
         {
-           // 위험을 감수할 순 없죠. 그냥 지나칩니다. [cite: 39]
-           return; // 전투 미발생, 이벤트 종료 [cite: 40]
+           // 위험을 감수할 순 없죠. 그냥 지나칩니다.
+           return; // 전투 미발생, 이벤트 종료
         }
         else
         {
@@ -812,13 +903,13 @@ void EventManager::ChoiceBrokenActor()
     if (!IsBattle)
     {
         // 성공 메세지 출력
-        // 귀중한 물품이 제법 많이 들어있군요. 살아남은 것만 대충 챙겨야겠군요. [cite: 41, 42]
+        // 귀중한 물품이 제법 많이 들어있군요. 살아남은 것만 대충 챙겨야겠군요.
     }
     else
     {
         // 실패 메세지 출력
-        // 아무래도 망가진 액터처럼 당신도 망가뜨리려는 모양인데요... 싸움을 피할 순 없겠습니다. [cite: 43]
-        // 전투 발생 [cite: 43]
+        // 아무래도 망가진 액터처럼 당신도 망가뜨리려는 모양인데요... 싸움을 피할 순 없겠습니다.
+        // 전투 발생
     }
 }
 
@@ -838,18 +929,18 @@ void EventManager::ChoiceUninitArray()
 
         if (Choice == 1)
         {
-            // 녀석의 몸에 적힌 방 번호 중 NULL이나 0이 저장된 빈방을 찾아봅니다. [cite: 49]
-            Dice.RollDice(20, 10, IntBonus()); // 지식 보정치 [cite: 50]
+            // 녀석의 몸에 적힌 방 번호 중 NULL이나 0이 저장된 빈방을 찾아봅니다.
+            Dice.RollDice(20, 10, IntBonus()); // 지식 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 고작해야 배열에게 막힐 순 없습니다. 정면으로 싸움을 겁니다. [cite: 50, 51]
+            // 고작해야 배열에게 막힐 순 없습니다. 정면으로 싸움을 겁니다.
             IsBattle = true;
         }
         else if (Choice == 3)
         {
-           // 쓰레기값은 예측할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다. [cite: 51, 52]
+           // 쓰레기값은 예측할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
            return;
         }
         else
@@ -869,8 +960,8 @@ void EventManager::ChoiceUninitArray()
     else
     {
         // 실패 메세지 출력
-        // 방 전체를 장악한 쓰레기값이 당신의 침입을 감지해 전투를 걸어옵니다. [cite: 53]
-        Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감 [cite: 53]
+        // 방 전체를 장악한 쓰레기값이 당신의 침입을 감지해 전투를 걸어옵니다.
+        Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
         // 보스 전투 시작
     }
 }
@@ -896,14 +987,14 @@ void EventManager::ChestNormal()
 
         if (Choice == 1)
         {
-            // 힘으로 상자를 부숴서 내용물을 확인합니다. [cite: 56]
-            Dice.RollDice(20, 10, StrBonus()); // 힘 보정치 [cite: 57]
+            // 힘으로 상자를 부숴서 내용물을 확인합니다.]
+            Dice.RollDice(20, 10, StrBonus()); // 힘 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 락픽을 이용해 자물쇠를 따봅니다. [cite: 57]
-            Dice.RollDice(20, 10, DexBonus()); // 민첩 보정치 [cite: 58]
+            // 락픽을 이용해 자물쇠를 따봅니다.
+            Dice.RollDice(20, 10, DexBonus()); // 민첩 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -919,12 +1010,12 @@ void EventManager::ChestNormal()
     if (!IsBattle)
     {
         // 판정 성공 메세지
-        // 당신은 신이 나서 안에 있는 금화를 모두 챙깁니다. [cite: 59]
+        // 당신은 신이 나서 안에 있는 금화를 모두 챙깁니다
     }
     else
     {
         // 판정 실패 메세지
-        // 이런, 상자가 파손되며 내용물도 파손되고 말았습니다... [cite: 60]
+        // 이런, 상자가 파손되며 내용물도 파손되고 말았습니다..
     }
 }
 
@@ -944,14 +1035,14 @@ void EventManager::ChestConstLock()
 
         if (Choice == 1)
         {
-            // 잠금 장치를 부술 수 없다면, 힘으로 상자를 부숩니다. [cite: 65]
-            Dice.RollDice(20, 14, StrBonus()); // 힘 보정치, 판정값 14 [cite: 66, 67]
+            // 잠금 장치를 부술 수 없다면, 힘으로 상자를 부숩니다
+            Dice.RollDice(20, 14, StrBonus()); // 힘 보정치, 판정값 14]
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             // 디버깅을 해서 const의 위치를 알맞은 곳으로 되돌립니다. [cite: 66]
-            Dice.RollDice(20, 14, IntBonus()); // 지식 보정치, 판정값 14 [cite: 67]
+            Dice.RollDice(20, 14, IntBonus()); // 지식 보정치, 판정값 14
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -967,12 +1058,12 @@ void EventManager::ChestConstLock()
     if (!IsBattle)
     {
         // 판정 성공 메세지
-        // 당신은 신이 나서 안에 있는 금화를 모두 챙깁니다. [cite: 68]
+        // 당신은 신이 나서 안에 있는 금화를 모두 챙깁니다.
     }
     else
     {
         // 판정 실패 메세지
-        // 이런, const는 강력하군요... [cite: 69]
+        // 이런, const는 강력하군요...
     }
 }
 
@@ -992,20 +1083,20 @@ void EventManager::ChestAndLogic()
 
         if (Choice == 1)
         {
-            // 재빠르게 열쇠 두 개를 동시에 집어넣어 봅니다. [cite: 74]
-            Dice.RollDice(20, 14, DexBonus()); // 민첩 보정치, 판정값 14 [cite: 74, 76]
+            // 재빠르게 열쇠 두 개를 동시에 집어넣어 봅니다
+            Dice.RollDice(20, 14, DexBonus()); // 민첩 보정치, 판정값 14
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 우연히 들어맞길 바라며 열쇠 두 개를 감으로 맞춰봅니다. [cite: 74]
-            Dice.RollDice(20, 14, LukBonus()); // 행운 보정치, 판정값 14 [cite: 75, 76]
+            // 우연히 들어맞길 바라며 열쇠 두 개를 감으로 맞춰봅니다.
+            Dice.RollDice(20, 14, LukBonus()); // 행운 보정치, 판정값 14
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 3)
         {
-            // 회로 하나를 조작해 첫 번째 구멍이 참인 것처럼 속이고 열쇠를 넣습니다. [cite: 75]
-            Dice.RollDice(20, 14, IntBonus()); // 지식 보정치, 판정값 14 [cite: 76]
+            // 회로 하나를 조작해 첫 번째 구멍이 참인 것처럼 속이고 열쇠를 넣습니다.
+            Dice.RollDice(20, 14, IntBonus()); // 지식 보정치, 판정값 14
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1021,12 +1112,12 @@ void EventManager::ChestAndLogic()
     if (!IsBattle)
     {
         // 판정 성공 메세지
-        // 두 논리가 맞물리며 상자가 열립니다. [cite: 77]
+        // 두 논리가 맞물리며 상자가 열립니다.
     }
     else
     {
         // 판정 실패 메세지
-        // 이런, 타이밍이 맞지 않았던걸까요... 논리가 부정당해 상자가 열리지 않습니다. [cite: 78]
+        // 이런, 타이밍이 맞지 않았던걸까요... 논리가 부정당해 상자가 열리지 않습니다
     }
 }
 
@@ -1046,14 +1137,14 @@ void EventManager::ChestPointerSearch()
 
         if (Choice == 1)
         {
-            // 주변의 데이터 흐름을 분석해 *ptr이 가리키는 자료형(Type)을 알아냅니다. [cite: 83]
-            Dice.RollDice(20, 14, IntBonus()); // 지식 보정치, 판정값 14 [cite: 84, 85]
+            // 주변의 데이터 흐름을 분석해 *ptr이 가리키는 자료형(Type)을 알아냅니다.
+            Dice.RollDice(20, 14, IntBonus()); // 지식 보정치, 판정값 14
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 우연히 자료형이 맞길 바라며 하나를 정하고 *ptr을 따라갑니다. [cite: 84]
-            Dice.RollDice(20, 14, LukBonus()); // 행운 보정치, 판정값 14 [cite: 85]
+            // 우연히 자료형이 맞길 바라며 하나를 정하고 *ptr을 따라갑니다.
+            Dice.RollDice(20, 14, LukBonus()); // 행운 보정치, 판정값 14
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1069,12 +1160,12 @@ void EventManager::ChestPointerSearch()
     if (!IsBattle)
     {
         // 판정 성공 메세지
-        // 당신이 생각한 자료형이 맞았습니다! 바닥을 파니 상자가 나옵니다. [cite: 85, 86]
+        // 당신이 생각한 자료형이 맞았습니다! 바닥을 파니 상자가 나옵니다.
     }
     else
     {
         // 판정 실패 메세지
-        // 이런, 자료형이 맞지 않았던걸까요... 바닥을 파도 아무것도 나오지 않습니다. [cite: 87]
+        // 이런, 자료형이 맞지 않았던걸까요... 바닥을 파도 아무것도 나오지 않습니다.
     }
 }
 
@@ -1094,14 +1185,14 @@ void EventManager::ChestBugActorFix()
 
         if (Choice == 1)
         {
-            // 디버깅 툴을 이용해서 물리적으로 버그의 원흉을 제거합니다. [cite: 92]
-            Dice.RollDice(20, 10, StrBonus()); // 힘 보정치, 판정값 10 [cite: 93, 94]
+            // 디버깅 툴을 이용해서 물리적으로 버그의 원흉을 제거합니다.
+            Dice.RollDice(20, 10, StrBonus()); // 힘 보정치, 판정값 10
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 디버깅 툴을 이용해서 오류가 발생한 코드를 찾아 수정합니다. [cite: 93]
-            Dice.RollDice(20, 10, IntBonus()); // 지식 보정치, 판정값 10 [cite: 94]
+            // 디버깅 툴을 이용해서 오류가 발생한 코드를 찾아 수정합니다.
+            Dice.RollDice(20, 10, IntBonus()); // 지식 보정치, 판정값 10
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1117,12 +1208,12 @@ void EventManager::ChestBugActorFix()
     if (!IsBattle)
     {
         // 판정 성공 메세지
-        // 성공적으로 액터의 버그가 제거됩니다. 액터는 마을주민 NPC였습니다. [cite: 94, 95]
+        // 성공적으로 액터의 버그가 제거됩니다. 액터는 마을주민 NPC였습니다.
     }
     else
     {
         // 판정 실패 메세지
-        // 이런, 오류의 원인을 잘못 짚은 모양입니다. 아예 충돌해서 소멸합니다... [cite: 95, 96]
+        // 이런, 오류의 원인을 잘못 짚은 모양입니다. 아예 충돌해서 소멸합니다...
     }
 }
 
@@ -1147,13 +1238,13 @@ void EventManager::ShopChoiceEvent()
 
         if (Choice == 1)
         {
-            // 여정을 쉴 수는 없지, 왼쪽 길로 갑니다. (모험 속행, 다음 이벤트가 전투로 고정) [cite: 101, 102]
+            // 여정을 쉴 수는 없지, 왼쪽 길로 갑니다. (모험 속행, 다음 이벤트가 전투로 고정)
             IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 뭔가 불길한데... 상점이 급하니 일단 오른쪽 길로 가봅니다. [cite: 102]
-            Dice.RollDice(20, 10, LukBonus()); // 행운 주사위 판정, 10 이하일 경우 전투 조우 [cite: 103]
+            // 뭔가 불길한데... 상점이 급하니 일단 오른쪽 길로 가봅니다.
+            Dice.RollDice(20, 10, LukBonus()); // 행운 주사위 판정, 10 이하일 경우 전투 조우
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1168,12 +1259,12 @@ void EventManager::ShopChoiceEvent()
 
     if (!IsBattle)
     {
-        // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요. [cite: 103, 104]
+        // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
         // 상점 진입 코드 작성
     }
     else
     {
-        // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다! [cite: 104, 105]
+        // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!
         // 전투 발생 코드 작성
     }
 }
@@ -1194,19 +1285,19 @@ void EventManager::ShopVillageWay()
 
         if (Choice == 1)
         {
-            // 그냥 다른 길로 갑니다. 상점은 다른곳에도 있겠죠. [cite: 109]
-            return; // 모험 속행 (상점 포기) [cite: 110]
+            // 그냥 다른 길로 갑니다. 상점은 다른곳에도 있겠죠.
+            return; // 모험 속행 (상점 포기)
         }
         else if (Choice == 2)
         {
-            // 상점도 가야하고, 주민들도 불편할거야. 바위를 치워봅니다. [cite: 110]
-            Dice.RollDice(20, 10, StrBonus()); // 힘 판정 [cite: 111, 112]
+            // 상점도 가야하고, 주민들도 불편할거야. 바위를 치워봅니다.
+            Dice.RollDice(20, 10, StrBonus()); // 힘 판정
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 3)
         {
-            // 민첩하게 바위를 뛰어넘어 상점을 이용하러 갑니다. [cite: 111]
-            Dice.RollDice(20, 10, DexBonus()); // 민첩 판정 [cite: 112]
+            // 민첩하게 바위를 뛰어넘어 상점을 이용하러 갑니다.
+            Dice.RollDice(20, 10, DexBonus()); // 민첩 판정
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1221,12 +1312,12 @@ void EventManager::ShopVillageWay()
 
     if (!IsBattle)
     {
-        // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요. [cite: 113, 114]
+        // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
         // 상점 진입 코드 작성
     }
     else
     {
-        // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다! [cite: 114, 115]
+        // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!
         // 전투 발생 코드 작성
     }
 }
@@ -1247,19 +1338,19 @@ void EventManager::ShopGamblerBet()
 
         if (Choice == 1)
         {
-            // 뭔 도박이야? 그냥 가던 길을 계속 간다. [cite: 118]
-            return; // 모험 속행 (상점 포기) [cite: 119]
+            // 뭔 도박이야? 그냥 가던 길을 계속 간다.
+            return; // 모험 속행 (상점 포기)
         }
         else if (Choice == 2)
         {
-            // 까짓거 한 번 굴려보지 뭐. 주사위를 굴린다. [cite: 119]
-            Dice.RollDice(20, 10, LukBonus()); // 행운 판정 [cite: 120, 121]
+            // 까짓거 한 번 굴려보지 뭐. 주사위를 굴린다.
+            Dice.RollDice(20, 10, LukBonus()); // 행운 판정
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 3)
         {
-            // 도박꾼에게 들키지 않게 손기술을 부여 결과값을 조작한다. [cite: 120]
-            Dice.RollDice(20, 10, DexBonus()); // 민첩 판정 [cite: 121]
+            // 도박꾼에게 들키지 않게 손기술을 부여 결과값을 조작한다.
+            Dice.RollDice(20, 10, DexBonus()); // 민첩 판정
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1274,12 +1365,12 @@ void EventManager::ShopGamblerBet()
 
     if (!IsBattle)
     {
-        // 주사위 값으로 6이 나오며, 5를 굴린 보부상을 이깁니다. 보부상이 킥킥 웃으며 보따리를 풀기 시작합니다. [cite: 122, 123]
+        // 주사위 값으로 6이 나오며, 5를 굴린 보부상을 이깁니다. 보부상이 킥킥 웃으며 보따리를 풀기 시작합니다.
         // 상점 진입 코드 작성
     }
     else
     {
-        // 이런, 주사위가 1이 나옵니다. 보부상이 기분 나쁘게 웃습니다. [cite: 123, 124]
+        // 이런, 주사위가 1이 나옵니다. 보부상이 기분 나쁘게 웃습니다.
         // 전투 발생 코드 작성
     }
 }
@@ -1300,19 +1391,19 @@ void EventManager::ShopBugStoreFix()
 
         if (Choice == 1)
         {
-            // 귀찮게 왜? 그냥 지나갑니다. [cite: 127]
-            return; // 모험 속행 (상점 포기) [cite: 128]
+            // 귀찮게 왜? 그냥 지나갑니다.
+            return; // 모험 속행 (상점 포기)
         }
         else if (Choice == 2)
         {
-            // 디버깅 툴을 이용해서 상점에 있는 버그를 디버깅해봅니다. [cite: 128]
-            Dice.RollDice(20, 10, IntBonus()); // 지식 판정 [cite: 129, 130]
+            // 디버깅 툴을 이용해서 상점에 있는 버그를 디버깅해봅니다.
+            Dice.RollDice(20, 10, IntBonus()); // 지식 판정
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 3)
         {
-            // 운 좋게 버그 난 곳 지워질수도 있는거 아닌가요? 그냥 되는대로 휘두릅니다! [cite: 129, 130]
-            Dice.RollDice(20, 10, LukBonus() - 5); // 행운 판정, 역보정 -5 [cite: 130]
+            // 운 좋게 버그 난 곳 지워질수도 있는거 아닌가요? 그냥 되는대로 휘두릅니다!
+            Dice.RollDice(20, 10, LukBonus() - 5); // 행운 판정, 역보정 -5
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1327,12 +1418,12 @@ void EventManager::ShopBugStoreFix()
 
     if (!IsBattle)
     {
-        // 디버깅에 성공했습니다! 상점이 원래의 모습을 되찾습니다. 이제 이용할 수 있겠군요. [cite: 131, 132]
+        // 디버깅에 성공했습니다! 상점이 원래의 모습을 되찾습니다. 이제 이용할 수 있겠군요.
         // 상점 진입 코드 작성
     }
     else
     {
-        // 디버깅에 실패했습니다! 오히려 버그가 급증했습니다. 버그가 당신에게 달려듭니다. [cite: 132, 133]
+        // 디버깅에 실패했습니다! 오히려 버그가 급증했습니다. 버그가 당신에게 달려듭니다.
         // 전투 발생 코드 작성
     }
 }
