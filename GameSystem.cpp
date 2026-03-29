@@ -5,6 +5,7 @@
 #include "BaseBossMonster.h"
 #include "GraphicManager.h"
 #include "CombatManager.h"
+#include "EventManager.h"
 #include <algorithm>
 #include <string>
 
@@ -52,6 +53,8 @@ void GameSystem::StartGame()
     Player.SetExperience(20);
     Player.SetMaxExperience(100);
 
+    EventManager Em(Player);
+
     cout << "Is your nickname " << Player.GetNickname() << "?\n";
 
     while (true)
@@ -81,9 +84,13 @@ void GameSystem::StartGame()
 
         }
 
+        Em.TriggerNextEvent();
+
+        //아래 테스트 함수
+        continue;
         if (Choice == 1)
         {
-            int RandomEvent = 1; //rand() % 3;
+            int RandomEvent = 2; //rand() % 3;
 
             switch (RandomEvent)
             {
@@ -108,7 +115,12 @@ void GameSystem::StartGame()
 
             case 2:
                 Gm.AddLog(" [?] Unknown Signal Detected...");
-                //Cm.UpdateEventUI(Player);
+                BaseMonster Bug("Fatal Error Bug",50,5,5,5);
+                Bug.SetHealth(50);
+                Bug.SetMaxHealth(50);
+                Bug.SetStrength(7);
+
+                Cm.UpdateEventUI(Player,Bug);
                 break;
             }
 

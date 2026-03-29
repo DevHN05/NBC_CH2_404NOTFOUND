@@ -9,7 +9,7 @@ void LoggerSystem::PrintMainArea(const vector<string>& Lines)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
 
-    for (int i = 0; i < 17; i++)
+    for (int i = 1; i < 17; i++)
     {
         Gm.GoSpace(2, i);
         cout << string(106, ' ');

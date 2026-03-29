@@ -242,48 +242,29 @@ void CombatManager::UpdateStoreUI(PlayerManager& Player)
 void CombatManager::UpdateEventUI(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
 
     Gm.ClearLogs();
-
-    for (int i = 21; i <= 28; i++)
-    {
-        Gm.GoSpace(2, i);
-        cout << "                                                                            ";
-    }
 
     Gm.DrawLayout();
     Gm.DrawInventoryData(Player);
 
-    Gm.GoSpace(10, 8);  cout << ">> DISCOVERED: OBSOLETE HARD DRIVE (MODEL: OLD-GEN)";
-    Gm.GoSpace(10, 9);  cout << ">> ATTEMPT DATA RECOVERY? (CAUTION: RISK OF CORRUPTION)";
+    Ls.LogEventAssassin(3,4);
 
-    Gm.GoSpace(5, 22);  cout << "1. [START RECOVERY] - (PROBABILITY-BASED REWARDS)";
-    Gm.GoSpace(5, 23);  cout << "2. [IGNORE DATA]    - (SECURE DISCONNECT)";
-    Gm.GoSpace(5, 25);  cout << "COMMAND >> ";
+    //Gm.GoSpace(10, 8);  cout << ">> DISCOVERED: OBSOLETE HARD DRIVE (MODEL: OLD-GEN)";
+    //Gm.GoSpace(10, 9);  cout << ">> ATTEMPT DATA RECOVERY? (CAUTION: RISK OF CORRUPTION)";
+
+    //Gm.GoSpace(5, 22);  cout << "1. [START RECOVERY] - (PROBABILITY-BASED REWARDS)";
+    //Gm.GoSpace(5, 23);  cout << "2. [IGNORE DATA]    - (SECURE DISCONNECT)";
+    Gm.GoSpace(3, 20);
+    cout << "[ Select ]";
 
     int choice;
     cin >> choice;
 
-    if (choice == 1)
-    {
-        if (rand() % 2 == 0)
-        {
-            int reward = 150;
-            Player.SetGold(Player.GetGold() + reward);
-            Gm.AddLog("Success! " + to_string(reward) + "G");
-        }
-        else {
-            Player.SetHealth(Player.GetHealth() - 20);
-            Gm.AddLog("SYSTEM ERROR: VIRUS DETECTED! HP -20");
-        }
-    }
-    else {
-        Gm.AddLog("Run!");
-    }
-
-    Gm.GoSpace(5, 27);  cout << "[ Press Enter to return ]";
-    cin.ignore(100, '\n');
-    cin.get();
+    //Gm.GoSpace(5, 27);  cout << "[ Press Enter to return ]";
+    //cin.ignore(100, '\n');
+    //cin.get();
 }
 
 void CombatManager::Reward(PlayerManager& Player, BaseMonster& Monster)
