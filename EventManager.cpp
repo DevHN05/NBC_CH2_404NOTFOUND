@@ -60,6 +60,7 @@ void EventManager::TriggerNextEvent()
 
     int id = EventIds[CurrentEventIndex++];     // 이번 차례의 이벤트 번호를 꺼내고, 다음 차례로 넘기는 함수
 
+    id = 11;
     switch (id)
     {
         // [1~10] 일반 전투 이벤트
@@ -749,6 +750,7 @@ void EventManager::ChoiceGarbageCollector()
         // 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다.
         Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
         // 보스 전투 시작
+        //cm.StartBossBattle(Player, *MonsterData::CreateSemicolon());
     }
 }
 
@@ -1261,6 +1263,7 @@ void EventManager::ShopChoiceEvent()
     {
         // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
         // 상점 진입 코드 작성
+        cm.UpdateStoreUI(Player);
     }
     else
     {
@@ -1314,6 +1317,7 @@ void EventManager::ShopVillageWay()
     {
         // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
         // 상점 진입 코드 작성
+        cm.UpdateStoreUI(Player);
     }
     else
     {
@@ -1367,6 +1371,7 @@ void EventManager::ShopGamblerBet()
     {
         // 주사위 값으로 6이 나오며, 5를 굴린 보부상을 이깁니다. 보부상이 킥킥 웃으며 보따리를 풀기 시작합니다.
         // 상점 진입 코드 작성
+        cm.UpdateStoreUI(Player);
     }
     else
     {
@@ -1420,6 +1425,7 @@ void EventManager::ShopBugStoreFix()
     {
         // 디버깅에 성공했습니다! 상점이 원래의 모습을 되찾습니다. 이제 이용할 수 있겠군요.
         // 상점 진입 코드 작성
+        cm.UpdateStoreUI(Player);
     }
     else
     {
@@ -1473,6 +1479,7 @@ void EventManager::ShopAccessDenied()
     {
         // 성공적으로 문이 열리며 상점 주인이 제 자리를 되찾습니다. 이제 이용할 수 있겠군요.
         // 상점 진입 코드 작성
+        cm.UpdateStoreUI(Player);
     }
     else
     {
