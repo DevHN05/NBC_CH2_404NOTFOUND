@@ -45,7 +45,7 @@ public:
     void LogSellItem(const string& ItemName, int SellPrice); //판매 완료한 아이템과 얻은 골드
     void LogShopSellPrompt(); //판매 아이템 입력칸
     void LogItemNotFound(const string& ItemName); //인벤토리에 아이템 없음
-    void LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items); //상점의 아이템 목록
+    void LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items, const vector<shared_ptr<ItemManager>>& CurrentDisplayItems); //상점의 아이템 목록
     void LogPrintShopMenu(); //상점 메뉴
 
     //전투 이벤트 내러티브
