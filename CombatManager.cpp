@@ -82,6 +82,7 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
     {
         Ls.LogPlayerDeath();
     }
+    Sleep(1000);
 }
 
 void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss)
@@ -186,6 +187,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
     {
         Ls.LogPlayerDeath();
     }
+    Sleep(1000);
 }
 
 void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
