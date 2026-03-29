@@ -19,10 +19,10 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
     Ls.LogMonsterAppear(Monster.GetNickname());
 
     UpdateBattleUI(Player, Monster);
+    cin.ignore(100, '\n');
 
     while (Player.GetHealth() > 0 && Monster.GetHealth() > 0)
     {
-
         Gm.GoSpace(3, 20);
         cout << "[ Enter: Player Turn ]";
         cin.get();
@@ -47,14 +47,14 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
         Monster.SetHealth(Monster.GetHealth() - Damage);
         Ls.LogAttack(Player.GetNickname(), Monster.GetNickname(), Damage);
 
-        Gm.HitShake("SLIME",74,1,0);
+        Gm.HitShake(Monster.GetNickname(),74,1,0);
         UpdateBattleUI(Player, Monster);
+
+        if (Monster.GetHealth() <= 0) break;
 
         Gm.GoSpace(3, 20);
         cout << "[ Enter: Monster Turn ]";
         cin.get();
-
-        if (Monster.GetHealth() <= 0) break;
 
         // --- Monster Turn ---
         Dice.RollDice(24, 10, 2);
@@ -95,15 +95,13 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
     bool Rage = false;
 
     UpdateBattleUI(Player, Boss);
+    cin.ignore(100, '\n');
 
     while (Player.GetHealth() > 0 && Boss.GetHealth() > 0)
     {
-
         Gm.GoSpace(3, 20);
         cout << "[ Enter: Player Turn ]";
         cin.get();
-
-
 
         // --- Player Turn ---
         Dice.RollDice(24, 10, 2);
@@ -125,14 +123,14 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         Boss.SetHealth(Boss.GetHealth() - Damage);
         Ls.LogAttack(Player.GetNickname(), Boss.GetNickname(), Damage);
 
-        Gm.HitShake("SLIME",74,1,0);
+        Gm.HitShake(Boss.GetNickname(),74,1,0);
         UpdateBattleUI(Player, Boss);
+
+        if (Boss.GetHealth() <= 0) break;
 
         Gm.GoSpace(3, 20);
         cout << "[ Enter: Boss Turn ]";
         cin.get();
-
-        if (Boss.GetHealth() <= 0) break;
 
         // --- Boss Turn ---
         Boss.OnPhaseChange();
@@ -224,7 +222,7 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
     }
     cout << "] " << Player.GetHealth() << " / " << Player.GetMaxHealth();
 
-    Gm.DrawAsciiCombatArt("PLAYER", "SLIME"); //전자는 고정 후자는 몬스터 이름 넣어야댐
+    Gm.DrawAsciiCombatArt("PLAYER", Monster.GetNickname()); //전자는 고정 후자는 몬스터 이름 넣어야댐
     Gm.DrawInventoryData(Player);
 }
 

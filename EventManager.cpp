@@ -109,7 +109,10 @@ void EventManager::BattleGuardian()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance(); // 이벤트 출력 함수입니당
+    Gm.ClearLogs();
     Logger.LogEventGuardian(DexBonus(), IntBonus());    // 선택지 출력 함수입니당
+
+    Gm.GoSpace(4, 20); cout << "Player Select Enter> ";
 
     while (true)
     {
@@ -148,6 +151,8 @@ void EventManager::BattleGuardian()
     {
         // 성공 메세지
         // 경험치 오르고 골드 보상 없이 종료
+        int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp,Player.GetExperience(),Player.GetMaxExperience());
     }
     else
     {
