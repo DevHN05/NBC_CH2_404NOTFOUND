@@ -79,7 +79,7 @@ public:
     void LogEventCliff(int DexBonus, int IntBonus);
     void LogEventFailCliff();
 
-    //보상/전투/회피 이벤트(
+    //보상/전투/회피 이벤트
     void ChoiceGarbageCollector(int DexBonus); //제일 쎔 - 처형자 :: 가비지 컬렉션
     void ChoiceGarbageCollectorSuccess();
     void ChoiceGarbageCollectorFail();
@@ -92,13 +92,35 @@ public:
     void ChoiceDanglingPointerSuccess();
     void ChoiceDanglingPointerFail();
 
-    void ChoiceBrokenActor(int LukBonus, int IntBonus);
+    void ChoiceBrokenActor(int LukBonus, int IntBonus); //재활용? - 브로큰 액터
     void ChoiceBrokenActorSuccess();
     void ChoiceBrokenActorFail();
 
-    void ChoiceUninitArray(int IntBonus);
+    void ChoiceUninitArray(int IntBonus); //재활용? - 미초기화 배열
     void ChoiceUninitArraySuccess();
     void ChoiceUninitArrayFail();
+
+    //보상 이벤트
+    void ChestNormal(int StrBonus, int DexBonus); //1 - 평범한 보물상자 이벤트
+    void ChestNormalSuccess();
+    void ChestNormalFail();
+
+    void ChestConstLock(int StrBonus, int IntBonus); //2 - const로 고정된 보물상자
+    void ChestConstLockSuccess();
+    void ChestConstLockFail();
+
+    void ChestAndLogic(int DexBonus, int LukBonus, int IntBonus); //3 - &&를 맞추기 위해 동시에 열기
+    void ChestAndLogicSuccess();
+    void ChestAndLogicFail();
+
+    void ChestPointerSearch(int IntBonus, int LukBonus); //4 - *ptr 보물찾기
+    void ChestPointerSearchSuccess();
+    void ChestPointerSearchFail();
+
+    void ChestBugActorFix(int StrBonus, int IntBonus); //5 - 버그 액터 고치기
+    void ChestBugActorFixSuccess();
+    void ChestBugActorFixFail();
+
 
     //요약
     void PrintSummary(); //처치 몬스터 수, 획득 골드, 획득 경험치

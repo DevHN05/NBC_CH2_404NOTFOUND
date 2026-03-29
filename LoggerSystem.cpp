@@ -348,7 +348,7 @@ void LoggerSystem::LogEventFailCliff()
     });
 }
 
-//-----------------------------보상/전투/회피 이벤트----------------------------------
+//-----------------------------보상/전투/회피 이벤트 관련----------------------------------
 //처형자::가비지 컬렉션
 void LoggerSystem::ChoiceGarbageCollector(int DexBonus)
 {
@@ -513,6 +513,163 @@ void LoggerSystem::ChoiceUninitArrayFail()
     });
 }
 
+//-----------------------------보상 이벤트 관련----------------------------------
+//평범한 보물상자
+void LoggerSystem::ChestNormal(int StrBonus, int DexBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "길을 나아가던 당신은, 길 한복판에 단단히 잠겨있는 상자를 발견합니다.",
+        "아무래도 버그가 발생해서 엉뚱한 곳에서 스폰된 객체인 것 같습니다.",
+        "이렇게 단단히 잠가놓다니, 분명 좋은 보상이 있을게 분명하지만...",
+        "불행인 점은, 열쇠가 없으며 당신은 이 상자의 주인이 아니라는 겁니다.",
+        "다행인 점은, 지금 당신을 지켜보는 사람은 없다는 거구요."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 힘으로 상자를 부숴서 내용물을 확인합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 락픽을 이용해 자물쇠를 따봅니다. (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
+}
+
+void LoggerSystem::ChestNormalSuccess()
+{
+    PrintMainArea({
+        "상자 안에는 꽤 많은 양의 금화가 들어 있었습니다.",
+        "당신은 신이 나서 안에 있는 금화를 모두 챙깁니다."
+    });
+}
+
+void LoggerSystem::ChestNormalFail()
+{
+    PrintMainArea({
+        "이런, 상자가 파손되며 내용물도 파손되고 말았습니다..."
+    });
+}
+
+//const로 고정된 보물상자
+void LoggerSystem::ChestConstLock(int StrBonus, int IntBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "길가에 빛나는 파란 보호막에 싸인 상자가 놓여 있습니다. 이 상자는 const 키워드가 선언되어 있어,",
+        "외부의 어떤 영향에도 내부 데이터(보상)가 변하지 않도록 고정되어 있는 구조인 것 같았습니다.",
+        "하지만 버그로 const 키워드가 상자의 잠금 장치로 넘어가, 열린 상태로 변하지 않는 상자가 됐군요.",
+        "변하지 않게 된 이 잠금장치를 뚫어야만 내용물을 얻을 수 있을 것 같습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 잠금 장치를 부술 수 없다면, 힘으로 상자를 부숩니다. (판정값 14, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 디버깅을 해서 const의 위치를 알맞은 곳으로 되돌립니다. (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
+}
+
+void LoggerSystem::ChestConstLockSuccess()
+{
+    PrintMainArea({
+        "상자 안에는 꽤 많은 양의 금화가 들어 있었습니다.",
+        "당신은 신이 나서 안에 있는 금화를 모두 챙깁니다."
+    });
+}
+
+void LoggerSystem::ChestConstLockFail()
+{
+    PrintMainArea({
+        "이런, const는 강력하군요...",
+        "당신은 상자를 여느라 시간만 허비했단 사실에 좌절합니다."
+    });
+}
+
+//&&를 맞추기 위해 동시에 열기
+void LoggerSystem::ChestAndLogic(int DexBonus, int LukBonus, int IntBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "길을 나아가던 당신은, 바위 위에 단단히 잠겨있는 황금상자를 발견합니다.",
+        "그리고 황금 상자 앞에는 열쇠가 2개나 있습니다. 상자에는 두 개의 열쇠 구멍이 나란히 뚫려 있고",
+        "그 가운데에 && 기호가 새겨져 있습니다. 이 녀석도 버그로 인해 열쇠구멍이 늘어난 것 같은데요.",
+        "아무래도 두 열쇠를 동시에 맞춰야만 상자 값이 true로 변해 열릴 것 같군요.",
+        "하지만 당신은 혼자이기에, 혼자서 타이밍을 맞추기란 쉽지 않습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 정교하게 하면 되죠! 재빠르게 열쇠 두 개를 동시에 집어넣어 봅니다. (판정값 14, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 우연히 들어맞길 바라며 열쇠 두 개를 감으로 맞춰봅니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("3. 회로 하나를 조작해 첫 번째 구멍이 참인 것처럼 속이고 열쇠를 넣습니다. (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
+}
+
+void LoggerSystem::ChestAndLogicSuccess()
+{
+    PrintMainArea({
+        "철컥! 두 논리가 맞물리며 상자가 열립니다.",
+        "당신은 신이 나서 안에 있는 금화를 모두 챙깁니다."
+    });
+}
+
+void LoggerSystem::ChestAndLogicFail()
+{
+    PrintMainArea({
+        "이런, 타이밍이 맞지 않았던걸까요... 논리가 부정당해 상자가 열리지 않습니다.",
+        "당신은 상자를 여느라 시간만 허비했단 사실에 좌절합니다."
+    });
+}
+
+//*ptr 보물찾기
+void LoggerSystem::ChestPointerSearch(int IntBonus, int LukBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "당신은 *ptr이라고 적힌 이정표를 발견합니다.",
+        "이 이정표는 진짜 보물이 숨겨진 메모리 주소를 가리키고 있는 보물지도인 모양입니다.",
+        "하지만, 버그때문인지 *ptr이라고만 적혀있어서 이게 int인지 char인지도 알 수 없습니다.",
+        "어느 자료형이라고 가정하고 길을 따라가야 보물을 찾을 수 있을까요?",
+        "잘못 찾아가면 허탕을 칠 것 같습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 주변의 데이터 흐름을 분석해 *ptr이 가리키는 자료형(Type)을 알아냅니다. (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 우연히 자료형이 맞길 바라며 하나를 정하고 *ptr을 따라갑니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+}
+
+void LoggerSystem::ChestPointerSearchSuccess()
+{
+    PrintMainArea({
+        "당신이 생각한 자료형이 맞았습니다! 바닥을 파니 상자가 나옵니다.",
+        "당신은 신이 나서 상자 속 금화를 모두 챙깁니다."
+    });
+}
+
+void LoggerSystem::ChestPointerSearchFail()
+{
+    PrintMainArea({
+        "이런, 자료형이 맞지 않았던걸까요... 바닥을 파도 아무것도 나오지 않습니다.",
+        "당신은 상자를 여느라 시간만 허비했단 사실에 좌절합니다."
+    });
+}
+
+//버그 액터 고치기
+void LoggerSystem::ChestBugActorFix(int StrBonus, int IntBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "당신은 원형을 잃어버린 버그 액터를 발견합니다.",
+        "이 액터는 말 그대로 알 수 없는 버그가 뒤엉켜 제 구실을 하지 못하고 있는데요.",
+        "당신의 손에 들린 특수 디버깅 툴이 빛을 냅니다.",
+        "어쩌면, 당신이 이 액터에게 원래 모습을 찾아줄 수 있을지도 모릅니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 디버깅 툴을 이용해서 물리적으로 버그의 원흉을 제거합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 디버깅 툴을 이용해서 오류가 발생한 코드를 찾아 수정합니다. (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+}
+
+void LoggerSystem::ChestBugActorFixSuccess()
+{
+    PrintMainArea({
+        "성공적으로 액터의 버그가 제거됩니다. 액터는 마을주민 NPC였습니다.",
+        "NPC가 감사의 표시로 당신에게 골드를 지급합니다."
+    });
+}
+
+void LoggerSystem::ChestBugActorFixFail()
+{
+    PrintMainArea({
+        "이런, 오류의 원인을 잘못 짚은 모양입니다. 아예 충돌해서 소멸합니다..."
+    });
+}
 
 //-----------------------------캐릭터 관련--------------------------------------
 void LoggerSystem::LogLevelUp(int NewLevel) //레벨업 했을때 로그 출력하는 함수
