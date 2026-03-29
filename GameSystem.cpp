@@ -42,7 +42,7 @@ void GameSystem::StartGame()
 
     PlayerManager Player(Name);
     Player.SetLevel(1);
-    Player.SetHealth(80);
+    Player.SetHealth(200);
     Player.SetMaxHealth(200);
     Player.SetStrength(20);
     Player.SetDexterity(3);
@@ -84,10 +84,10 @@ void GameSystem::StartGame()
 
         }
         //민서님의 랜덤 이벤트 함수
-        //Em.TriggerNextEvent();
+        Em.TriggerNextEvent();
 
         //아래 테스트 함수
-        //continue;
+        continue;
         if (Choice == 1)
         {
             int RandomEvent = 1; //rand() % 3;
