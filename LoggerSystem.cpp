@@ -454,6 +454,7 @@ void LoggerSystem::LogSellItem(const string& ItemName, int SellPrice)
 void LoggerSystem::LogShopSellPrompt()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.GoSpace(4, 20);
     Gm.AddLog("판매할 아이템 이름을 입력하세요 >> ");
 }
 
@@ -467,25 +468,59 @@ void LoggerSystem::LogItemNotFound(const string& ItemName)
 //상점 메뉴 출력 함수
 void LoggerSystem::LogPrintShopMenu()
 {
-    GraphicManager& Gm = GraphicManager::GetInstance();
+    /*GraphicManager& Gm = GraphicManager::GetInstance();
     Gm.ClearLogs();
     Gm.AddLog("1. 아이템 구매");
     Gm.AddLog("2. 아이템 판매");
     Gm.AddLog("3. 상점 나가기");
-    Gm.AddLog("선택 >> ");
+    Gm.AddLog("선택 >> ");*/
+
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+    //Gm.ClearLogs();
+
+    int LogStartX = 28;
+    Gm.GoSpace(LogStartX, 6);
+    cout << "[ SHOP MENU ]";
+    Gm.GoSpace(LogStartX, 8);
+    cout << "1. 구매하기";
+    Gm.GoSpace(LogStartX, 10);
+    cout << "2. 판매하기";
+    Gm.GoSpace(LogStartX, 12);
+    cout << "3. 떠나기";
+
+    Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
+
 }
 
 //아이템 목록 출력 함수
-void LoggerSystem::LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items)
+void LoggerSystem::LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items, const vector<shared_ptr<ItemManager>>& CurrentDisplayItems)
 {
-    GraphicManager& Gm = GraphicManager::GetInstance();
+    /*GraphicManager& Gm = GraphicManager::GetInstance();
     Gm.ClearLogs();
     for (int i = 0; i < (int)Items.size(); i++)
     {
         Gm.AddLog(to_string(i + 1) + ". " + Items[i]->GetName()
             + " (" + to_string(Items[i]->GetPrice()) + "G)");
     }
-    Gm.AddLog("선택 >> ");
+    Gm.AddLog("선택 >> ");*/
+
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+    Gm.GoSpace(30, 3); cout << " [ SYSTEM MERCHANT ] ";
+
+    int LogStartX = 28;
+
+    for (int i =0; i < CurrentDisplayItems.size(); ++i)
+    {
+        Gm.GoSpace(LogStartX, 6 + 2 * i);
+        cout << to_string(i+1) + ". " + CurrentDisplayItems[i]->GetName() + " : " + to_string(CurrentDisplayItems[i]->GetPrice()) + "G";
+    }
+
+    Gm.GoSpace(LogStartX, 16); cout << "0. EXIT TERMINAL";
+    Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
+    Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
+
 }
 
 //-----------------------------요약----------------------------------

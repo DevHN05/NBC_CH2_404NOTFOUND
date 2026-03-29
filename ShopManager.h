@@ -42,8 +42,6 @@ public:
     }
 
     void EnterShop(PlayerManager& Player); //입장 여부 확인 → 메뉴 루프
-    void PrintShopMenu() const;
-    void ShowShopItems() const;
     void RandomShuffleShopItems();
 
     bool BuyItem(int Index, PlayerManager& Player);
