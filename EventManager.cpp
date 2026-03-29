@@ -123,14 +123,12 @@ void EventManager::BattleGuardian()
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 13, DexBonus()); // 보정치를 받아서 13을 굴립니당
-             Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+            Dice.RollDice(20, 1, DexBonus()); // 보정치를 받아서 13을 굴립니당
             if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)로 갑니당
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 13, IntBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
            if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)로 갑니당
         }
         else if (Choice == 3)                           // 3번 선택 시 즉시 전투 출력
@@ -153,8 +151,9 @@ void EventManager::BattleGuardian()
     {
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         // 경험치 오르고 골드 보상 없이 종료
-        int SuccessExp = 10;
-        Logger.LogExpGain(SuccessExp,Player.GetExperience(),Player.GetMaxExperience());
+        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience()+30);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -162,6 +161,7 @@ void EventManager::BattleGuardian()
     else
     {
         // 실패 메세지 출력 들어갈 곳. 여긴 실패해도 체력 손해는 없음!
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailGuardian();
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
@@ -189,13 +189,11 @@ void EventManager::BattleWanderer()
         if (Choice == 1)
         {
             Dice.RollDice(20, 13, Player.GetStrength() / 5);
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 13, Player.GetDexterity() / 5);
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 3)                            // 3번 선택 시 즉시 전투 출력
@@ -218,14 +216,16 @@ void EventManager::BattleWanderer()
         // 성공 메세지
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         // 경험치 오르고 골드 보상 없이 종료
-        int SuccessExp = 10;
-        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Logger.LogExpGain(10, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + 10);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
     }
     else if (IsBattle) {
         // 실패 메세지 + hp 5 차감
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailWanderer();
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
@@ -243,9 +243,6 @@ void EventManager::BattleBreaker()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventBreaker(StrBonus(), IntBonus());
 
-    // 무한 루프 메세지 출력 함수란
-
-    // 무한 루프 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -258,13 +255,11 @@ void EventManager::BattleBreaker()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, StrBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, IntBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -283,6 +278,8 @@ void EventManager::BattleBreaker()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -290,6 +287,7 @@ void EventManager::BattleBreaker()
     else
     {
         // 실패 메세지 및 전투 발생
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailBreaker();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
         cin.clear();
@@ -306,9 +304,6 @@ void EventManager::BattleInvader()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventInvader(DexBonus(), LukBonus());
 
-    // 오버플로우 메세지 출력 함수란
-
-    // 오버플로우 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -321,13 +316,11 @@ void EventManager::BattleInvader()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, IntBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, DexBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -345,14 +338,17 @@ void EventManager::BattleInvader()
         // 성공 메세지
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
     }
     else
     {
         // 실패 메세지 및 전투 발생
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailInvader();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         cin.clear();
@@ -369,9 +365,6 @@ void EventManager::BattleAssassin()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventAssassin(StrBonus(), IntBonus());
 
-    // 세그폴트 메세지 출력 함수란
-
-    // 세그폴트 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -384,13 +377,11 @@ void EventManager::BattleAssassin()
         if (Choice == 1)
         {
             Dice.RollDice(20, 12, IntBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 12, DexBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -409,6 +400,8 @@ void EventManager::BattleAssassin()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -416,6 +409,7 @@ void EventManager::BattleAssassin()
     else
     {
         // 실패 메세지 및 전투 발생
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailAssassin();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         cin.clear();
@@ -432,9 +426,6 @@ void EventManager::BattleBridge()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventBridge(DexBonus(), LukBonus(), StrBonus());
 
-    // 구역 메세지 출력 함수란
-
-    // 구역 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -447,19 +438,16 @@ void EventManager::BattleBridge()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, LukBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, IntBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 3)
         {
             Dice.RollDice(20, 15, StrBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -476,8 +464,9 @@ void EventManager::BattleBridge()
     {
         // 성공 메세지
         Gm.GoSpace(2, 26); cout << "판정 성공!";
-        int SuccessExp = 10;
-        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience()+30);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -486,10 +475,11 @@ void EventManager::BattleBridge()
     {
         // 실패 메세지 및 전투 발생
         Logger.LogEventFailBridge();
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        cm.StartBattle(Player, *MonsterData::CreateBot());
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -500,9 +490,6 @@ void EventManager::BattleForest()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventForest(IntBonus(), LukBonus());
 
-    // 숲 메세지 출력 함수란
-
-    // 숲 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -515,13 +502,11 @@ void EventManager::BattleForest()
         if (Choice == 1)
         {
             Dice.RollDice(20, 14, IntBonus()); // 지능 보정치
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 14, LukBonus()); // 행운 보정치
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -543,6 +528,8 @@ void EventManager::BattleForest()
         // 경험치 오르고 골드 보상 없이 종료
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -552,11 +539,12 @@ void EventManager::BattleForest()
         // 실패 메세지 출력
         // [당신의 방안은 탁월한 효과를 보였습니다. 버그를 찾아내는데 말입니다... 너무 탁월해서 버그가 바로 앞에 있었거든요...]
         // 전용 메세지 출력 및 몬스터 랜덤 전투 발생
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailForest();
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        cm.StartBattle(Player, *MonsterData::CreateBot());
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -567,9 +555,6 @@ void EventManager::BattleDataNoise()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventDataNoise(IntBonus(), LukBonus());
 
-    // 데이터 노이즈 메세지 출력 함수란
-
-    // 데이터 노이즈 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -582,13 +567,11 @@ void EventManager::BattleDataNoise()
         if (Choice == 1)
         {
             Dice.RollDice(20, 14, IntBonus()); // 지식 보정치
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 14, LukBonus()); // 행운 보정치
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -609,6 +592,8 @@ void EventManager::BattleDataNoise()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -618,12 +603,13 @@ void EventManager::BattleDataNoise()
         // 실패 메세지 출력
         // [아무래도 잘못 건드린 모양입니다. 깨진 데이터가 당신의 데이터마저 조금 깨뜨립니다...]
         // HP 10 차감, 전용 메세지 출력 및 몬스터 랜덤 전투 발생
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailDataNoise();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        cm.StartBattle(Player, *MonsterData::CreateBot());
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -634,9 +620,6 @@ void EventManager::BattleGravity()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventGravity(LukBonus(), IntBonus());
 
-    // 중력 역전 메세지 출력 함수란
-
-    // 중력 역전 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -649,13 +632,11 @@ void EventManager::BattleGravity()
         if (Choice == 1)
         {
             Dice.RollDice(20, 12, LukBonus()); // 행운 보정치
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 12, IntBonus()); // 지식 보정치
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -676,6 +657,8 @@ void EventManager::BattleGravity()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -685,12 +668,13 @@ void EventManager::BattleGravity()
         // 실패 메세지 출력
         // [이런, 엄청난 속도로 추락한 거대 버그와 정면으로 충돌했습니다! 충격으로 인해 시야가 흔들리는 가운데...]
         // HP 5 차감, 전용 메세지 출력 및 몬스터 랜덤 전투 발생
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailGravity();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        cm.StartBattle(Player, *MonsterData::CreateBot());
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -701,9 +685,6 @@ void EventManager::BattleCliff()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventCliff(DexBonus(), IntBonus());
 
-    // 훼손 데이터 메세지 출력 함수란
-
-    // 훼손 데이터 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -716,13 +697,11 @@ void EventManager::BattleCliff()
         if (Choice == 1)
         {
             Dice.RollDice(20, 10, DexBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 10, StrBonus());
-            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -741,6 +720,8 @@ void EventManager::BattleCliff()
         Gm.GoSpace(2, 26); cout << "판정 성공!";
         int SuccessExp = 10;
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -748,11 +729,12 @@ void EventManager::BattleCliff()
     else
     {
         // 실패 메세지 및 전투 발생
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         Logger.LogEventFailCliff();
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        cm.StartBattle(Player, *MonsterData::CreateBot());
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -767,9 +749,9 @@ void EventManager::BattleCliff()
 void EventManager::ChoiceGarbageCollector()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ChoiceGarbageCollector(DexBonus());
 
-    // 가비지 컬렉션 메세지 출력 함수란
-    // 가비지 컬렉션 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -780,18 +762,15 @@ void EventManager::ChoiceGarbageCollector()
 
         if (Choice == 1)
         {
-            // 가비지 컬렉션에게 걸리지 않도록 주의하며 데이터를 챙겨봅니다.
             Dice.RollDice(20, 10, DexBonus()); // 민첩 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            // 가비지 컬렉션도 결국 코드덩어리. 정면으로 싸움을 겁니다.
             IsBattle = true;
         }
         else if (Choice == 3)
         {
-            // 삭제당할 위험을 감수할 수 없습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
             cin.clear();
             std::cin.ignore(LLONG_MAX, '\n');
             std::cin.get();
@@ -809,22 +788,27 @@ void EventManager::ChoiceGarbageCollector()
 
     if (!IsBattle)
     {
-        // 성공 메세지 출력
-        // 보상 (골드 지급, 특별 장비)
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 60; // 보스 몬스터 경험치
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
     }
     else
     {
-        // 실패 메세지 출력
-        // 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다.
-        Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
+        if (Choice == 1) // 2를 골랐는데도 실패 선택지를 출력하고 패널티를 받지 않도록 수정
+        {
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << " [실패]";
+            Logger.ChoiceGarbageCollectorFail();
+            Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 보스 전투 시작
-        cm.StartBossBattle(Player, *MonsterData::CreateShadowLord());
+        }
+        cm.StartBossBattle(Player, *MonsterData::CreateShadowLord()); // 보스 전투 시작
     }
 }
 
@@ -832,9 +816,9 @@ void EventManager::ChoiceGarbageCollector()
 void EventManager::ChoiceUndeclared()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ChoiceUndeclared(StrBonus());
 
-    // 언디클레어드 메세지 출력 함수란
-    // 언디클레어드 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -875,6 +859,11 @@ void EventManager::ChoiceUndeclared()
     if (!IsBattle)
     {
         // 성공 메세지 출력
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 60; // 보스 몬스터 경험치
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -883,11 +872,16 @@ void EventManager::ChoiceUndeclared()
     {
         // 실패 메세지 출력
         // 시스템이 당신을 인식할 수 없습니다. 즉시 제거가 시작됩니다. 몸이 흐릿해지는 걸 느끼며 맞서 싸웁니다.
-        Player.SetHealth(max(0, Player.GetHealth() - 10));
-        cin.clear();
-        std::cin.ignore(LLONG_MAX, '\n');
-        std::cin.get();
-        // 보스 전투 시작
+        if (Choice == 1)
+        {
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << " [실패]";
+            Logger.ChoiceUndeclaredFail();
+            Player.SetHealth(max(0, Player.GetHealth() - 10));
+            cin.clear();
+            std::cin.ignore(LLONG_MAX, '\n');
+            std::cin.get();
+        }
+        cm.StartBossBattle(Player, *MonsterData::CreateVolcanicDragon()); // 보스 전투 시작
     }
 }
 
@@ -895,6 +889,8 @@ void EventManager::ChoiceUndeclared()
 void EventManager::ChoiceDanglingPointer()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ChoiceDanglingPointer(StrBonus());
 
     // 댕글링 포인터 메세지 출력 함수란
     // 댕글링 포인터 선택지 출력 함수란
@@ -920,6 +916,9 @@ void EventManager::ChoiceDanglingPointer()
         else if (Choice == 3)
         {
            // 시스템 크래시는 무섭습니다. 욕심을 버리고 빙 돌아서 지나갑니다.
+           cin.clear();
+           std::cin.ignore(LLONG_MAX, '\n');
+           std::cin.get();
            return;
         }
         else
@@ -936,6 +935,11 @@ void EventManager::ChoiceDanglingPointer()
     {
         // 성공 메세지 출력
         // 데이터 잔상이 소멸하며 안전한 경로가 확보됩니다.
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 60; // 보스 몬스터 경험치
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -944,11 +948,16 @@ void EventManager::ChoiceDanglingPointer()
     {
         // 실패 메세지 출력
         // 녀석은 여전히 존재하지 않는 주소를 읽으려 시도했습니다. 시스템 크래시와 함께 유령 데이터가 실체화되어 당신을 덮칩니다.
-        Player.SetHealth(max(0, Player.GetHealth() - 10));
-        cin.clear();
-        std::cin.ignore(LLONG_MAX, '\n');
-        std::cin.get();
-        // 보스 전투 시작
+        if (Choice == 1)
+        {
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << " [실패]";
+            Logger.ChoiceDanglingPointerFail();
+            Player.SetHealth(max(0, Player.GetHealth() - 10));
+            cin.clear();
+            std::cin.ignore(LLONG_MAX, '\n');
+            std::cin.get();
+        }
+        cm.StartBossBattle(Player, *MonsterData::CreateForestGuardian()); // 보스 전투 시작
     }
 }
 
@@ -956,6 +965,8 @@ void EventManager::ChoiceDanglingPointer()
 void EventManager::ChoiceBrokenActor()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ChoiceBrokenActor(LukBonus(), IntBonus());
 
     // 깨진 액터 메세지 출력 함수란
     // 깨진 액터 선택지 출력 함수란
@@ -982,9 +993,6 @@ void EventManager::ChoiceBrokenActor()
         else if (Choice == 3)
         {
             // 위험을 감수할 순 없죠. 그냥 지나칩니다.
-            cin.clear();
-            std::cin.ignore(LLONG_MAX, '\n');
-            std::cin.get();
             return; // 전투 미발생, 이벤트 종료
         }
         else
@@ -1001,6 +1009,11 @@ void EventManager::ChoiceBrokenActor()
     {
         // 성공 메세지 출력
         // 귀중한 물품이 제법 많이 들어있군요. 살아남은 것만 대충 챙겨야겠군요.
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 30; // 일반 몬스터 경험치
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -1009,10 +1022,12 @@ void EventManager::ChoiceBrokenActor()
     {
         // 실패 메세지 출력
         // 아무래도 망가진 액터처럼 당신도 망가뜨리려는 모양인데요... 싸움을 피할 순 없겠습니다.
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << " [실패]";
+        Logger.ChoiceBrokenActorFail();
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 전투 발생
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster()); // 일반 전투 발생
     }
 }
 
@@ -1020,6 +1035,8 @@ void EventManager::ChoiceBrokenActor()
 void EventManager::ChoiceUninitArray()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ChoiceDanglingPointer(IntBonus());
 
     // 배열 메세지 출력 함수란
     // 배열 선택지 출력 함수란
@@ -1063,6 +1080,11 @@ void EventManager::ChoiceUninitArray()
     if (!IsBattle)
     {
         // 성공 메세지 출력
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        int SuccessExp = 30; // 일반 몬스터 경험치
+        Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
+        Player.SetExperience(Player.GetExperience() + SuccessExp);
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -1071,11 +1093,15 @@ void EventManager::ChoiceUninitArray()
     {
         // 실패 메세지 출력
         // 방 전체를 장악한 쓰레기값이 당신의 침입을 감지해 전투를 걸어옵니다.
+        if (Choice == 1)
+        {
+            Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << " [실패]";
         Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 보스 전투 시작
+        }
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster()); // 일반 전투 시작
     }
 }
 
