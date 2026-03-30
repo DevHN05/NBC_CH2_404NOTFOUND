@@ -1015,7 +1015,7 @@ void LoggerSystem::LogPrintShopMenu()
 }
 
 //아이템 목록 출력 함수
-void LoggerSystem::LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items, const vector<shared_ptr<ItemManager>>& CurrentDisplayItems)
+void LoggerSystem::LogPrintShopItems(const vector<ItemManager*>& CurrentDisplayItems)
 {
     /*GraphicManager& Gm = GraphicManager::GetInstance();
     Gm.ClearLogs();
