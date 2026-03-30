@@ -10,15 +10,15 @@ class PlayerManager : public BaseCharacter
 public:
     PlayerManager(string Nickname);
 
-    int GetLevel();
-    int GetExperience();
-    int GetMaxExperience();
-    int GetDexterity();
-    int GetIntelligence();
-    int GetLuck();
-    int GetCriticalProbability();
-    int GetGold();
-    vector<shared_ptr<ItemManager>> GetPlayerInventory();
+    int GetLevel() const;
+    int GetExperience() const;
+    int GetMaxExperience() const;
+    int GetDexterity() const;
+    int GetIntelligence() const;
+    int GetLuck() const;
+    int GetCriticalProbability() const;
+    int GetGold() const;
+    const vector<unique_ptr<ItemManager>>& GetPlayerInventory() const;
 
     void SetLevel(int Level);
     void SetExperience(int Experience);
@@ -29,12 +29,12 @@ public:
     void SetCriticalProbability(int CriticalProbability);
     void SetGold(int Gold);
 
-    void CollectItem(std::shared_ptr<ItemManager> Item);
+    void CollectItem(std::unique_ptr<ItemManager> Item);
     void UseItem(const string& ItemName);
     void RemoveItem(const string& ItemName);
-    void ShowItems();
+    //void ShowItems();
 
-    std::shared_ptr<ItemManager> FindItem(const string& ItemName);
+    ItemManager* FindItem(const string& ItemName);
 
     void PrintPlayerStatus();
 
