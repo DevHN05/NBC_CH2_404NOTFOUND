@@ -764,60 +764,70 @@ void GraphicManager::SetRageMode(bool IsRage)
 void GraphicManager::ShowTitle() const
 {
     system("cls");
-    int StartX = 30, StartY = 12;
-
-    GoSpace(0, 0);      cout <<"________________________________________________________________________________________________________________________",
-    GoSpace(0, 1);      cout <<"|[ SYSTEM_TERMINAL_V4.04 ]                                                                     [ STATUS: 0xDEADC0DE ]  |" ,
-    GoSpace(0, 2);      cout <<"|======================================================================================================================|",
-    Sleep(50);
-    const char* logs[] = {
-        "| [CPU] [|||||||||||||||||||||||||||||||          ] 72% | [MEM] [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■□□] 92% | [TEMP] 42'C   |",
-        "|----------------------------------------------------------------------------------------------------------------------|",
-        "| [NET_LOG]                                                                                                            |",
-        "| > TRACE: 127.0.0.1 ... OK                                                                                            |",
-        "| > ADDR_RECURSIVE ... DETECTED                                                                                        |",
-        "| > ERR: SEG_FAULT (0xDEADBEEF)                                                                                        |"
-    };
-    for(int i=0; i<6; i++) {
-        GoSpace(0, 3+i); cout << logs[i];
-        Sleep(50); // 0.05초 간격
+    Sleep(100);
+    for (int i = 0; i <= RightEdge; i++)
+    {
+        GoSpace(i, 0); cout << "_";
+        GoSpace(i, 2); cout << "=";
     }
-    GoSpace(0, 9);      cout <<"|                                                                                                                      |",
-    GoSpace(0, 10);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 11);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 12);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 13);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 14);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 15);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 16);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 17);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 18);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 19);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 20);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 21);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 22);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 23);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 24);     cout <<"| [STORAGE]                                                                                                            |",
-    GoSpace(0, 25);     cout <<"| SEC_A: [■■■■■■■□□] 70%                                                                                               |",
-    GoSpace(0, 26);     cout <<"| SEC_B: [■■■□□□□□□] 30%                                                                                               |",
-    GoSpace(0, 27);     cout <<"| SEC_C: [■■■■■■■■■] 100%                                                                                              |",
-    GoSpace(0, 28);     cout <<"|                                                                                                                      |",
-    GoSpace(0, 29);     cout <<"|______________________________________________________________________________________________________________________|",
-    GoSpace(0, 30);     cout <<"| [CMD] : /START  /OPTIONS  /RECOVERY  /SHUTDOWN                                          [TERMINAL_READY]  _          |",
-    GoSpace(0, 31);     cout <<"|______________________________________________________________________________________________________________________|";
 
-    Sleep(300);
+    for (int i = 1; i < BottomEdge; i++)
+    {
+        GoSpace(0, i);         cout << "|";
+        GoSpace(RightEdge, i); cout << "|";
+    }
+
+    for (int i = 0; i <= RightEdge; i++)
+    {
+        GoSpace(i, BottomEdge - 2); cout << "_";
+        GoSpace(i, BottomEdge);     cout << "_";
+    }
+
+    GoSpace(2, 1); cout << "[ SYSTEM_TERMINAL_V4.04 ]";
+    GoSpace(RightEdge - 25, 1); cout << "[ STATUS: 0xDEADC0DE ]";
+
+    const char* logs[] = {
+        "[CPU] [|||||||||||||||||||||||||||||||          ] 72% | [MEM] [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■□□] 92% | [TEMP] 42'C",
+        "-------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "[NET_LOG]",
+        "> TRACE: 127.0.0.1 ... OK",
+        "> ADDR_RECURSIVE ... DETECTED",
+        "> ERR: SEG_FAULT (0xDEADBEEF)"
+    };
+
+    for (int i = 0; i < 6; i++)
+    {
+        GoSpace(2, 3 + i);
+        cout << logs[i];
+        Sleep(30);
+    }
+
+    int storageY = BottomEdge - 7;
+    GoSpace(2, storageY);     cout << "[STORAGE]";
+    GoSpace(2, storageY + 1); cout << "SEC_A: [■■■■■■■□□] 70%";
+    GoSpace(2, storageY + 2); cout << "SEC_B: [■■■□□□□□□] 30%";
+    GoSpace(2, storageY + 3); cout << "SEC_C: [■■■■■■■■■] 100%";
+
+    GoSpace(2, BottomEdge - 1);
+    cout << "[CMD] : /START  /OPTIONS  /RECOVERY  /SHUTDOWN";
+    GoSpace(RightEdge - 25, BottomEdge - 1);
+    cout << "[TERMINAL_READY]  _";
+
+    int logoW = 60;
+    int StartX = (CurrentWidth / 2) - (logoW / 2);
+    int StartY = (CurrentHeight / 2) - 4;
+
+    Sleep(200);
     GoSpace(StartX, StartY);     cout << "o  o  o-o  o  o   o   o      o    o--o                  o  ";
-    Sleep(50);
+    Sleep(100);
     GoSpace(StartX, StartY + 1); cout << "|  | o  /o |  |   |\\  |      |    |                     |  ";
-    Sleep(50);
     GoSpace(StartX, StartY + 2); cout << "o--O | / | o--O   | \\ | o-o -o-   O-o  o-o o  o o-o   o-O  ";
+    Sleep(50);
     GoSpace(StartX, StartY + 3); cout << "   | o/  o    |   |  \\| | |  |    |    | | |  | |  | |  |  ";
     GoSpace(StartX, StartY + 4); cout << "   o  o-o     o   o   o o-o  o    o    o-o o--o o  o  o-o  ";
 
-    GoSpace(41, StartY + 7); cout << "[ PROJECT : 404 NOT FOUND ]";
-
-    GoSpace(43, StartY + 9); cout << "[Press Enter to Start]";
+    GoSpace((CurrentWidth / 2) - 13, StartY + 6); cout << "[ PROJECT : 404 NOT FOUND ]";
+    GoSpace((CurrentWidth / 2) - 11, StartY + 8); cout << "[Press Enter to Start]";
 
     cin.ignore(100, '\n');
 }
