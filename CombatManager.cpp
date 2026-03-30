@@ -7,7 +7,7 @@
 #include "LoggerSystem.h"
 #include "DiceSystem.h"
 #include "ShopManager.h"
-#include "ItemManager.h"
+#include "BaseItem.h"
 #include <random>
 
 void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)

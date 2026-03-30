@@ -45,7 +45,7 @@ int PlayerManager::GetGold() const
     return Gold;
 }
 
-const vector<unique_ptr<ItemManager>>& PlayerManager::GetPlayerInventory() const
+const vector<unique_ptr<BaseItem>>& PlayerManager::GetPlayerInventory() const
 {
     return PlayerInventory.GetInventoryItems();
 }
@@ -90,7 +90,7 @@ void PlayerManager::SetGold(int Gold)
     this->Gold = Gold;
 }
 
-void PlayerManager::CollectItem(std::unique_ptr<ItemManager> Item)
+void PlayerManager::CollectItem(std::unique_ptr<BaseItem> Item)
 {
     PlayerInventory.AddItem(std::move(Item));
 }
@@ -105,7 +105,7 @@ void PlayerManager::RemoveItem(const string& ItemName)
     PlayerInventory.RemoveItem(ItemName);
 }
 
-ItemManager* PlayerManager::FindItem(const string& ItemName)
+BaseItem* PlayerManager::FindItem(const string& ItemName)
 {
     return PlayerInventory.FindItem(ItemName);
 }

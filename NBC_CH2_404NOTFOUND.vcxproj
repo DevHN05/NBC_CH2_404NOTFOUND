@@ -135,7 +135,7 @@
     <ClCompile Include="LoggerSystem.cpp" />
     <ClCompile Include="DiceSystem.cpp" />
     <ClCompile Include="Equipment.cpp" />
-    <ClCompile Include="ItemManager.cpp" />
+    <ClCompile Include="BaseItem.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="BaseMonster.cpp" />
     <ClCompile Include="BaseBossMonster.cpp" />
@@ -154,7 +154,7 @@
     <ClInclude Include="LoggerSystem.h" />
     <ClInclude Include="DiceSystem.h" />
     <ClInclude Include="Equipment.h" />
-    <ClInclude Include="ItemManager.h" />
+    <ClInclude Include="BaseItem.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="BaseMonster.h" />
     <ClInclude Include="BaseBossMonster.h" />

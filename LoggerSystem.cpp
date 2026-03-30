@@ -996,46 +996,39 @@ void LoggerSystem::LogPrintShopMenu()
     Gm.DrawLayout();
     //Gm.ClearLogs();
 
-    int LogStartX = 28;
-    Gm.GoSpace(LogStartX, 6);
-    cout << "[ SHOP MENU ]";
-    Gm.GoSpace(LogStartX, 8);
-    cout << "1. 구매하기";
+    Gm.GoSpace(32, 7); cout << " [ SHOP MENU ] ";
+
+    int LogStartX = 32;
+
     Gm.GoSpace(LogStartX, 10);
-    cout << "2. 판매하기";
+    cout << "1. 구매하기";
     Gm.GoSpace(LogStartX, 12);
+    cout << "2. 판매하기";
+    Gm.GoSpace(LogStartX, 14);
     cout << "3. 떠나기";
 
-    Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
+    Gm.DrawAsciiArt("SHOPKEEPER" , 93, 6);
 
 }
 
 //아이템 목록 출력 함수
-void LoggerSystem::LogPrintShopItems(const vector<ItemManager*>& CurrentDisplayItems)
+void LoggerSystem::LogPrintShopItems(const vector<BaseItem*>& CurrentDisplayItems)
 {
-    /*GraphicManager& Gm = GraphicManager::GetInstance();
-    Gm.ClearLogs();
-    for (int i = 0; i < (int)Items.size(); i++)
-    {
-        Gm.AddLog(to_string(i + 1) + ". " + Items[i]->GetName()
-            + " (" + to_string(Items[i]->GetPrice()) + "G)");
-    }
-    Gm.AddLog("선택 >> ");*/
-
     GraphicManager& Gm = GraphicManager::GetInstance();
     Gm.DrawLayout();
-    Gm.GoSpace(30, 3); cout << " [ SYSTEM MERCHANT ] ";
+    Gm.GoSpace(32, 7); cout << " [ SYSTEM MERCHANT ] ";
 
-    int LogStartX = 28;
+    int LogStartX = 32;
 
     for (int i =0; i < CurrentDisplayItems.size(); ++i)
     {
-        Gm.GoSpace(LogStartX, 6 + 2 * i);
-        cout << to_string(i+1) + ". " + CurrentDisplayItems[i]->GetName() + " : " + to_string(CurrentDisplayItems[i]->GetPrice()) + "G";
+        Gm.GoSpace(LogStartX, 10 + 2 * i);
+        cout << to_string(i+1) + ". [" + CurrentDisplayItems[i]->GetPotionTypeStr() + "] " +
+            CurrentDisplayItems[i]->GetName() + " : " + to_string(CurrentDisplayItems[i]->GetPrice()) + "G";
     }
 
-    Gm.GoSpace(LogStartX, 16); cout << "0. EXIT TERMINAL";
-    Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
+    Gm.GoSpace(LogStartX, 20); cout << "0. EXIT TERMINAL";
+    Gm.DrawAsciiArt("SHOPKEEPER" , 93, 6);
 
 }
 //----------------------------------------튜토리얼 관련----------------------------------------

@@ -3,7 +3,7 @@
 #include "BaseCharacter.h"
 #include "Inventory.h"
 
-class ItemManager;
+class BaseItem;
 
 class PlayerManager : public BaseCharacter
 {
@@ -18,7 +18,7 @@ public:
     int GetLuck() const;
     int GetCriticalProbability() const;
     int GetGold() const;
-    const vector<unique_ptr<ItemManager>>& GetPlayerInventory() const;
+    const vector<unique_ptr<BaseItem>>& GetPlayerInventory() const;
 
     void SetLevel(int Level);
     void SetExperience(int Experience);
@@ -29,12 +29,12 @@ public:
     void SetCriticalProbability(int CriticalProbability);
     void SetGold(int Gold);
 
-    void CollectItem(std::unique_ptr<ItemManager> Item);
+    void CollectItem(std::unique_ptr<BaseItem> Item);
     void UseItem(const string& ItemName);
     void RemoveItem(const string& ItemName);
     //void ShowItems();
 
-    ItemManager* FindItem(const string& ItemName);
+    BaseItem* FindItem(const string& ItemName);
 
     void PrintPlayerStatus();
 

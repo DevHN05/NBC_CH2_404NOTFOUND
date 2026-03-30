@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "ItemManager.h"
+#include "BaseItem.h"
 
 using namespace std;
 
@@ -12,13 +12,13 @@ class PlayerManager;
 class Inventory
 {
 private:
-	vector<unique_ptr<ItemManager>> Items;
+	vector<unique_ptr<BaseItem>> Items;
 
 public:
-    const vector<unique_ptr<ItemManager>>& GetInventoryItems() const;
+    const vector<unique_ptr<BaseItem>>& GetInventoryItems() const;
 
-	void AddItem(unique_ptr<ItemManager> Item);
-    ItemManager* FindItem(const string& ItemName) const;
+	void AddItem(unique_ptr<BaseItem> Item);
+    BaseItem* FindItem(const string& ItemName) const;
 	void UseItem(const string& ItemName, PlayerManager& Character);
 	bool RemoveItem(const string& ItemName);
 };
