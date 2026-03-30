@@ -82,7 +82,7 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
     }
     else
     {
-        Ls.LogPlayerDeath();
+        Gm.DrawGameOver(Player);
     }
     Sleep(1000);
 }
@@ -189,7 +189,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
     }
     else
     {
-        Ls.LogPlayerDeath();
+        Gm.DrawGameOver(Player);
     }
     Sleep(1000);
 }

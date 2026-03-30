@@ -1,5 +1,7 @@
 #include "GraphicManager.h"
 #include "PlayerManager.h"
+#include "LoggerSystem.h"
+#include "GameSystem.h"
 #include "BaseMonster.h"
 #include "Inventory.h"
 #include "ItemManager.h"
@@ -285,6 +287,18 @@ void GraphicManager::InitializeAssets()
         " ╚════════════════════════════════╝ ", // 14. 카운터 하단 마감
         "   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ", // 15. 바닥 그림자/질감 (15줄)
     };
+    //Logo
+    AsciiAssets["YOUDIED"] =
+    {
+        "▒█████ █████                       ▒██████████   ▒███              ▒█████",
+        "▒▒███ ▒▒███                         ▒███▒▒▒▒███  ▒▒▒               ▒▒███ ",
+        " ▒▒███▒███    ██████  █████ ████    ▒███   ▒▒███ ▒███   ██████   ███████ ",
+        "  ▒▒█████    ███▒▒███▒▒███ ▒███     ▒███    ▒███ ▒███  ███▒▒███ ███▒▒███ ",
+        "   ▒▒███    ▒███ ▒███ ▒███ ▒███     ▒███    ▒███ ▒███ ▒███████ ▒███ ▒███ ",
+        "    ▒███    ▒███ ▒███ ▒███ ▒███     ▒███    ███  ▒███ ▒███▒▒   ▒███ ▒███ ",
+        "   ▒█████   ▒▒██████  ▒▒████████   ▒██████████  ▒█████▒▒██████ ▒▒████████",
+        "   ▒▒▒▒▒     ▒▒▒▒▒▒    ▒▒▒▒▒▒▒▒    ▒▒▒▒▒▒▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒ "
+    };
 }
 
 void GraphicManager::GoSpace(int X, int Y) const
@@ -378,6 +392,19 @@ void GraphicManager::DrawLayout() const
     }
 }
 
+void GraphicManager::DrawCombatLayOut() const
+{
+    for (int y = 1; y < MainBottom; y++)
+    {
+        GoSpace(1, y);
+
+        for (int x = 1; x < RightEdge; x++)
+        {
+            cout << " ";
+        }
+    }
+}
+
 void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
 {
     int centerX = SplitColumn / 2 - 10;
@@ -417,7 +444,7 @@ void GraphicManager::DrawInventoryData(PlayerManager& Player) const
     GoSpace(statusX, startY + 4); cout << "- Lux: " << Player.GetLuck();
 
     int invX = statusX + 16;
-    if (invX + 20 > RightEdge) invX = statusX; // 공간 부족 시 스탯 아래로
+    if (invX + 20 > RightEdge) invX = statusX;
 
     GoSpace(invX, startY); cout << "[ Inventory ]";
     GoSpace(invX, startY + 1); cout << "- GOLD: " << Player.GetGold() << " G";
@@ -429,6 +456,86 @@ void GraphicManager::DrawInventoryData(PlayerManager& Player) const
         }
     }
  }
+
+void GraphicManager::DrawGameOver(PlayerManager& Player)
+{
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
+    DrawLayout();
+    DrawInventoryData(Player);
+
+    int targetX = (CurrentWidth / 2) - (72 / 2);
+
+    int targetY = (MainBottom / 2) - (8 / 2);
+
+    DrawAsciiArt("YOUDIED",targetX, targetY );
+
+    int Input;
+
+    Ls.LogPlayerDeath();
+    CommandAddLog("1. 다시 컴파일하기 / 2. 끝내기");
+    cin >> Input;
+
+    //게임 다시하기
+    if (Input == 1)
+    {
+        GameSystem& Gs = GameSystem::GetInstance();
+        Gs.StartGame();
+    }
+    else// 게임 끄기
+    {
+        exit(0);
+    }
+}
+
+void GraphicManager::DrawDiceRoll(int RollHead, int MaxNumber)
+{
+    // 1. 애니메이션 연출 (주사위가 막 굴러가는 느낌)
+    for (int i = 0; i < 15; i++)
+    {
+        int tempRoll = (rand() % MaxNumber) + 1;
+
+        DrawCustomDice(tempRoll, MaxNumber);
+
+        Sleep(50 + (i * 10));
+    }
+
+    // 2. 최종 결과값 출력 (강조를 위해 조금 더 대기)
+    Sleep(200);
+    DrawCustomDice(RollHead, MaxNumber);
+
+    // 3. 하단에 텍스트 피드백
+    int textX = (CurrentWidth / 2) - 12;
+    int textY = (MainBottom / 2) + 4;
+    GoSpace(textX, textY);
+    cout << ">>>  DICE RESULT: " << RollHead << "  <<<";
+
+    Sleep(1000); // 결과 확인용 정지
+}
+
+void GraphicManager::DrawCustomDice(int Number, int MaxNumber)
+{
+    int diceW = 11;
+    int diceH = 5;
+
+    int startX = (CurrentWidth / 2) - (diceW / 2);
+    int startY = (MainBottom / 2) - (diceH / 2);
+
+    GoSpace(startX, startY);     cout << ".-------.";
+    GoSpace(startX, startY + 1); cout << "|       |";
+
+    GoSpace(startX, startY + 2);
+    if (Number < 10)
+    {
+        cout << "|   " << Number << "   |";
+    }
+    else
+    {
+        cout << "|   " << Number << "  |";
+    }
+
+    GoSpace(startX, startY + 3); cout << "|       |";
+    GoSpace(startX, startY + 4); cout << "'-------'";
+}
 
 void GraphicManager::AddLog(const string& Log)
 {
@@ -466,11 +573,20 @@ void GraphicManager::CommandAddLog(const string& Log)
     int startX = 2;
     int clearWidth = SplitColumn - 4;
 
+    GoSpace(startX, targetY - 1);
+    for (int x = 0; x < clearWidth; x++)
+    {
+        cout << " ";
+    }
+
     GoSpace(startX, targetY);
     for (int x = 0; x < clearWidth; x++)
     {
         cout << " ";
     }
+
+    GoSpace(startX, targetY - 1);
+    cout << "  [System Log]";
 
     GoSpace(startX, targetY);
     cout << "> " << Log;
@@ -759,4 +875,25 @@ void GraphicManager::DrawAsciiArt(const string& Name, const int& X,const int& Y)
         }
     }
 
+}
+
+void GraphicManager::DrawAsciiArtCenter(const string& Name)
+{
+    if (AsciiAssets.find(Name) == AsciiAssets.end()) return;
+
+    const vector<string>& Asset = AsciiAssets[Name];
+    int artHeight = static_cast<int>(Asset.size());
+
+    size_t maxWidth = 0;
+    for (const string& line : Asset)
+    {
+        if (line.length() > maxWidth)
+            maxWidth = line.length();
+    }
+    int artWidth = static_cast<int>(maxWidth);
+
+    int targetX = (CurrentWidth / 2) - (artWidth / 2);
+    int targetY = (MainBottom / 2) - (artHeight / 2);
+
+    DrawAsciiArt(Name, targetX, targetY);
 }
