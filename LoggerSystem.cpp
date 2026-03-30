@@ -1170,9 +1170,10 @@ void LoggerSystem::Tutorial3()
 
     TypeText(Gm, "이 세계의 모든 행동은 20면체 주사위가 결정합니다.", 3, 2);
     TypeText(Gm, "당신이 행동을 할 때마다, 시스템에서는 당신의 행동을 평가하는 주사위를 굴립니다.", 3, 3);
-    TypeText(Gm, "주사위를 굴려서 얻은 결과값에, 당신의 능력 보정치를 더한", 3, 4); // 한 줄로 쓰면 넘침
-    TypeText(Gm, "최종 숫자가 제시된 목표값보다 높아야 성공합니다.", 3, 5);
-    TypeText(Gm, "주사위를 굴릴 땐, 스탯 5포인트당 +1의 보정치가 붙습니다. STR이 15라면? 힘 주사위 값에 +3이 추가되는 식입니다.", 3, 6);
+    TypeText(Gm, "주사위를 굴려서 얻은 결과값에,", 3, 4); // 한 줄로 쓰면 넘침
+    TypeText(Gm, "당신의 능력 보정치를 더한 최종 숫자가 제시된 목표값보다 높아야 성공합니다.", 3, 5);
+    TypeText(Gm, "주사위를 굴릴 땐, 스탯 5포인트당 +1의 보정치가 붙습니다.", 3, 6);
+    TypeText(Gm, "STR이 15라면? 힘 주사위 값에 +3이 추가되는 식입니다.", 3, 7);
 
     Gm.GoSpace(3, 20);
     cout << "[ 계속하려면 Enter를 누르세요... ]";
@@ -1186,7 +1187,7 @@ void LoggerSystem::Tutorial4()
     TypeText(Gm, "선택지를 고르기 전, 특수 디버깅 툴은 이러한 보정값을 가시적으로 보여줍니다.", 3, 2);
     TypeText(Gm, "1. 튜토리얼을 이해해봅니다. (판정값 10, 지식 보정 +2)", 3, 4);
     TypeText(Gm, "2. 몸이 나쁘면 머리가 고생하는 거죠. 몸으로 부딪힙니다. (판정값 10, 힘 보정 +2)", 3, 5);
-    TypeText(Gm, "전자의 경우 지식이 높은 사람이, 후자의 경우 힘이 높은 사람이 유리하겠죠.", 3, 6);
+    TypeText(Gm, "전자의 경우 지식이 높은 사람이, 후자의 경우 힘이 높은 사람이 유리하겠죠.", 3, 7);
 
     Gm.GoSpace(3, 20);
     cout << "[ 계속하려면 Enter를 누르세요... ]";
@@ -1199,8 +1200,8 @@ void LoggerSystem::Tutorial5()
 
     TypeText(Gm, "하지만, 스탯이 낮더라도 주사위 값만 높으면 성공할 수 있습니다.", 3, 2);
     TypeText(Gm, "20면체 주사위는 최대 20까지 나오니까요.", 3, 3);
-    TypeText(Gm, "이 경우 스탯이 높아진다면, 1이 나오더라도 힘이 50을 넘기면", 3, 4);
-    TypeText(Gm, "11이 되어 10 선택지를 무조건 성공할 수 있겠죠.", 3, 5);
+    TypeText(Gm, "이 경우 스탯이 높아진다면 1이 나오더라도,", 3, 4);
+    TypeText(Gm, "힘이 50을 넘기면 11이 되어 10 선택지를 무조건 성공할 수 있겠죠.", 3, 5);
     TypeText(Gm, "그 상황에서도 유저의 짜릿함을 위해, 실패율을 최소 5%로 만드는 시스템이 존재합니다.", 3, 6);
     TypeText(Gm, "바로, 대실패와 대성공 시스템입니다.", 3, 7);
     TypeText(Gm, "대실패: 주사위 눈이 1이 나오면 보정치와 상관없이 무조건 실패합니다.", 3, 9);
@@ -1223,10 +1224,10 @@ void LoggerSystem::Tutorial6()
     SetConsoleTextAttribute(hConsole, 0x4F); //빨간 배경 + 흰 글자
 
     TypeText(Gm, "[캐릭터 생성창으로 이동합니다... ", 3, 4);
-    BlinkText(Gm, hConsole, "실패. 접근 권한 없음.]", 35, 4); //X=3 + 표시너비(32) = 35
+    BlinkText(Gm, hConsole, " 실패. 접근 권한 없음.]", 35, 4); //X=3 + 표시너비(32) = 35
 
     TypeText(Gm, "[재시도. ", 3, 5);
-    BlinkText(Gm, hConsole, "실패.]", 11, 5);                 //X=3 + 표시너비(8)  = 11
+    BlinkText(Gm, hConsole, " 실패.]", 11, 5);                 //X=3 + 표시너비(8)  = 11
 
     TypeText(Gm, "[캐릭터 생성 절차에 접근할 수 없습니다. ERROR CORD:404 NOT FOUND.]", 3, 6);
     TypeText(Gm, "[비상 상황에 대비해 랜덤 구성 프로토콜이 시작됩니다. 튜토리얼이 이어서 진행됩니다.]", 3, 7);
@@ -1238,10 +1239,13 @@ void LoggerSystem::Tutorial6()
 void LoggerSystem::TutorialStatDice()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     Gm.DrawLayout();
-    TypeText(Gm, "방금 배운 20면체 주사위를 실험 삼아 당신을 긴급 구성합니다", 3, 2);
-    TypeText(Gm, "지금부터 엔터를 누를 때마다 스탯이 정해집니다.", 3, 3);
+    BlinkText(Gm, hConsole, "비상 상황", 3, 2);
+    BlinkText(Gm, hConsole, "긴급 랜덤 구성 프로토콜 가동", 3, 3);
+    TypeText(Gm, "20면체 주사위로 당신을 긴급 구성합니다", 3, 4);
+    TypeText(Gm, "지금부터 엔터를 누를 때마다 스탯이 무작위로 정해집니다.", 3, 5);
 
 }
 
