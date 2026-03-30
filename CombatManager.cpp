@@ -93,6 +93,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
     LoggerSystem& Ls = LoggerSystem::GetInstance();
 
     Gm.ClearLogs();
+    Gm.BossAppearance(Boss.GetNickname());
     Ls.LogMonsterAppear(Boss.GetNickname());
 
     bool Rage = false;
@@ -142,9 +143,14 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
 
         if(Boss.GetPhase() == 2 && !Rage)
         {
-            Ls.LogBossPhaseChange(Boss.GetNickname(), Boss.GetSpecialSkillName(), Boss.GetStrength());
             Rage = true;
+            Gm.SetRageMode(true);
+            Ls.LogBossPhaseChange(Boss.GetNickname(), Boss.GetSpecialSkillName(), Boss.GetStrength());
+            //Gm.FlashScreen(0x4F, 100);
         }
+
+        if (Rage)
+            Gm.SetRageMode(true);
 
         Dice.RollDice(24, 10, 2);
         IsSuccess = Dice.GetResult();
@@ -160,7 +166,16 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
             if (IsSuccess)
             {
                 Gm.AddLog("[ ATTACK ]" + Boss.GetNickname()+ "의 " + Boss.GetSpecialSkillName() + " 공격");
+                Gm.GlitchEffect(300);
                 Player.SetHealth(Player.GetHealth() - Boss.GetSpecialSkillDamage());
+                for(int i = 0; i < 2; i++) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0xF0);
+                    Gm.DrawCombatLayOut();
+                    Sleep(50);
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
+                    Gm.DrawCombatLayOut();
+                    Sleep(50);
+                }
                 Gm.HitShake("PLAYER",12,5, 9);
             }
             else
@@ -180,6 +195,8 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         UpdateBattleUI(Player, Boss);
     }
 
+    Gm.SetRageMode(false);
+
     UpdateBattleUI(Player, Boss);
 
     if (Player.GetHealth() > 0)
@@ -198,7 +215,7 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
 
-    Gm.DrawLayout();
+    Gm.DrawCombatLayOut();
     Gm.DrawAsciiCombatArt(Player,Monster);
 }
 

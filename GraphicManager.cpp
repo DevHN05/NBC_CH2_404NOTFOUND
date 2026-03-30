@@ -48,11 +48,11 @@ void GraphicManager::InitializeAssets()
         "        .=====.           ",
         "    .---'-----'---.       ",
         "   /  [|[ (O) ]|]  \\      ",
-        "  /   '-----------'   \\     ",
-        " /   .-------------.   \\    ",
-        "|   /  > SECURED <  \\   |   ",
+        "  /   '-----------'  \\     ",
+        " /   .-------------.  \\    ",
+        "|   /  > SECURED <  \\  |   ",
         "|  |   [SYSTEM OK]   |  |   ",
-        "|   \\_____________/   |   ",
+        "|   \\_____________/    |   ",
         " \\__       ||       __/    ",
         "  | |======||======| |     ",
         "  | |      ||      | |     ",
@@ -67,7 +67,7 @@ void GraphicManager::InitializeAssets()
         " |  |  [???]  |  |     ",
         "  \\  \\_______/  /     ",
         "  /\\__  ~  __ /\\      ",
-        " / | [del_ptr] | \\     ",
+        " / | [del_ptr] |\\     ",
         "/__|_ _ _ _ _ _|_\\    ",
         "     |   |             ",
         "    _|_ _|_            ",
@@ -92,7 +92,7 @@ void GraphicManager::InitializeAssets()
     {
         "       .-------------.        ",
         "    .-'  _   _   _   '-.      ",
-        "   /   ((_)) ((_)) ((_)) \\    ",
+        " /   ((_)) ((_)) ((_))   \\    ",
         "|  < F U L L > [OVERFLOW] |  ",
         "\\   ((_)) ((_)) ((_))   /    ",
         " '--._______     _______.-'   ",
@@ -153,7 +153,7 @@ void GraphicManager::InitializeAssets()
         "     ._________________.     ",
         "  .--| 01101  10110   |--.  ",
         " /   |#@$!%&*&%!$@#&@#|   \\ ",
-        "|    | D A T A N O I S E |   | ",
+        "|    | D A T A N O I S E |  | ",
         " \\   | 10110  01101   |   /  ",
         "  '--|__#&@!%$*&@#&__ |--'  ",
         "      |  ||  ||  ||  |       ",
@@ -181,7 +181,7 @@ void GraphicManager::InitializeAssets()
     AsciiAssets["CLIFF"] =
     {
         "   ___  [CLIFF]  ___   ___   ",
-        "  /   \\_________/   \\ /   \\  ",
+        "  /   \\_________/   \\ /   \\",
         " |::::|_________|::::|:::::| ",
         " |:::::::::::::::::::::::::| ",
         " |:::::::::::::::::::::::::| ",
@@ -199,25 +199,25 @@ void GraphicManager::InitializeAssets()
         "  .-' \\               / '-.  ",
         " /   __\\_____________/__   \\ ",
         "|   / < [I N T A K E] > \\   | ",
-        "|  |   (( _ _ _ _ _ ))   |  | ",
-        "|   \\ <#$@!%*&#@$%> /   |   ",
-        "|    '-------------'    |   ",
-        "| [G A R B A G E   C O L.] |",
-        "| [L E C T I O N  v1.0] |   ",
-        "| ::::::::::::::::::::::|   ",
-        " \\_____________________/    ",
-        "    '---------------'       ",
+        "|  |   (( _ _ _ _ _ ))   |   | ",
+        "|   \\ <#$@!%*&#@$%> /   |   |",
+        "|    '-------------'     |   |",
+        "| [G A R B A G E   C O L.]   |",
+        "| [L E C T I O N  v1.0]  |   |",
+        "| :::::::::::::::::::::: |   |",
+        " \\_____________________/___/",
+        "    '----------------------'",
     };
     AsciiAssets["소거자 :: 언디클레어드"] =
     {
-        "      .----------.             ",
-        "   .-'            '-.          ",
-        "  /   < >      < >   \\         ",
+        "      .----------.            ",
+        "   .-'            '-.         ",
+        "  /   < >      < >    \\      ",
         " |           __           |    ",
-        "/       .---'  '---.       \\   ",
-        "       / [UNDECLARED] \\       |  ",
-        "      |  <404 ERROR>  |      |  ",
-        "\\      \\_____________/      /   ",
+        "/       .---'  '---.       \\ ",
+        "|      / [UNDECLARED] \\    |  ",
+        "|      |  <404 ERROR> |     |  ",
+        "\\     \\_____________/    /   ",
         " '--._______    _______.--'    ", //
         "    /  /\\  /\\  /\\  /\\  \\       ",
         "   (  (__)(__)(__)(__)  )      ", //
@@ -489,7 +489,7 @@ void GraphicManager::DrawGameOver(PlayerManager& Player)
 
 void GraphicManager::DrawDiceRoll(int RollHead, int MaxNumber)
 {
-    // 1. 애니메이션 연출 (주사위가 막 굴러가는 느낌)
+    //애니메이션 연출 (주사위가 막 굴러가는 느낌)
     for (int i = 0; i < 15; i++)
     {
         int tempRoll = (rand() % MaxNumber) + 1;
@@ -499,17 +499,15 @@ void GraphicManager::DrawDiceRoll(int RollHead, int MaxNumber)
         Sleep(50 + (i * 10));
     }
 
-    // 2. 최종 결과값 출력 (강조를 위해 조금 더 대기)
     Sleep(200);
     DrawCustomDice(RollHead, MaxNumber);
 
-    // 3. 하단에 텍스트 피드백
     int textX = (CurrentWidth / 2) - 12;
     int textY = (MainBottom / 2) + 4;
     GoSpace(textX, textY);
     cout << ">>>  DICE RESULT: " << RollHead << "  <<<";
 
-    Sleep(1000); // 결과 확인용 정지
+    Sleep(1000);
 }
 
 void GraphicManager::DrawCustomDice(int Number, int MaxNumber)
@@ -691,7 +689,79 @@ void GraphicManager::HitShake(const string& TargetKey, int StartX, int StartY, i
     SetConsoleTextAttribute(hConsole, 0x0F);
 }
 
-string GraphicManager::ShowTitle() const
+void GraphicManager::BossAppearance(const string& BossKey)
+{
+    for(int i = 0; i < 3; i++)
+    {
+        int AlertX = CurrentWidth / 2 - 15;
+        int AlertY = MainBottom / 2;
+
+        GoSpace(AlertX, AlertY);
+        cout << " [ WARNING: SYSTEM INTRUSION ] ";
+        Sleep(200);
+
+        GoSpace(AlertX, AlertY);
+        cout << "                               ";
+        Sleep(100);
+    }
+
+    int StartX = SplitColumn + ((RightEdge - SplitColumn) * 10 / 100);
+    int StartY = (MainBottom * 10) / 100;
+
+    int LineCount = 0;
+    for (const string& line : AsciiAssets[BossKey])
+    {
+        GoSpace(StartX, StartY + LineCount);
+
+        string noise = (rand() % 2 ? "0xDEADBEEF " : "********** ");
+        cout << noise << line;
+
+        LineCount++; // 다음 줄로!
+        Sleep(100);  // 500ms는 너무 느릴 수 있으니 100ms 정도로 조절 추천
+    }
+}
+
+void GraphicManager::GlitchEffect(int DurationMs)
+{
+    int StartTime = GetTickCount();
+    char Noise[] = { '@', '#', '$', '%', '&', '*', '!', '?' };
+
+    while (GetTickCount() - StartTime < DurationMs)
+    {
+        int Rx = rand() % (RightEdge - 2) + 1;
+        int Ry = rand() % (MainBottom - 2) + 1;
+
+        GoSpace(Rx, Ry);
+        cout << Noise[rand() % 8];
+
+        Sleep(10);
+    }
+
+    DrawCombatLayOut();
+}
+
+void GraphicManager::InverseFlash(int DurationMs)
+{
+    HANDLE HOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(HOut, 0xF0);
+
+    DrawLayout();
+    Sleep(DurationMs);
+    SetConsoleTextAttribute(HOut, 0x0F);
+    DrawLayout();
+}
+
+void GraphicManager::SetRageMode(bool IsRage)
+{
+    HANDLE HConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (IsRage) {
+        SetConsoleTextAttribute(HConsole, 12);
+    } else {
+        SetConsoleTextAttribute(HConsole, 15);
+    }
+}
+
+void GraphicManager::ShowTitle() const
 {
     system("cls");
     int StartX = 30, StartY = 12;
@@ -747,29 +817,9 @@ string GraphicManager::ShowTitle() const
 
     GoSpace(41, StartY + 7); cout << "[ PROJECT : 404 NOT FOUND ]";
 
-    GoSpace(38, StartY + 9); cout << "ENTER YOUR NICKNAME: ";
-
-    string InputName;
-    while (true)
-    {
-        GoSpace(59, StartY + 9);
-
-        getline(cin, InputName);
-
-        if (InputName.empty())
-        {
-            continue;
-        }
-
-        break;
-    }
-
-    GoSpace(42, StartY + 13); cout << "[Press Enter to Start]";
+    GoSpace(43, StartY + 9); cout << "[Press Enter to Start]";
 
     cin.ignore(100, '\n');
-    //cin.get();
-
-    return InputName;
 }
 
 void GraphicManager::DrawAsciiCombatArt(const string& Player,const string& Monster)

@@ -75,7 +75,7 @@ public:
     void DrawDiceRoll(int RollHead, int MaxNumber);
     void DrawCustomDice(int Number, int MaxNumber);
 
-    string ShowTitle() const;
+    void ShowTitle() const;
 
     void DrawAsciiCombatArt(const string& Player,const string& Monster);
     void DrawAsciiCombatArt(PlayerManager& Player, BaseMonster& Monster);
@@ -91,4 +91,9 @@ public:
     void HitMonsterShake(const string& TargetKey, int Force);
     void HitPlayerShake(const string& TargetKey, int Force);
     void HitShake(const string& TargetKey, int StartX, int StartY, int Force);
+
+    void BossAppearance(const string& BossKey);
+    void GlitchEffect(int DurationMs);
+    void InverseFlash(int DurationMs);
+    void SetRageMode(bool IsRage);
 };
