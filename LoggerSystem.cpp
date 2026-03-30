@@ -728,6 +728,174 @@ void LoggerSystem::LogPlayerDeath() //플레이어 사망시 로그 출력하는
 	EventLogs.push_back(Log);
 };
 
+//-----------------------------상점 이벤트----------------------------------
+//두 갈래 길
+void LoggerSystem::ShopChoiceEvent(int LukBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "길을 나아가던 당신은 두 갈래로 나뉘는 길을 마주칩니다.",
+        "어디... 가운데에 나무 팻말이 하나 있군요.",
+        "왼쪽 팻말에는 [주의! 몬스터 출몰 지역], 오른쪽 팻말에는",
+        "[길 잃은 모험가를 위한 잡화상점] 이라고 적혀있군요.",
+        "뭔가 상술같긴 하지만, 오른쪽으로 가면 상점이 있긴 할 것 같습니다.",
+        "잠시, 상점에 들릴 필요가 있을까요?"
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 왼쪽 길로 갑니다. (모험 속행, 다음 이벤트 전투 고정)");
+    Gm.AddLog("2. 불길하지만 일단 오른쪽 길로 가봅니다.");
+    Gm.AddLog("   (판정값 10, 행운 보정 +" + to_string(LukBonus) + ")");
+}
+
+void LoggerSystem::ShopChoiceEventSuccess()
+{
+    PrintMainArea({
+        "당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요."
+    });
+}
+
+void LoggerSystem::ShopChoiceEventFail()
+{
+    PrintMainArea({
+        "오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!"
+    });
+}
+
+//주민 마을 표지판
+void LoggerSystem::ShopVillageWay(int StrBonus, int DexBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "여정을 떠나던 당신은 제법 말끔한 표지판을 발견합니다. [동쪽, 주민 마을 있다.]",
+        "텍스트는 이상하지만, 버그의 영향을 아직 덜 받은 표지판 같습니다.",
+        "마을에는 상점도 있겠죠. 하지만 동쪽 길은 커다란 바위로 막혀있군요.",
+        "아무래도 오류로 이곳에 엉뚱한 오브젝트가 생긴 것 같은데요.",
+        "마을로 가려면 이 바위를 치워야만 할 것 같습니다."
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 다른 길로 갑니다. 상점은 다른 곳에도 있겠죠. (모험 속행)");
+    Gm.AddLog("2. 상점도 가야하고, 바위를 치워봅니다.");
+    Gm.AddLog("   (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("3. 민첩하게 바위를 뛰어넘어 상점으로 갑니다.");
+    Gm.AddLog("   (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
+}
+
+void LoggerSystem::ShopVillageWaySuccess()
+{
+    PrintMainArea({
+        "당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요."
+    });
+}
+
+void LoggerSystem::ShopVillageWayFail()
+{
+    PrintMainArea({
+        "오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!"
+    });
+}
+
+//도박꾼 보부상
+void LoggerSystem::ShopGamblerBet(int LukBonus, int DexBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "당신은 여정을 하던 중 보부상을 만납니다.",
+        "보부상이 킬킬 웃으며 당신에게 주사위를 들이밉니다.",
+        "자신은 도박을 좋아하는 도박꾼이며, 취미로 보부상을 하고 있다는군요.",
+        "자신과의 간단한 주사위 도박에서 성공하면 물건을 팔아주겠다고 합니다.",
+        "어이가 없군요. 하지만 다른 상점도 없습니다. 어울려줘야 할까요?"
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 뭔 도박이야? 그냥 가던 길을 계속 간다. (모험 속행)");
+    Gm.AddLog("2. 까짓거 한 번 굴려보지 뭐. 주사위를 굴린다.");
+    Gm.AddLog("   (판정값 10, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("3. 손기술로 도박꾼 몰래 결과값을 조작한다.");
+    Gm.AddLog("   (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
+}
+
+void LoggerSystem::ShopGamblerBetSuccess()
+{
+    PrintMainArea({
+        "주사위 값으로 6이 나오며, 5를 굴린 보부상을 이깁니다.",
+        "보부상이 킥킥 웃으며 보따리를 풀기 시작합니다."
+    });
+}
+
+void LoggerSystem::ShopGamblerBetFail()
+{
+    PrintMainArea({
+        "이런, 주사위가 1이 나옵니다. 보부상이 기분 나쁘게 웃습니다.",
+        "아무래도 여기서 뭘 사긴 글러먹은 것 같습니다..."
+    });
+}
+
+//버그 상점
+void LoggerSystem::ShopBugStoreFix(int IntBonus, int LukBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "당신은 버그로 뒤덮여버린 상점을 발견합니다. 뭔가 문제가 있는 것 같은데...",
+        "당장 상점 이용이 필요하다면, 이 상점에 걸린 버그를 고쳐서 이용할 수 있을 것 같습니다.",
+        "하지만 아무리 디버깅 툴이 있더라도 어디에 버그가 생겼는지 알아야,",
+        "상점에 있는 버그를 고칠 수 있는 법이죠.",
+        "여정이 바쁘긴 하지만... 잠시 버그를 고쳐볼까요?"
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 귀찮게 왜? 그냥 지나갑니다. (모험 속행)");
+    Gm.AddLog("2. 디버깅 툴로 상점의 버그를 고쳐봅니다.");
+    Gm.AddLog("   (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("3. 운 좋게 지워질 수도 있지 않나요? 마구 휘두릅니다!");
+    Gm.AddLog("   (판정값 10, 행운 보정 +" + to_string(LukBonus) + ", 역보정 -5)");
+}
+
+void LoggerSystem::ShopBugStoreFixSuccess()
+{
+    PrintMainArea({
+        "디버깅에 성공했습니다! 상점이 원래의 모습을 되찾습니다. 이제 이용할 수 있겠군요."
+    });
+}
+
+void LoggerSystem::ShopBugStoreFixFail()
+{
+    PrintMainArea({
+        "디버깅에 실패했습니다! 오히려 버그가 급증했습니다. 버그가 당신에게 달려듭니다."
+    });
+}
+
+//Access Denied 상점
+void LoggerSystem::ShopAccessDenied(int IntBonus, int LukBonus)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    PrintMainArea({
+        "문이 잠긴 상점 앞에, 상점 주인이 난감하다는 듯 서있습니다.",
+        "상점 입구를 보니, Access Denied라는 붉은 글씨가 적혀 있네요.",
+        "상점 주인이 자신의 가게에 접근을 거부당하는 그야말로 버그같은 상황입니다.",
+        "상점 문을 보니, 복잡한 수식과 함께 if 조건문이 걸려있습니다.",
+        "아무래도 버그가 명확한 것 같은데, 이 상인을 도와줄 수 있을까요?"
+    });
+    Gm.ClearLogs();
+    Gm.AddLog("1. 그냥 다른 상점 이용하지 뭐. (모험 속행)");
+    Gm.AddLog("2. 조건문을 추론해 상점 주인의 권한을 찾아줍니다.");
+    Gm.AddLog("   (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("3. if문에 숫자를 대입해 운으로 문을 열어봅니다.");
+    Gm.AddLog("   (판정값 10, 행운 보정 +" + to_string(LukBonus) + ")");
+}
+
+void LoggerSystem::ShopAccessDeniedSuccess()
+{
+    PrintMainArea({
+        "성공적으로 문이 열리며 상점 주인이 제 자리를 되찾습니다. 이제 이용할 수 있겠군요."
+    });
+}
+
+void LoggerSystem::ShopAccessDeniedFail()
+{
+    PrintMainArea({
+        "디버깅 코드를 대입해보자... 문에서 버그가 튀어나옵니다! 버그가 당신을 노립니다..."
+    });
+}
+
+
 //----------------------------------------아이템 관련----------------------------------------
 //아이템 사용시 로그 출력하는 함수(아이템명과 효과)
 void LoggerSystem::LogItemUse(const string& ItemName, const string& Effect)
@@ -811,14 +979,6 @@ void LoggerSystem::LogSellItem(const string& ItemName, int SellPrice)
     EventLogs.push_back(Log);
 }
 
-//"판매할 아이템 이름" 입력칸 출력 함수
-void LoggerSystem::LogShopSellPrompt()
-{
-    GraphicManager& Gm = GraphicManager::GetInstance();
-    Gm.GoSpace(4, 20);
-    Gm.AddLog("판매할 아이템 이름을 입력하세요 >> ");
-}
-
 void LoggerSystem::LogItemNotFound(const string& ItemName)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
@@ -879,7 +1039,6 @@ void LoggerSystem::LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Item
     }
 
     Gm.GoSpace(LogStartX, 16); cout << "0. EXIT TERMINAL";
-    Gm.GoSpace(4, 20); cout << "ENTER ITEM NUMBER TO PURCHASE >> ";
     Gm.DrawAsciiArt("SHOPKEEPER" , 64, 2);
 
 }

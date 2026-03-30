@@ -43,7 +43,6 @@ public:
     void LogBuyItem(const string& ItemName, int Price); //구매한 아이템, 소모 골드
     void LogInsufficientGold(int MyGold, int RequiredGold); //골드가 부족할 때
     void LogSellItem(const string& ItemName, int SellPrice); //판매 완료한 아이템과 얻은 골드
-    void LogShopSellPrompt(); //판매 아이템 입력칸
     void LogItemNotFound(const string& ItemName); //인벤토리에 아이템 없음
     void LogPrintShopItems(const vector<shared_ptr<ItemManager>>& Items, const vector<shared_ptr<ItemManager>>& CurrentDisplayItems); //상점의 아이템 목록
     void LogPrintShopMenu(); //상점 메뉴
@@ -120,6 +119,27 @@ public:
     void ChestBugActorFix(int StrBonus, int IntBonus); //5 - 버그 액터 고치기
     void ChestBugActorFixSuccess();
     void ChestBugActorFixFail();
+
+    //상점 이벤트
+    void ShopChoiceEvent(int LukBonus); //두 갈래 길
+    void ShopChoiceEventSuccess();
+    void ShopChoiceEventFail();
+
+    void ShopVillageWay(int StrBonus, int DexBonus); //주민 마을 표지판
+    void ShopVillageWaySuccess();
+    void ShopVillageWayFail();
+
+    void ShopGamblerBet(int LukBonus, int DexBonus); //도박꾼 보부상
+    void ShopGamblerBetSuccess();
+    void ShopGamblerBetFail();
+
+    void ShopBugStoreFix(int IntBonus, int LukBonus); //버그 상점
+    void ShopBugStoreFixSuccess();
+    void ShopBugStoreFixFail();
+
+    void ShopAccessDenied(int IntBonus, int LukBonus); //Access Denied 상점
+    void ShopAccessDeniedSuccess();
+    void ShopAccessDeniedFail();
 
 
     //요약
