@@ -43,9 +43,9 @@ void GameSystem::StartGame()
 
     PlayerManager Player(Name);
     Player.SetLevel(1);
-    Player.SetHealth(200);
-    Player.SetMaxHealth(200);
-    Player.SetStrength(20);
+    Player.SetHealth(400);
+    Player.SetMaxHealth(400);
+    Player.SetStrength(50);
     Player.SetDexterity(3);
     Player.SetIntelligence(3);
     Player.SetLuck(2);
@@ -72,7 +72,7 @@ void GameSystem::StartGame()
         {
             Gm.GoSpace(3, 20);
             //cout << " Command (1.Search 2.Recovery 3.Quit): ";
-            Gm.CommandAddLog(" Command (1.Search 2.Recovery 3.Quit): ");
+            Gm.CommandAddLog(" Command (1.탐색 2.아이템 사용 3.끝내기): ");
 
             getline(cin, Input);
 
@@ -85,8 +85,19 @@ void GameSystem::StartGame()
             break;
 
         }
-        //민서님의 랜덤 이벤트 함수
-        Em.TriggerNextEvent();
+        if (Choice == 1)
+        {
+            //민서님의 랜덤 이벤트 함수
+            Em.TriggerNextEvent();
+        }
+        else if (Choice == 2)
+        {
+
+        }
+        else
+        {
+            exit(0);
+        }
 
         //아래 테스트 함수
         continue;

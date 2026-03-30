@@ -91,4 +91,9 @@ public:
     void HitMonsterShake(const string& TargetKey, int Force);
     void HitPlayerShake(const string& TargetKey, int Force);
     void HitShake(const string& TargetKey, int StartX, int StartY, int Force);
+
+    void BossAppearance(const string& BossKey);
+    void GlitchEffect(int DurationMs);
+    void InverseFlash(int DurationMs);
+    void SetRageMode(bool IsRage);
 };
