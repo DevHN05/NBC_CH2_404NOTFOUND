@@ -297,16 +297,24 @@ void GraphicManager::SetConsoleSize(int Width, int Height) const
 {
     if (HOut == INVALID_HANDLE_VALUE) return;
 
-    COORD BufferSize = { static_cast<short>(Width), static_cast<short>(Height) };
+    // 1. 최소 크기 방어 (120x29 미만으로 작아지지 않게)
+    int targetW = (Width > 120) ? Width : 120;
+    int targetH = (Height > 29) ? Height : 29;
 
-    //창 크기 설정
-    SMALL_RECT WindowSize = { 0, 0, static_cast<short>(Width - 1), static_cast<short>(Height - 1) };
+    // 2. 버퍼 크기 설정 (화면 너비)
+    COORD bufferSize = { static_cast<short>(targetW), static_cast<short>(targetH) };
 
-    SMALL_RECT MinWindow = { 0, 0, 1, 1 };
-    SetConsoleWindowInfo(HOut, TRUE, &MinWindow);
+    // 3. 창 크기 설정 구역 (Small Rect)
+    SMALL_RECT windowSize = { 0, 0, static_cast<short>(targetW - 1), static_cast<short>(targetH - 1) };
 
-    SetConsoleScreenBufferSize(HOut, BufferSize);
-    SetConsoleWindowInfo(HOut, TRUE, &WindowSize);
+    // [중요] 창 크기를 먼저 아주 작게 만들었다가 키워야 오류가 안 납니다.
+    SMALL_RECT minWindow = { 0, 0, 1, 1 };
+    SetConsoleWindowInfo(HOut, TRUE, &minWindow);
+
+    // 버퍼 크기를 먼저 키우고
+    SetConsoleScreenBufferSize(HOut, bufferSize);
+    // 그 다음 창 크기를 키웁니다
+    SetConsoleWindowInfo(HOut, TRUE, &windowSize);
 }
 
 void GraphicManager::UpdateWindowSize()

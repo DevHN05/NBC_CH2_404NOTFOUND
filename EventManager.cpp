@@ -110,7 +110,8 @@ void EventManager::BattleGuardian()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventGuardian(DexBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    //Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -150,7 +151,7 @@ void EventManager::BattleGuardian()
     if (!IsBattle)
     {
         Gm.ClearLogs();
-        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        Gm.AddLog("판정 성공!");
         // 경험치 오르고 골드 보상 없이 종료
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
@@ -181,8 +182,8 @@ void EventManager::BattleWanderer()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventWanderer(Player.GetStrength() / 5, Player.GetDexterity() / 5);
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
-
+    //Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
     while (true)
     {
         cin >> Choice;
@@ -253,8 +254,8 @@ void EventManager::BattleBreaker()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventBreaker(StrBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
-
+    //Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
     while (true)
     {
         cin >> Choice;
@@ -320,7 +321,7 @@ void EventManager::BattleInvader()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventInvader(DexBonus(), LukBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -387,7 +388,7 @@ void EventManager::BattleAssassin()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventAssassin(StrBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -454,7 +455,7 @@ void EventManager::BattleBridge()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventBridge(DexBonus(), LukBonus(), StrBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -524,7 +525,7 @@ void EventManager::BattleForest()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventForest(IntBonus(), LukBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -595,7 +596,7 @@ void EventManager::BattleDataNoise()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventDataNoise(IntBonus(), LukBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -666,7 +667,7 @@ void EventManager::BattleGravity()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventGravity(LukBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -737,7 +738,7 @@ void EventManager::BattleCliff()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventCliff(DexBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -810,7 +811,7 @@ void EventManager::ChoiceGarbageCollector()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ChoiceGarbageCollector(DexBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -884,7 +885,7 @@ void EventManager::ChoiceUndeclared()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ChoiceUndeclared(StrBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -960,7 +961,7 @@ void EventManager::ChoiceDanglingPointer()
 
     // 댕글링 포인터 메세지 출력 함수란
     // 댕글링 포인터 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1037,7 +1038,7 @@ void EventManager::ChoiceBrokenActor()
 
     // 깨진 액터 메세지 출력 함수란
     // 깨진 액터 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1112,7 +1113,7 @@ void EventManager::ChoiceUninitArray()
 
     // 배열 메세지 출력 함수란
     // 배열 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1193,7 +1194,7 @@ void EventManager::ChestNormal()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ChestNormal(StrBonus(), DexBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1259,7 +1260,7 @@ void EventManager::ChestConstLock()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ChestConstLock(StrBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1326,7 +1327,7 @@ void EventManager::ChestAndLogic()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ChestAndLogic(DexBonus(), LukBonus(), IntBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1401,7 +1402,7 @@ void EventManager::ChestPointerSearch()
 
     // 포인터 보물찾기 이벤트 출력 함수란
     // 포인터 보물찾기 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1470,7 +1471,7 @@ void EventManager::ChestBugActorFix()
 
     // 버그 액터 수리 이벤트 출력 함수란
     // 버그 액터 수리 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1544,7 +1545,7 @@ void EventManager::ShopChoiceEvent()
 
     // 갈림길 메세지 출력 함수란
     // 갈림길 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1605,7 +1606,7 @@ void EventManager::ShopVillageWay()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ShopVillageWay(StrBonus(), DexBonus()); // 바위 길막기 로거
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1672,7 +1673,7 @@ void EventManager::ShopGamblerBet()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ShopGamblerBet(LukBonus(), DexBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1741,7 +1742,7 @@ void EventManager::ShopBugStoreFix()
 
     // 상점 디버깅 메세지 출력 함수란
     // 상점 디버깅 선택지 출력 함수란
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
@@ -1807,7 +1808,7 @@ void EventManager::ShopAccessDenied()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ShopAccessDenied(IntBonus(), LukBonus());
 
-    Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {

@@ -37,6 +37,7 @@ void GameSystem::StartGame()
     CombatManager& Cm = CombatManager::GetInstance();
 
     //Gm.SetConsoleSize(160, 90);
+    Gm.UpdateWindowSize();
 
     string Name = Gm.ShowTitle();
 
@@ -59,7 +60,6 @@ void GameSystem::StartGame()
 
     while (true)
     {
-        Gm.UpdateWindowSize();
         Gm.DrawLayout();
 
         Gm.DrawLobbyStatus(Player);

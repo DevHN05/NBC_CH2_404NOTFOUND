@@ -9,8 +9,10 @@ int main()
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 
+    printf("\x1b[8;%d;%dt", 42, 160);
+
     GameSystem Game;
     Game.StartGame();
-    
+
     return 0;
 }
