@@ -1,6 +1,5 @@
 ﻿#include "EventManager.h"
 #include "CombatManager.h"
-#include "ShopManager.h"
 #include "BaseMonster.h"
 #include "GraphicManager.h"
 #include <iostream>
@@ -60,7 +59,6 @@ void EventManager::TriggerNextEvent()
 
     int id = EventIds[CurrentEventIndex++];     // 이번 차례의 이벤트 번호를 꺼내고, 다음 차례로 넘기는 함수
 
-    id = 16;
     switch (id)
     {
         // [1~10] 일반 전투 이벤트
@@ -1541,6 +1539,8 @@ void EventManager::ChestBugActorFix()
 void EventManager::ShopChoiceEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ShopChoiceEvent(LukBonus()); // 갈림길 이벤트 로거, 행운 보정치만 사용
 
     // 갈림길 메세지 출력 함수란
     // 갈림길 선택지 출력 함수란
@@ -1576,18 +1576,25 @@ void EventManager::ShopChoiceEvent()
     if (!IsBattle)
     {
         // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
-        cin.clear();
+        Gm.ClearLogs();
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopChoiceEventSuccess();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
+        cin.clear();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!
         cin.clear();
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopChoiceEventFail();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 전투 발생 코드 작성
+        cin.clear();
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -1595,9 +1602,9 @@ void EventManager::ShopChoiceEvent()
 void EventManager::ShopVillageWay()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ShopVillageWay(StrBonus(), DexBonus()); // 바위 길막기 로거
 
-    // 바위 길막기 메세지 출력 함수란
-    // 바위 길막기 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -1636,18 +1643,25 @@ void EventManager::ShopVillageWay()
     if (!IsBattle)
     {
         // 당신은 별다른 일 없이 상점에 도착하는데 성공합니다. 팻말은 진짜였군요.
-        cin.clear();
+        Gm.ClearLogs();
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopVillageWaySuccess();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
+        cin.clear();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 오른쪽은 당신을 유도하기 위한 함정이었습니다. 버그가 당신을 공격합니다!
         cin.clear();
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopVillageWayFail();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 전투 발생 코드 작성
+        cin.clear();
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -1655,9 +1669,9 @@ void EventManager::ShopVillageWay()
 void EventManager::ShopGamblerBet()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ShopGamblerBet(LukBonus(), DexBonus());
 
-    // 보부상 메세지 출력 함수란
-    // 보부상 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -1696,18 +1710,25 @@ void EventManager::ShopGamblerBet()
     if (!IsBattle)
     {
         // 주사위 값으로 6이 나오며, 5를 굴린 보부상을 이깁니다. 보부상이 킥킥 웃으며 보따리를 풀기 시작합니다.
-        cin.clear();
+        Gm.ClearLogs();
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopGamblerBetSuccess();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
+        cin.clear();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 이런, 주사위가 1이 나옵니다. 보부상이 기분 나쁘게 웃습니다.
         cin.clear();
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopGamblerBetFail();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 전투 발생 코드 작성
+        cin.clear();
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
 
@@ -1715,6 +1736,8 @@ void EventManager::ShopGamblerBet()
 void EventManager::ShopBugStoreFix()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ShopBugStoreFix(IntBonus(), LukBonus() - 5); // 상점 디버깅 로거
 
     // 상점 디버깅 메세지 출력 함수란
     // 상점 디버깅 선택지 출력 함수란
@@ -1756,28 +1779,34 @@ void EventManager::ShopBugStoreFix()
     if (!IsBattle)
     {
         // 디버깅에 성공했습니다! 상점이 원래의 모습을 되찾습니다. 이제 이용할 수 있겠군요.
-        cin.clear();
+        Gm.ClearLogs();
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopBugStoreFixSuccess();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
+        cin.clear();
         cm.UpdateStoreUI(Player);
     }
     else
     {
         // 디버깅에 실패했습니다! 오히려 버그가 급증했습니다. 버그가 당신에게 달려듭니다.
         cin.clear();
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopBugStoreFixFail();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 전투 발생 코드 작성
+        cin.clear();
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
-
 // 상점 방문 이벤트 #5 Access Denied 상점 ShopAccessDenied
 void EventManager::ShopAccessDenied()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+    Logger.ShopAccessDenied(IntBonus(), LukBonus());
 
-    // 접근 거부 메세지 출력 함수란
-    // 접근 거부 선택지 출력 함수란
     Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
 
     while (true)
@@ -1815,18 +1844,23 @@ void EventManager::ShopAccessDenied()
 
     if (!IsBattle)
     {
-        // 성공적으로 문이 열리며 상점 주인이 제 자리를 되찾습니다. 이제 이용할 수 있겠군요.
-        cin.clear();
+        Gm.ClearLogs();
+        Gm.GoSpace(2, 26); cout << "판정 성공!";
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopAccessDeniedSuccess();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
+        cin.clear();
         cm.UpdateStoreUI(Player);
     }
     else
     {
-        // 문에서 버그가 튀어나옵니다! 버그가 당신을 노립니다...
         cin.clear();
+        Gm.GoSpace(2, 26); cout << "판정 결과 : "<< Dice.GetDiceHead() << (Dice.GetResult() ? " [성공]" : " [실패]");
+        Logger.ShopAccessDeniedFail();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
-        // 전투 발생 코드 작성
+        cin.clear();
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
 }
