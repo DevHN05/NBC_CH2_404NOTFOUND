@@ -23,8 +23,8 @@ void Equipment::Use(PlayerManager& character)
 
 void Equipment::ShowInfo() const
 {
-	cout << "Equipment: " << ItemManager::GetName() << "\n";
-	cout << "Price: " << ItemManager::GetPrice() << " gold" << "\n";
+	cout << "Equipment: " << BaseItem::GetName() << "\n";
+	cout << "Price: " << BaseItem::GetPrice() << " gold" << "\n";
 	cout << "Type: " << equipType << "\n";
 	cout << "Attack Bonus: " << attackBonus << "\n";
 	cout << "Defense Bonus: " << defenseBonus << "\n";

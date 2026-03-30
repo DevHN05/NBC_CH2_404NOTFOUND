@@ -4,7 +4,7 @@
 #include "GameSystem.h"
 #include "BaseMonster.h"
 #include "Inventory.h"
-#include "ItemManager.h"
+#include "BaseItem.h"
 #include <windows.h>
 
 using namespace std;

@@ -1,10 +1,10 @@
 #pragma once
-#include "ItemManager.h"
+#include "BaseItem.h"
 #include "PlayerManager.h"
 
 class PlayerManager;
 
-class Equipment : public ItemManager
+class Equipment : public BaseItem
 {
 private:
     string equipType;
@@ -19,7 +19,7 @@ public:
             const string& equipType,
             int attackBonus,
             int defenseBonus):
-        ItemManager(name, price),
+        BaseItem(name, price),
         equipType(equipType),
         attackBonus(attackBonus),
         defenseBonus(defenseBonus),

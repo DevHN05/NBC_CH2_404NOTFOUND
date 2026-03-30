@@ -2,18 +2,18 @@
 
 using namespace std;
 
-const vector<unique_ptr<ItemManager>>& Inventory::GetInventoryItems() const
+const vector<unique_ptr<BaseItem>>& Inventory::GetInventoryItems() const
 {
     return Items;
 }
 
-void Inventory::AddItem(unique_ptr<ItemManager> Item)
+void Inventory::AddItem(unique_ptr<BaseItem> Item)
 {
     cout << Item->GetName() << " is add Inventory" << "\n";
     Items.push_back(std::move(Item));
 }
 
-ItemManager* Inventory::FindItem(const string& ItemName) const
+BaseItem* Inventory::FindItem(const string& ItemName) const
 {
     for (auto& Item : Items)
     {
@@ -39,7 +39,7 @@ void Inventory::UseItem(const string& ItemName, PlayerManager& Character)
 bool Inventory::RemoveItem(const string& ItemName)
 {
     auto It = find_if(Items.begin(), Items.end(),
-        [&](const unique_ptr<ItemManager>& Item)
+        [&](const unique_ptr<BaseItem>& Item)
         {
             return Item->GetName() == ItemName;
         }

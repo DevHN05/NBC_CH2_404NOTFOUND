@@ -1,7 +1,7 @@
 //ShopManager.h
 
 #pragma once
-#include "ItemManager.h"
+#include "BaseItem.h"
 #include <vector>
 #include <random>
 
@@ -27,8 +27,8 @@ class ShopManager
 private:
     ShopManager();
 
-    vector<unique_ptr<ItemManager>> ShopItems;
-    vector<ItemManager*> CurrentDisplayItems;
+    vector<unique_ptr<BaseItem>> ShopItems;
+    vector<BaseItem*> CurrentDisplayItems;
 
 public:
     ShopManager(const ShopManager&) = delete;

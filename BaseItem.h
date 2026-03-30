@@ -6,15 +6,15 @@ using namespace std;
 
 class PlayerManager;
 
-class ItemManager
+class BaseItem
 {
 protected:
 	string Name;
 	int Price;
 
 public:
-	ItemManager(const string& Name, int Price) : Name(Name), Price(Price) {}
-	virtual ~ItemManager() = default;
+	BaseItem(const string& Name, int Price) : Name(Name), Price(Price) {}
+	virtual ~BaseItem() = default;
 
 	string GetName() const;
 
@@ -22,6 +22,8 @@ public:
 
 	virtual void Use(PlayerManager& Character) = 0;
 	virtual void ShowInfo() const = 0;
-    virtual unique_ptr<ItemManager> Clone() const = 0;
+    virtual unique_ptr<BaseItem> Clone() const = 0;
+
+    virtual string GetPotionTypeStr() const;
 };
 

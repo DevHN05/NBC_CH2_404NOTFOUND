@@ -5,18 +5,17 @@
 #include "LoggerSystem.h"
 #include "GraphicManager.h"
 #include "BasePotion.h"
-#include <limits>
 #include <algorithm>
 
 ShopManager::ShopManager()
 {
-	ShopItems.push_back(make_unique<BasePotion>("Minor Healing Potion", 100, BasePotion::EPotionType::Health, 30));
-    ShopItems.push_back(make_unique<BasePotion>("Major Healing Potion", 250, BasePotion::EPotionType::Health, 80));
-    ShopItems.push_back(make_unique<BasePotion>("Minor Strength Potion", 120, BasePotion::EPotionType::Strength, 5));
-    ShopItems.push_back(make_unique<BasePotion>("Major Strength Potion", 300, BasePotion::EPotionType::Strength, 15));
-    ShopItems.push_back(make_unique<BasePotion>("Major Jin Potion", 250, BasePotion::EPotionType::Health, 80));
-    ShopItems.push_back(make_unique<BasePotion>("Minor Hui Potion", 120, BasePotion::EPotionType::Strength, 5));
-    ShopItems.push_back(make_unique<BasePotion>("Major Jang Potion", 300, BasePotion::EPotionType::Strength, 15));
+	ShopItems.push_back(make_unique<BasePotion>("시리어스 포션", 75, BasePotion::EPotionType::Health, 30));
+    ShopItems.push_back(make_unique<BasePotion>("기가진희 포션", 150, BasePotion::EPotionType::Health, 70));
+    ShopItems.push_back(make_unique<BasePotion>("민서유기 포션", 300, BasePotion::EPotionType::Health, 150));
+    ShopItems.push_back(make_unique<BasePotion>("리더승재 포션", 75, BasePotion::EPotionType::Strength, 5));
+    ShopItems.push_back(make_unique<BasePotion>("유민달팽 포션", 120, BasePotion::EPotionType::Strength, 7));
+    ShopItems.push_back(make_unique<BasePotion>("별이다섯개오성현 포션", 120, BasePotion::EPotionType::Strength, 10));
+    ShopItems.push_back(make_unique<BasePotion>("10월엔 강동욱토버 포션", 300, BasePotion::EPotionType::Strength, 15));
 }
 
 void ShopManager::EnterShop(PlayerManager& Player)
@@ -34,7 +33,7 @@ void ShopManager::EnterShop(PlayerManager& Player)
 	    Ls.LogPrintShopMenu();
 
 	    Gm.DrawInventoryData(Player);
-	    Gm.GoSpace(4, 20); cout << "상점 메뉴 번호를 입력하세요 >> ";
+	    Gm.CommandAddLog("상점 서비스를 선택하세요 >> ");
 
 	    string input;
 	    getline(cin, input);
@@ -50,14 +49,13 @@ void ShopManager::EnterShop(PlayerManager& Player)
 		case 1:
 		    Ls.LogPrintShopItems(CurrentDisplayItems);
 		    Gm.DrawInventoryData(Player);
-		    Gm.GoSpace(4, 20); cout << "구매할 아이템 이름을 입력하세요 >> ";
-
+		    Gm.CommandAddLog("구매할 아이템을 선택하세요 >> ");
 		    getline(cin, input);
 		    ItemChoice = stoi(input);
 			BuyItem(ItemChoice, Player);
 			break;
 		case 2:
-		    Gm.GoSpace(4, 20); cout << "판매할 아이템 이름을 입력하세요 >> ";
+		    Gm.CommandAddLog("판매할 아이템 이름을 입력하세요 >> ");
 		    getline(cin, ItemToSellName);
 			SellItem(ItemToSellName, Player);
 			break;
@@ -78,14 +76,14 @@ void ShopManager::RandomShuffleShopItems()
      * ShopItems[0] -> Potion A
      * ShopItems[1] -> Potion B
      *
-     * vector<ItemManager*> ShuffledItems; //잠깐 참조하기 위해 raw pointer vector
-     * ShuffledItems.push_back(item.get());
-     * ShuffledItems[0] -> Potion A (같은 객체)
-     * ShuffledItems[1] -> Potion B (같은 객체)
+     * vector<ItemManager*> CurrentDisplayItems; //잠깐 참조하기 위해 raw pointer vector
+     * CurrentDisplayItems.push_back(item.get());
+     * CurrentDisplayItems[0] -> Potion A (같은 객체)
+     * CurrentDisplayItems[1] -> Potion B (같은 객체)
      *
-     * shuffle(shuffled.begin(), shuffled.end(), g); //raw pointer 순서만 섞기
-     * ShuffledItems[0] -> Potion B
-     * ShuffledItems[1] -> Potion A
+     * shuffle(CurrentDisplayItems.begin(), CurrentDisplayItems.end(), g); //raw pointer 순서만 섞기
+     * CurrentDisplayItems[0] -> Potion B
+     * CurrentDisplayItems[1] -> Potion A
      */
 
     if (ShopItems.empty())
