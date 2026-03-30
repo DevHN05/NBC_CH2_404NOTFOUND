@@ -1,8 +1,8 @@
-#include "Potion.h"
+#include "BasePotion.h"
 
-map<string, int> Potion::PotionCounts;
+map<string, int> BasePotion::PotionCounts;
 
-Potion::Potion(const string& Name, int Price, EPotionType Type, int Recovery, bool IsIncreaseCount)
+BasePotion::BasePotion(const string& Name, int Price, EPotionType Type, int Recovery, bool IsIncreaseCount)
     : ItemManager(Name, Price), PotionType(Type), Recovery(Recovery), IsCountRegistered(IsIncreaseCount)
 {
     if (IsIncreaseCount)
@@ -11,7 +11,7 @@ Potion::Potion(const string& Name, int Price, EPotionType Type, int Recovery, bo
     }
 }
 
-Potion::~Potion()
+BasePotion::~BasePotion()
 {
     if (IsCountRegistered && PotionCounts[GetName()] > 0)
     {
@@ -19,7 +19,7 @@ Potion::~Potion()
     }
 }
 
-void Potion::Use(PlayerManager& User)
+void BasePotion::Use(PlayerManager& User)
 {
     if (PotionCounts[GetName()] <= 0)
     {
@@ -58,7 +58,7 @@ void Potion::Use(PlayerManager& User)
     cout << "Remaining count of " << GetName() << ": " << PotionCounts[GetName()] << '\n';
 }
 
-void Potion::ShowInfo() const
+void BasePotion::ShowInfo() const
 {
     cout << "Potion: " << GetName() << '\n';
     cout << "Price: " << GetPrice() << " gold" << '\n';
@@ -66,7 +66,7 @@ void Potion::ShowInfo() const
     cout << "Count: " << PotionCounts[GetName()] << '\n';
 }
 
-shared_ptr<ItemManager> Potion::Clone() const
+unique_ptr<ItemManager> BasePotion::Clone() const
 {
-    return make_shared<Potion>(GetName(), GetPrice(), PotionType, Recovery, true);
+    return make_unique<BasePotion>(GetName(), GetPrice(), PotionType, Recovery, true);
 }

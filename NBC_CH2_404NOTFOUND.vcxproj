@@ -140,7 +140,7 @@
     <ClCompile Include="BaseMonster.cpp" />
     <ClCompile Include="BaseBossMonster.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
-    <ClCompile Include="Potion.cpp" />
+    <ClCompile Include="BasePotion.cpp" />
     <ClCompile Include="NBC_CH2_404NOTFOUND.cpp" />
     <ClCompile Include="ShopManager.cpp" />
   </ItemGroup>
@@ -159,7 +159,7 @@
     <ClInclude Include="BaseBossMonster.h" />
     <ClInclude Include="MonsterData.h" />
     <ClInclude Include="PlayerManager.h" />
-    <ClInclude Include="Potion.h" />
+    <ClInclude Include="BasePotion.h" />
     <ClInclude Include="ShopManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
