@@ -34,7 +34,7 @@ public:
 
     //보상 관련
     void LogExpGain(int Amount, int MyExp, int MaxExp); //경험치 획득
-    void LogGoldGain(int Amount, int MyGold); //골드 획득
+    void LogGoldGain(int Amount, int& MyGold); //골드 획득
 
     //상점 관련
     void LogShopPrompt(); //상점 입장 선택지 (출력 문구는 수정해야할 수 있음)

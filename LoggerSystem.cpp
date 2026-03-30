@@ -920,11 +920,12 @@ void LoggerSystem::LogExpGain(int Amount, int MyExp, int MaxExp)
 };
 
 //골드 획득시 로그 출력하는 함수(얻은량, 현재 골드량)
-void LoggerSystem::LogGoldGain(int Amount, int MyGold)
+void LoggerSystem::LogGoldGain(int Amount, int& MyGold)
 {
 	TotalGold += Amount;
+    MyGold += Amount;
     GraphicManager& Gm = GraphicManager::GetInstance();
-	string Log = "[ RESOURCE ] " + to_string(Amount) + "G 확보 / 누적 골드: " + to_string(MyGold) + "G";
+	string Log = "[ RESOURCE ] " + to_string(Amount) + "G 확보 / 현재 골드: " + to_string(MyGold) + "G";
 
     Gm.AddLog(Log);
     EventLogs.push_back(Log);
