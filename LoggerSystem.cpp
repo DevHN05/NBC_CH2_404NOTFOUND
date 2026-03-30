@@ -845,7 +845,7 @@ void LoggerSystem::ShopBugStoreFix(int IntBonus, int LukBonus)
     Gm.AddLog("2. 디버깅 툴로 상점의 버그를 고쳐봅니다.");
     Gm.AddLog("   (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
     Gm.AddLog("3. 운 좋게 지워질 수도 있지 않나요? 마구 휘두릅니다!");
-    Gm.AddLog("   (판정값 10, 행운 보정 +" + to_string(LukBonus) + ", 역보정 -5)");
+    Gm.AddLog("   (판정값 10, 행운 보정 " + to_string(LukBonus) + ")");
 }
 
 void LoggerSystem::ShopBugStoreFixSuccess()
