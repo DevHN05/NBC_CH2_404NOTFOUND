@@ -1240,7 +1240,7 @@ void LoggerSystem::TutorialStatDice()
     GraphicManager& Gm = GraphicManager::GetInstance();
 
     Gm.DrawLayout();
-    TypeText(Gm, "방금 배운 20면체 주사위를 실험 삼아 당신을 구성해볼까요?", 3, 2);
+    TypeText(Gm, "방금 배운 20면체 주사위를 실험 삼아 당신을 긴급 구성합니다", 3, 2);
     TypeText(Gm, "지금부터 엔터를 누를 때마다 스탯이 정해집니다.", 3, 3);
 
 }

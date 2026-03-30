@@ -57,6 +57,8 @@ void GameSystem::StartGame()
 
     cout << "Is your nickname " << Player.GetNickname() << "?\n";
 
+    Em.TutorialEvent();
+
     while (true)
     {
         Gm.DrawLayout();
