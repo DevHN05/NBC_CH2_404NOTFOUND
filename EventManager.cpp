@@ -23,13 +23,20 @@ EventManager::EventManager(PlayerManager& InPlayer) : Player(InPlayer), CurrentE
     ShuffleEvents();
 }
 
+void EventManager::WaitEnter()
+{
+    cin.clear();
+    cin.ignore(LLONG_MAX, '\n');
+    cin.get();
+}
+
 void EventManager::ShuffleEvents()
 {
     random_device rd;
-    mt19937 g(rd());
+    mt19937 EventRandomRoll(rd());
 
-    shuffle(NormalEventIds.begin(), NormalEventIds.end(), g);
-    shuffle(ShopEventIds.begin(), ShopEventIds.end(), g);
+    shuffle(NormalEventIds.begin(), NormalEventIds.end(), EventRandomRoll);
+    shuffle(ShopEventIds.begin(), ShopEventIds.end(), EventRandomRoll);
 
     EventIds.clear();
 
@@ -41,7 +48,7 @@ void EventManager::ShuffleEvents()
             Chunk.push_back(NormalEventIds[i * 4 + j]);
         }
         Chunk.push_back(ShopEventIds[i]);
-        shuffle(Chunk.begin(), Chunk.end(), g);
+        shuffle(Chunk.begin(), Chunk.end(), EventRandomRoll);
 
         for (int id : Chunk)
         {
@@ -100,6 +107,50 @@ void EventManager::TriggerNextEvent()
     }
 }
 
+
+void EventManager::TutorialEvent()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Logger = LoggerSystem::GetInstance();
+
+    // 튜토리얼 로그 들어갈 자리
+
+    random_device rd;
+    mt19937 DiceVal(rd());
+    uniform_int_distribution<int> RollStat(1, 20);
+
+    Gm.CommandAddLog("[ 캐릭터 초기 스탯 굴리기 ]");
+    Gm.CommandAddLog("Enter를 누를 때마다 스탯이 하나씩 결정됩니다.");
+
+    WaitEnter();
+    int str = RollStat(DiceVal);
+    Player.SetStrength(str);
+    Gm.CommandAddLog("근력(STR) 주사위 값 : " + to_string(str) + "/20");
+
+    WaitEnter();
+    int dex = RollStat(DiceVal);
+    Player.SetDexterity(dex);
+    Gm.CommandAddLog("민첩(DEX) 주사위 값 : " + to_string(dex) + "/20");
+
+    WaitEnter();
+    int intel = RollStat(DiceVal);
+    Player.SetIntelligence(intel);
+    Gm.CommandAddLog("지능(INT) 주사위 값 : " + to_string(intel) + "/20");
+
+    WaitEnter();
+    int luk = RollStat(DiceVal);
+    Player.SetLuck(luk);
+    Gm.CommandAddLog("행운(LUK) 주사위 값 : " + to_string(luk) + "/20");
+
+    WaitEnter();
+    Gm.CommandAddLog("모든 스탯 설정이 완료되었습니다! 디버깅을 시작합니다.");
+
+    WaitEnter();
+}
+
+
+
+
 // ========== 구분선 ===========
 // 일반 전투 이벤트는 맨 앞에 Battle을 붙여서 구분
 
@@ -110,7 +161,6 @@ void EventManager::BattleGuardian()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.LogEventGuardian(DexBonus(), IntBonus());
 
-    //Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
@@ -156,9 +206,7 @@ void EventManager::BattleGuardian()
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -167,9 +215,7 @@ void EventManager::BattleGuardian()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailGuardian();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateBot());
     }
@@ -227,9 +273,7 @@ void EventManager::BattleWanderer()
         Logger.LogExpGain(10, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 10);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else if (IsBattle) {
@@ -238,9 +282,7 @@ void EventManager::BattleWanderer()
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailWanderer();
         Player.SetHealth(Player.GetHealth() - 5);
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateDeletePtr());
     }
@@ -294,9 +336,7 @@ void EventManager::BattleBreaker()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -306,9 +346,7 @@ void EventManager::BattleBreaker()
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailBreaker();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateBreak());
     }
@@ -361,9 +399,7 @@ void EventManager::BattleInvader()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -373,9 +409,7 @@ void EventManager::BattleInvader()
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailInvader();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateOverflow());
     }
@@ -428,9 +462,7 @@ void EventManager::BattleAssassin()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -440,9 +472,7 @@ void EventManager::BattleAssassin()
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailAssassin();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateSemicolon());
     }
@@ -499,9 +529,7 @@ void EventManager::BattleBridge()
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -510,9 +538,7 @@ void EventManager::BattleBridge()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailBridge();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
@@ -568,9 +594,7 @@ void EventManager::BattleForest()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -581,9 +605,7 @@ void EventManager::BattleForest()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailForest();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
@@ -638,9 +660,7 @@ void EventManager::BattleDataNoise()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -652,9 +672,7 @@ void EventManager::BattleDataNoise()
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailDataNoise();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
@@ -709,9 +727,7 @@ void EventManager::BattleGravity()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -723,9 +739,7 @@ void EventManager::BattleGravity()
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailGravity();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
@@ -778,9 +792,7 @@ void EventManager::BattleCliff()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -789,9 +801,7 @@ void EventManager::BattleCliff()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.LogEventFailCliff();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
     }
@@ -830,9 +840,7 @@ void EventManager::ChoiceGarbageCollector()
         }
         else if (Choice == 3)
         {
-            cin.clear();
-            cin.ignore(LLONG_MAX, '\n');
-            cin.get();
+            WaitEnter();
             Gm.ClearLogs();
             return; // 전투 회피 후 즉시 이벤트 종료
         }
@@ -856,9 +864,7 @@ void EventManager::ChoiceGarbageCollector()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -869,9 +875,7 @@ void EventManager::ChoiceGarbageCollector()
             Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [실패]");
             Logger.ChoiceGarbageCollectorFail();
             Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
-            cin.clear();
-            cin.ignore(LLONG_MAX, '\n');
-            cin.get();
+            WaitEnter();
             Gm.ClearLogs();
         }
         cm.StartBossBattle(Player, *MonsterData::CreateShadowLord()); // 보스 전투 시작
@@ -928,9 +932,7 @@ void EventManager::ChoiceUndeclared()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -943,9 +945,7 @@ void EventManager::ChoiceUndeclared()
             Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [실패]");
             Logger.ChoiceUndeclaredFail();
             Player.SetHealth(max(0, Player.GetHealth() - 10));
-            cin.clear();
-            cin.ignore(LLONG_MAX, '\n');
-            cin.get();
+            WaitEnter();
             Gm.ClearLogs();
         }
         cm.StartBossBattle(Player, *MonsterData::CreateVolcanicDragon()); // 보스 전투 시작
@@ -1005,9 +1005,7 @@ void EventManager::ChoiceDanglingPointer()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1020,9 +1018,7 @@ void EventManager::ChoiceDanglingPointer()
             Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [실패]");
             Logger.ChoiceDanglingPointerFail();
             Player.SetHealth(max(0, Player.GetHealth() - 10));
-            cin.clear();
-            cin.ignore(LLONG_MAX, '\n');
-            cin.get();
+            WaitEnter();
             Gm.ClearLogs();
         }
         cm.StartBossBattle(Player, *MonsterData::CreateForestGuardian()); // 보스 전투 시작
@@ -1084,9 +1080,7 @@ void EventManager::ChoiceBrokenActor()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1096,9 +1090,7 @@ void EventManager::ChoiceBrokenActor()
         Gm.ClearLogs();
         Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [실패]");
         Logger.ChoiceBrokenActorFail();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster()); // 일반 전투 발생
         Gm.ClearLogs();
     }
@@ -1159,9 +1151,7 @@ void EventManager::ChoiceUninitArray()
         Logger.LogExpGain(SuccessExp, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + SuccessExp);
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1173,9 +1163,7 @@ void EventManager::ChoiceUninitArray()
             Gm.ClearLogs();
             Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [실패]");
             Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
-            cin.clear();
-            cin.ignore(LLONG_MAX, '\n');
-            cin.get();
+            WaitEnter();
             Gm.ClearLogs();
         }
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster()); // 일반 전투 시작
@@ -1235,9 +1223,7 @@ void EventManager::ChestNormal()
         Player.SetExperience(Player.GetExperience()+30);
         Player.SetGold(Player.GetGold()+30);
         Logger.LogGoldGain(30, Player.GetGold());
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1246,9 +1232,7 @@ void EventManager::ChestNormal()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.ChestNormalFail();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
 }
@@ -1301,9 +1285,7 @@ void EventManager::ChestConstLock()
         Player.SetExperience(Player.GetExperience()+30);
         Player.SetGold(Player.GetGold()+30);
         Logger.LogGoldGain(30, Player.GetGold());
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1313,9 +1295,7 @@ void EventManager::ChestConstLock()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.ChestConstLockFail();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
 }
@@ -1374,9 +1354,7 @@ void EventManager::ChestAndLogic()
         Player.SetExperience(Player.GetExperience()+30);
         Player.SetGold(Player.GetGold()+30);
         Logger.LogGoldGain(30, Player.GetGold());
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1386,9 +1364,7 @@ void EventManager::ChestAndLogic()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.ChestAndLogicFail();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
 }
@@ -1443,9 +1419,7 @@ void EventManager::ChestPointerSearch()
         Player.SetExperience(Player.GetExperience()+30);
         Player.SetGold(Player.GetGold()+30);
         Logger.LogGoldGain(30, Player.GetGold());
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1455,9 +1429,7 @@ void EventManager::ChestPointerSearch()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.ChestPointerSearchFail();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
 }
@@ -1512,9 +1484,7 @@ void EventManager::ChestBugActorFix()
         Player.SetExperience(Player.GetExperience()+30);
         Player.SetGold(Player.GetGold()+30);
         Logger.LogGoldGain(30, Player.GetGold());
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
     else
@@ -1524,9 +1494,7 @@ void EventManager::ChestBugActorFix()
         Gm.ClearLogs();
         Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [성공]" : " [실패]"));
         Logger.ChestBugActorFixFail();
-        cin.clear();
-        cin.ignore(LLONG_MAX, '\n');
-        cin.get();
+        WaitEnter();
         Gm.ClearLogs();
     }
 }

@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include <vector>
+#include <string>
+#include <random>    // mt19937 사용을 위해 반드시 필요!
+#include <algorithm>
+#include <iostream>
 #include "DiceSystem.h"
 #include "PlayerManager.h"
 
@@ -8,16 +12,23 @@ using namespace std;
 class EventManager
 {
 public:
+    EventManager();
     EventManager(PlayerManager& InPlayer);
     void TriggerNextEvent();
+    void TutorialEvent();                    // 튜토리얼 이벤트 호출 함수
 
 private:
+    std::mt19937 Engine;
     int Choice;
     bool IsBattle;
     void ShuffleEvents();
+    void WaitEnter();
     vector<int> NormalEventIds;
     vector<int> ShopEventIds;
+    vector<int> EventIds;
+    size_t CurrentEventIndex = 0;
 
+    // --- [01~10] 전투 이벤트 ---
     void BattleGuardian();                   // 노말 이벤트 #1 파수꾼 :: 시스템 보안 봇
     void BattleWanderer();                   // 노말 이벤트 #2 방랑자 :: delete ptr
     void BattleBreaker();                    // 노말 이벤트 #3 분쇄자 :: Break
@@ -52,8 +63,8 @@ private:
 
     PlayerManager& Player;
     DiceSystem Dice;
-    vector<int> EventIds;
-    size_t CurrentEventIndex;
+
+    // --- [스탯 보정값 계산기] ---
     int StrBonus() { return Player.GetStrength() / 5; }
     int DexBonus() { return Player.GetDexterity() / 5; }
     int IntBonus() { return Player.GetIntelligence() / 5; }
