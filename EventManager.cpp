@@ -1232,8 +1232,8 @@ void EventManager::ChestNormal()
         Logger.ChestNormalSuccess();
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
-        Logger.LogGoldGain(30, Player.GetGold());
         Player.SetGold(Player.GetGold()+30);
+        Logger.LogGoldGain(30, Player.GetGold());
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -1298,8 +1298,8 @@ void EventManager::ChestConstLock()
         Logger.ChestConstLockSuccess();
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
-        Logger.LogGoldGain(30, Player.GetGold());
         Player.SetGold(Player.GetGold()+30);
+        Logger.LogGoldGain(30, Player.GetGold());
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -1371,8 +1371,8 @@ void EventManager::ChestAndLogic()
         Logger.ChestAndLogicSuccess();
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
-        Logger.LogGoldGain(30, Player.GetGold());
         Player.SetGold(Player.GetGold()+30);
+        Logger.LogGoldGain(30, Player.GetGold());
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -1440,8 +1440,8 @@ void EventManager::ChestPointerSearch()
         Logger.ChestPointerSearchSuccess();
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
-        Logger.LogGoldGain(30, Player.GetGold());
         Player.SetGold(Player.GetGold()+30);
+        Logger.LogGoldGain(30, Player.GetGold());
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
@@ -1509,8 +1509,8 @@ void EventManager::ChestBugActorFix()
         Logger.ChestBugActorFixSuccess();
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience()+30);
-        Logger.LogGoldGain(30, Player.GetGold());
         Player.SetGold(Player.GetGold()+30);
+        Logger.LogGoldGain(30, Player.GetGold());
         cin.clear();
         std::cin.ignore(LLONG_MAX, '\n');
         std::cin.get();
