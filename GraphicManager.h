@@ -57,6 +57,7 @@ public:
         return Instance;
     }
 
+    //Window
     void GoSpace(int X, int Y) const;
     void SetConsoleSize(int Width, int Height) const;
     void UpdateWindowSize();
@@ -67,14 +68,19 @@ public:
 
     //Draw
     void DrawLayout() const;
+    void DrawCombatLayOut() const;
     void DrawLobbyStatus(PlayerManager& Player) const;
     void DrawInventoryData(PlayerManager& Player) const;
+    void DrawGameOver(PlayerManager& Player);
+    void DrawDiceRoll(int RollHead, int MaxNumber);
+    void DrawCustomDice(int Number, int MaxNumber);
 
     string ShowTitle() const;
 
     void DrawAsciiCombatArt(const string& Player,const string& Monster);
     void DrawAsciiCombatArt(PlayerManager& Player, BaseMonster& Monster);
     void DrawAsciiArt(const string& Name,const int& X, const int& Y);
+    void DrawAsciiArtCenter(const string& Name);
 
     //System Log
     void AddLog(const string& Log);

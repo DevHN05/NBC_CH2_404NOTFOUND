@@ -1,0 +1,32 @@
+#pragma once
+#pragma comment(lib, "winmm.lib")
+#include <string>
+#include <windows.h>
+#include <mmsystem.h>
+#include <unordered_map>
+using namespace std;
+
+enum class SoundType
+{
+    TitleBGM,
+    LobbyBGM,
+    BattleBGM,
+    AttackSFX
+};
+
+class SoundManager
+{
+public:
+    void RegisterSound(SoundType type, const wstring& fileName);
+    bool PlayBGM(SoundType type);
+    bool PlaySFX(SoundType type);
+    void Stop();
+
+    void SetBGMVolume(int volume);
+    void SetSFXVolume(int volume);
+private:
+    unordered_map<SoundType, wstring> soundTable;
+    int bgmVolume = 50;
+    int sfxVolume = 50;
+};
+

@@ -11,7 +11,9 @@ int main()
 
     printf("\x1b[8;%d;%dt", 42, 160);
 
-    GameSystem Game;
+
+
+    GameSystem& Game = GameSystem::GetInstance();
     Game.StartGame();
 
     return 0;
