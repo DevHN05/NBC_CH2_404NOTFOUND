@@ -1,8 +1,8 @@
 #include "LoggerSystem.h"
 #include <iostream>
-#include <chrono>
 #include <thread>
 #include "GraphicManager.h"
+#include "EventManager.h"
 
 //상단 출력 헬퍼
 void LoggerSystem::PrintMainArea(const vector<string>& Lines)
@@ -18,9 +18,9 @@ void LoggerSystem::PrintMainArea(const vector<string>& Lines)
         {
             cout << C;
             cout.flush();
-            this_thread::sleep_for(chrono::milliseconds(10));
+            Sleep(10);
         }
-        this_thread::sleep_for(chrono::milliseconds(80));
+        Sleep(80);
     }
 }
 
@@ -1108,7 +1108,164 @@ void LoggerSystem::ShowStory()
         Sleep(250);
     }
 }
+//튜토리얼 출력 헬퍼
+static void TypeText(GraphicManager& Gm, const string& text, int x, int y)
+{
+    Gm.GoSpace(x, y);
+    for (int i = 0; i < (int)text.size(); i++)
+    {
+        cout << text[i];
+        cout.flush();
+        Sleep(15);
+    }
+}
+//텍스트 점멸 효과
+static void BlinkText(GraphicManager& Gm, HANDLE hConsole, const string& text, int x, int y)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        SetConsoleTextAttribute(hConsole, 0x4F);
+        Gm.GoSpace(x, y);
+        cout << text;
+        Sleep(180);
 
+        SetConsoleTextAttribute(hConsole, 0x00);
+        Gm.GoSpace(x, y);
+        cout << text;
+        Sleep(180);
+    }
+    SetConsoleTextAttribute(hConsole, 0x4F);
+    Gm.GoSpace(x, y);
+    cout << text;
+}
+
+void LoggerSystem::Tutorial1()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+
+    TypeText(Gm, "접속 권한 확인 완료. 특수 디버깅 툴을 처음 사용하는 요원으로 확인됩니다.", 3, 2);
+    TypeText(Gm, "특수 디버깅 툴을 사용하는 요원을 위한 교육 문구가 출력됩니다.", 3, 3);
+
+    Gm.GoSpace(3, 20);
+    cout << "[ 계속하려면 Enter를 누르세요... ]";
+}
+
+void LoggerSystem::Tutorial2()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+
+    TypeText(Gm, "특수 디버깅 툴은 게임 세계에서 직접 원하는 객체에 접촉하여 코드를 수정할 수 있는 능동적인 툴입니다.", 3, 2);
+    TypeText(Gm, "그렇기에, 요원은 필연적으로 게임의 룰을 따르면서 디버깅해야 합니다. 게임의 룰을 설명 드리겠습니다.", 3, 3);
+
+    Gm.GoSpace(3, 20);
+    cout << "[ 계속하려면 Enter를 누르세요... ]";
+}
+
+void LoggerSystem::Tutorial3()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+
+    TypeText(Gm, "이 세계의 모든 행동은 20면체 주사위가 결정합니다.", 3, 2);
+    TypeText(Gm, "당신이 행동을 할 때마다, 시스템에서는 당신의 행동을 평가하는 주사위를 굴립니다.", 3, 3);
+    TypeText(Gm, "주사위를 굴려서 얻은 결과값에, 당신의 능력 보정치를 더한", 3, 4); // 한 줄로 쓰면 넘침
+    TypeText(Gm, "최종 숫자가 제시된 목표값보다 높아야 성공합니다.", 3, 5);
+    TypeText(Gm, "주사위를 굴릴 땐, 스탯 5포인트당 +1의 보정치가 붙습니다. STR이 15라면? 힘 주사위 값에 +3이 추가되는 식입니다.", 3, 6);
+
+    Gm.GoSpace(3, 20);
+    cout << "[ 계속하려면 Enter를 누르세요... ]";
+}
+
+void LoggerSystem::Tutorial4()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+
+    TypeText(Gm, "선택지를 고르기 전, 특수 디버깅 툴은 이러한 보정값을 가시적으로 보여줍니다.", 3, 2);
+    TypeText(Gm, "1. 튜토리얼을 이해해봅니다. (판정값 10, 지식 보정 +2)", 3, 4);
+    TypeText(Gm, "2. 몸이 나쁘면 머리가 고생하는 거죠. 몸으로 부딪힙니다. (판정값 10, 힘 보정 +2)", 3, 5);
+    TypeText(Gm, "전자의 경우 지식이 높은 사람이, 후자의 경우 힘이 높은 사람이 유리하겠죠.", 3, 6);
+
+    Gm.GoSpace(3, 20);
+    cout << "[ 계속하려면 Enter를 누르세요... ]";
+}
+
+void LoggerSystem::Tutorial5()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawLayout();
+
+    TypeText(Gm, "하지만, 스탯이 낮더라도 주사위 값만 높으면 성공할 수 있습니다.", 3, 2);
+    TypeText(Gm, "20면체 주사위는 최대 20까지 나오니까요.", 3, 3);
+    TypeText(Gm, "이 경우 스탯이 높아진다면, 1이 나오더라도 힘이 50을 넘기면", 3, 4);
+    TypeText(Gm, "11이 되어 10 선택지를 무조건 성공할 수 있겠죠.", 3, 5);
+    TypeText(Gm, "그 상황에서도 유저의 짜릿함을 위해, 실패율을 최소 5%로 만드는 시스템이 존재합니다.", 3, 6);
+    TypeText(Gm, "바로, 대실패와 대성공 시스템입니다.", 3, 7);
+    TypeText(Gm, "대실패: 주사위 눈이 1이 나오면 보정치와 상관없이 무조건 실패합니다.", 3, 9);
+    TypeText(Gm, "대성공: 주사위 눈이 20이 나오면 무조건 성공합니다.", 3, 10);
+
+    Gm.GoSpace(3, 20);
+    cout << "[ 계속하려면 Enter를 누르세요... ]";
+}
+
+void LoggerSystem::Tutorial6()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    Gm.DrawLayout();
+    SetConsoleTextAttribute(hConsole, 0x0F);
+
+    TypeText(Gm, "튜토리얼이 끝났습니다. 게임에 접속합니다.", 3, 2);
+
+    SetConsoleTextAttribute(hConsole, 0x4F); //빨간 배경 + 흰 글자
+
+    TypeText(Gm, "[캐릭터 생성창으로 이동합니다... ", 3, 4);
+    BlinkText(Gm, hConsole, "실패. 접근 권한 없음.]", 35, 4); //X=3 + 표시너비(32) = 35
+
+    TypeText(Gm, "[재시도. ", 3, 5);
+    BlinkText(Gm, hConsole, "실패.]", 11, 5);                 //X=3 + 표시너비(8)  = 11
+
+    TypeText(Gm, "[캐릭터 생성 절차에 접근할 수 없습니다. ERROR CORD:404 NOT FOUND.]", 3, 6);
+    TypeText(Gm, "[비상 상황에 대비해 랜덤 구성 프로토콜이 시작됩니다. 튜토리얼이 이어서 진행됩니다.]", 3, 7);
+
+    Gm.GoSpace(3, 20);
+    cout << "[ 계속하려면 Enter를 누르세요... ]";
+}
+
+void LoggerSystem::TutorialStatDice()
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+
+    Gm.DrawLayout();
+    TypeText(Gm, "방금 배운 20면체 주사위를 실험 삼아 당신을 구성해볼까요?", 3, 2);
+    TypeText(Gm, "지금부터 엔터를 누를 때마다 스탯이 정해집니다.", 3, 3);
+
+}
+
+void LoggerSystem::RunTutorial()
+{
+
+    Tutorial1();
+    EventManager::WaitEnter();
+
+    Tutorial2();
+    EventManager::WaitEnter();
+
+    Tutorial3();
+    EventManager::WaitEnter();
+
+    Tutorial4();
+    EventManager::WaitEnter();
+
+    Tutorial5();
+    EventManager::WaitEnter();
+
+    Tutorial6();
+    EventManager::WaitEnter();
+}
 
 //-----------------------------요약----------------------------------
 //처치한 몬스터와 획득한 총 골드와 경험치를 보여주는 함수

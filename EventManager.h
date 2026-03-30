@@ -24,6 +24,7 @@ class EventManager
 public:
     EventManager();
     EventManager(PlayerManager& InPlayer);
+    static void WaitEnter();
     void TriggerNextEvent();
     void TutorialEvent();                    // 튜토리얼 이벤트 호출 함수
 
@@ -31,7 +32,6 @@ private:
     int Choice;
     bool IsBattle;
     void ShuffleEvents();
-    void WaitEnter();
     vector<int> NormalEventIds;
     vector<int> ShopEventIds;
     vector<int> EventIds;

@@ -143,6 +143,15 @@ public:
 
     //튜토리얼 관련
     void ShowStory(); //배경 스토리 출력
+    void RunTutorial(); //튜토리얼 출력 (이거 + TutorialStatDice 호출하면 됨)
+    void Tutorial1();
+    void Tutorial2();
+    void Tutorial3();
+    void Tutorial4();
+    void Tutorial5();
+    void Tutorial6();
+    void TutorialStatDice();
+
 
     //요약
     void PrintSummary(); //처치 몬스터 수, 획득 골드, 획득 경험치
@@ -155,5 +164,6 @@ private:
     map<string, int> MonsterKillLogs;
     vector<string> EventLogs;
     void PrintMainArea(const vector<string>& Lines);
+
 };
 
