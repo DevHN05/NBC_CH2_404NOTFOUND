@@ -5,6 +5,7 @@
 #include "Potion.h"
 #include "LoggerSystem.h"
 #include "GraphicManager.h"
+#include <limits>
 
 ShopManager::ShopManager()
 {
@@ -21,17 +22,6 @@ void ShopManager::EnterShop(PlayerManager& Player)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
-    Ls.LogShopPrompt();
-    Gm.GoSpace(65, 21);
-
-	int EnterChoice;
-	cin >> EnterChoice;
-
-	if (EnterChoice != 1)
-	{
-	    Ls.LogShopDecline();
-		return;
-	}
 
 	bool InShop = true;
 	int MenuChoice;
@@ -43,10 +33,11 @@ void ShopManager::EnterShop(PlayerManager& Player)
 	    Ls.LogPrintShopMenu();
 
 	    Gm.DrawInventoryData(Player);
-	    Gm.GoSpace(4, 20); cout << "ENTER SHOP MENU >> ";
+	    Gm.GoSpace(4, 20); cout << "상점 메뉴 번호를 입력하세요 >> ";
 
-	    cin >> MenuChoice;
-	    cin.ignore();
+	    string input;
+	    getline(cin, input);
+	    int MenuChoice = stoi(input);
 
 		int ItemChoice;
 		string ItemToSellName;
@@ -58,19 +49,20 @@ void ShopManager::EnterShop(PlayerManager& Player)
 		case 1:
 		    Ls.LogPrintShopItems(ShopItems, CurrentDisplayItems);
 		    Gm.DrawInventoryData(Player);
-		    Gm.GoSpace(38, 20);
+		    Gm.GoSpace(4, 20); cout << "구매할 아이템 이름을 입력하세요 >> ";
 
-			cin >> ItemChoice;
+		    getline(cin, input);
+		    ItemChoice = stoi(input);
 			BuyItem(ItemChoice, Player);
 			break;
 		case 2:
-		    Ls.LogShopSellPrompt();
-			getline(cin, ItemToSellName);
+		    Gm.GoSpace(4, 20); cout << "판매할 아이템 이름을 입력하세요 >> ";
+		    getline(cin, ItemToSellName);
 			SellItem(ItemToSellName, Player);
 			break;
 		case 3:
-		    //Gm.AddLog("다음에 또 오시오.");
 			InShop = false;
+		    Gm.ClearLogs();
 			break;
 		}
 	}
