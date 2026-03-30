@@ -1,13 +1,23 @@
 ﻿#pragma once
 #include <vector>
-#include <string>
-#include <random>    // mt19937 사용을 위해 반드시 필요!
-#include <algorithm>
+#include <random>
 #include <iostream>
 #include "DiceSystem.h"
 #include "PlayerManager.h"
 
 using namespace std;
+
+enum EEventId {
+    // [01~10] 전투 이벤트
+    EV_Guardian = 1, EV_Wanderer, EV_Breaker, EV_Invader, EV_Assassin,
+    EV_Bridge, EV_Forest, EV_DataNoise, EV_Gravity, EV_Cliff,
+    // [11~15] 선택 이벤트
+    EV_GarbageCollector, EV_Undeclared, EV_DanglingPointer, EV_BrokenActor, EV_UninitArray,
+    // [16~20] 보상 이벤트
+    EV_ChestNormal, EV_ChestConstLock, EV_ChestAndLogic, EV_ChestPointerSearch, EV_ChestBugActorFix,
+    // [21~25] 상점 이벤트
+    EV_ShopChoice, EV_ShopVillageWay, EV_ShopGamblerBet, EV_ShopBugStoreFix, EV_ShopAccessDenied
+};
 
 class EventManager
 {
@@ -18,7 +28,6 @@ public:
     void TutorialEvent();                    // 튜토리얼 이벤트 호출 함수
 
 private:
-    std::mt19937 Engine;
     int Choice;
     bool IsBattle;
     void ShuffleEvents();

@@ -59,51 +59,50 @@ void EventManager::ShuffleEvents()
 }
 
 // 이 함수를 호출할때마다 랜덤하게 섞인 이벤트가 순서대로 실행
-// 한번 호출할때마다 하나만 실행하게 했는데, 여기서 무한 순환 돌리면서 보스전 조건까지 달아도 되긴 할수도?
 void EventManager::TriggerNextEvent()
 {
-    if (CurrentEventIndex >= EventIds.size()) ShuffleEvents(); // 이벤트를 다 소진했으면 다시 섞는 함수
+    if (CurrentEventIndex >= EventIds.size()) ShuffleEvents();
 
-    int id = EventIds[CurrentEventIndex++];     // 이번 차례의 이벤트 번호를 꺼내고, 다음 차례로 넘기는 함수
+    int id = EventIds[CurrentEventIndex++];
 
     switch (id)
     {
         // [1~10] 일반 전투 이벤트
-    case 1:  BattleGuardian(); break;          // 노말 #1 vs시스템 보안 봇
-    case 2:  BattleWanderer(); break;          // 노말 #2 vs방랑자 :: delete ptr
-    case 3:  BattleBreaker(); break;           // 노말 #3 vs분쇄자 :: Break
-    case 4:  BattleInvader(); break;           // 노말 #4 vs침략자 :: 오버플로우
-    case 5:  BattleAssassin(); break;          // 노말 #5 vs감시자 :: 세그멘테이션 폴트
-    case 6:  BattleBridge(); break;            // 노말 #6 vs통나무 다리
-    case 7:  BattleForest(); break;            // 노말 #7 vs스산한 소리의 숲
-    case 8:  BattleDataNoise(); break;         // 노말 #8 vs데이터 노이즈
-    case 9:  BattleGravity(); break;           // 노말 #9 vs중력 역전
-    case 10: BattleCliff(); break;             // 노말 #10 vs거대한 절벽
+        case EV_Guardian:          BattleGuardian(); break;          // 노말 #1 vs시스템 보안 봇
+        case EV_Wanderer:          BattleWanderer(); break;          // 노말 #2 vs방랑자 :: delete ptr
+        case EV_Breaker:           BattleBreaker(); break;           // 노말 #3 vs분쇄자 :: Break
+        case EV_Invader:           BattleInvader(); break;           // 노말 #4 vs침략자 :: 오버플로우
+        case EV_Assassin:          BattleAssassin(); break;          // 노말 #5 vs감시자 :: 세그멘테이션 폴트
+        case EV_Bridge:            BattleBridge(); break;            // 노말 #6 vs통나무 다리
+        case EV_Forest:            BattleForest(); break;            // 노말 #7 vs스산한 소리의 숲
+        case EV_DataNoise:         BattleDataNoise(); break;         // 노말 #8 vs데이터 노이즈
+        case EV_Gravity:           BattleGravity(); break;           // 노말 #9 vs중력 역전
+        case EV_Cliff:             BattleCliff(); break;             // 노말 #10 vs거대한 절벽
 
         // [11~15] 보상 / 전투 / 회피 이벤트. 중간 보스전도 포함입니다.
-    case 11: ChoiceGarbageCollector(); break;  // 보상/전투 #1 vs가비지컬렉션
-    case 12: ChoiceUndeclared(); break;        // 보상/전투 #2 vs언디클레어드
-    case 13: ChoiceDanglingPointer(); break;   // 보상/전투 #3 vs댕글링 포인터
-    case 14: ChoiceBrokenActor(); break;       // 보상/전투 #4 vs깨진 액터
-    case 15: ChoiceUninitArray(); break;       // 보상/전투 #5 vs미초기화 배열
+        case EV_GarbageCollector:  ChoiceGarbageCollector(); break;  // 보상/전투 #1 vs가비지컬렉션
+        case EV_Undeclared:        ChoiceUndeclared(); break;        // 보상/전투 #2 vs언디클레어드
+        case EV_DanglingPointer:   ChoiceDanglingPointer(); break;   // 보상/전투 #3 vs댕글링 포인터
+        case EV_BrokenActor:       ChoiceBrokenActor(); break;       // 보상/전투 #4 vs깨진 액터
+        case EV_UninitArray:       ChoiceUninitArray(); break;       // 보상/전투 #5 vs미초기화 배열
 
         // [16~20] 보상 이벤트
-    case 16: ChestNormal(); break;             // 보상 #1 평범한 보물상자
-    case 17: ChestConstLock(); break;          // 보상 #2 const 보물상자
-    case 18: ChestAndLogic(); break;           // 보상 #3 && 논리상자
-    case 19: ChestPointerSearch(); break;      // 보상 #4 *ptr 보물찾기
-    case 20: ChestBugActorFix(); break;        // 보상 #5 버그 액터 수리
+        case EV_ChestNormal:       ChestNormal(); break;             // 보상 #1 평범한 보물상자
+        case EV_ChestConstLock:    ChestConstLock(); break;          // 보상 #2 const 보물상자
+        case EV_ChestAndLogic:     ChestAndLogic(); break;           // 보상 #3 && 논리상자
+        case EV_ChestPointerSearch: ChestPointerSearch(); break;      // 보상 #4 *ptr 보물찾기
+        case EV_ChestBugActorFix:  ChestBugActorFix(); break;        // 보상 #5 버그 액터 수리
 
         // [21~25] 상점 방문 이벤트
-    case 21: ShopChoiceEvent(); break;         // 상점 #1 갈림길
-    case 22: ShopVillageWay(); break;          // 상점 #2 바위 길막기
-    case 23: ShopGamblerBet(); break;          // 상점 #3 도박꾼 보부상
-    case 24: ShopBugStoreFix(); break;         // 상점 #4 상점 디버깅
-    case 25: ShopAccessDenied(); break;        // 상점 #5 Access Denied 상점
+        case EV_ShopChoice:        ShopChoiceEvent(); break;         // 상점 #1 갈림길
+        case EV_ShopVillageWay:    ShopVillageWay(); break;          // 상점 #2 바위 길막기
+        case EV_ShopGamblerBet:    ShopGamblerBet(); break;          // 상점 #3 도박꾼 보부상
+        case EV_ShopBugStoreFix:   ShopBugStoreFix(); break;         // 상점 #4 상점 디버깅
+        case EV_ShopAccessDenied:  ShopAccessDenied(); break;        // 상점 #5 Access Denied 상점
 
-    default:
-        // 아직 구현되지 않았거나 예외적인 ID일 경우 안전하게 종료
-        break;
+        default:
+            // 아직 구현되지 않았거나 예외적인 ID일 경우 안전하게 종료
+            break;
     }
 }
 
@@ -112,8 +111,7 @@ void EventManager::TutorialEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
-
-    // 튜토리얼 로그 들어갈 자리
+    Logger.ShowStory();
 
     random_device rd;
     mt19937 DiceVal(rd());
