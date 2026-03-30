@@ -5,47 +5,47 @@ PlayerManager::PlayerManager(string Nickname) : BaseCharacter(Nickname)
     SetNickname(Nickname);
 }
 
-int PlayerManager::GetLevel()
+int PlayerManager::GetLevel() const
 {
     return Level;
 }
 
-int PlayerManager::GetExperience()
+int PlayerManager::GetExperience() const
 {
     return Experience;
 }
 
-int PlayerManager::GetMaxExperience()
+int PlayerManager::GetMaxExperience() const
 {
     return MaxExperience;
 }
 
-int PlayerManager::GetDexterity()
+int PlayerManager::GetDexterity() const
 {
     return Dexterity;
 }
 
-int PlayerManager::GetIntelligence()
+int PlayerManager::GetIntelligence() const
 {
     return Intelligence;
 }
 
-int PlayerManager::GetLuck()
+int PlayerManager::GetLuck() const
 {
     return Luck;
 }
 
-int PlayerManager::GetCriticalProbability()
+int PlayerManager::GetCriticalProbability() const
 {
     return CriticalProbability;
 }
 
-int PlayerManager::GetGold()
+int PlayerManager::GetGold() const
 {
     return Gold;
 }
 
-vector<shared_ptr<ItemManager>> PlayerManager::GetPlayerInventory()
+const vector<unique_ptr<ItemManager>>& PlayerManager::GetPlayerInventory() const
 {
     return PlayerInventory.GetInventoryItems();
 }
@@ -90,9 +90,9 @@ void PlayerManager::SetGold(int Gold)
     this->Gold = Gold;
 }
 
-void PlayerManager::CollectItem(std::shared_ptr<ItemManager> Item)
+void PlayerManager::CollectItem(std::unique_ptr<ItemManager> Item)
 {
-    PlayerInventory.AddItem(Item);
+    PlayerInventory.AddItem(std::move(Item));
 }
 
 void PlayerManager::UseItem(const string& ItemName)
@@ -105,7 +105,7 @@ void PlayerManager::RemoveItem(const string& ItemName)
     PlayerInventory.RemoveItem(ItemName);
 }
 
-std::shared_ptr<ItemManager> PlayerManager::FindItem(const string& ItemName)
+ItemManager* PlayerManager::FindItem(const string& ItemName)
 {
     return PlayerInventory.FindItem(ItemName);
 }
