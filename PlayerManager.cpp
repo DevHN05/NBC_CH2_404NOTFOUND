@@ -17,7 +17,7 @@ int PlayerManager::GetExperience()
 
 int PlayerManager::GetMaxExperience()
 {
-    return Experience;
+    return MaxExperience;
 }
 
 int PlayerManager::GetDexterity()
@@ -115,6 +115,7 @@ void PlayerManager::PrintPlayerStatus()
     cout << GetNickname() << "\n";
     cout << Level << "\n";
     cout << Experience << "\n";
+    cout << MaxExperience << "\n";
     cout << GetHealth() << "\n";
     cout << GetStrength() << "\n";
     cout << Dexterity << "\n";
