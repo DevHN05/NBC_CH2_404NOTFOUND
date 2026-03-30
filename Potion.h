@@ -3,6 +3,7 @@
 #include "ItemManager.h"
 #include <iostream>
 #include <algorithm>
+#include <map>
 
 class Potion : public ItemManager
 {
@@ -16,14 +17,17 @@ public:
 private:
     EPotionType PotionType;
     int Recovery;
-    //int Count;
+    bool IsCountRegistered;
+    static map<string, int> PotionCounts; //포션별로 따로 저장되도록 만듦
 
 public:
+    Potion(const string& Name, int Price, EPotionType Type, int Recovery, bool IsIncreaseCount);
+
     Potion(const string& Name, int Price, EPotionType Type, int Recovery)
-        : ItemManager(Name, Price),
-        PotionType(Type),
-        Recovery(Recovery)
+        : Potion(Name, Price, Type, Recovery, false)
     {}
+
+    ~Potion() override;
 
     void Use(PlayerManager& Character) override;
     void ShowInfo() const override;

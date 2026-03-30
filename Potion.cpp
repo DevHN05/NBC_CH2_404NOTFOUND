@@ -1,12 +1,31 @@
 #include "Potion.h"
 
+map<string, int> Potion::PotionCounts;
+
+Potion::Potion(const string& Name, int Price, EPotionType Type, int Recovery, bool IsIncreaseCount)
+    : ItemManager(Name, Price), PotionType(Type), Recovery(Recovery), IsCountRegistered(IsIncreaseCount)
+{
+    if (IsIncreaseCount)
+    {
+        ++PotionCounts[GetName()];
+    }
+}
+
+Potion::~Potion()
+{
+    if (IsCountRegistered && PotionCounts[GetName()] > 0)
+    {
+        --PotionCounts[GetName()];
+    }
+}
+
 void Potion::Use(PlayerManager& User)
 {
-    /*if (Count <= 0)
+    if (PotionCounts[GetName()] <= 0)
     {
         cout << "You have no more " << GetName() << " left!" << '\n';
         return;
-    }*/
+    }
 
     switch (PotionType)
     {
@@ -34,8 +53,9 @@ void Potion::Use(PlayerManager& User)
         }
     }
 
-    //Count--;
-    //cout << "Remaining count of " << GetName() << ": " << Count << '\n';
+    --PotionCounts[GetName()];
+    IsCountRegistered = false;
+    cout << "Remaining count of " << GetName() << ": " << PotionCounts[GetName()] << '\n';
 }
 
 void Potion::ShowInfo() const
@@ -43,9 +63,10 @@ void Potion::ShowInfo() const
     cout << "Potion: " << GetName() << '\n';
     cout << "Price: " << GetPrice() << " gold" << '\n';
     cout << "Recovery: " << Recovery << '\n';
-    //cout << "Count: " << Count << '\n';
+    cout << "Count: " << PotionCounts[GetName()] << '\n';
 }
 
-shared_ptr<ItemManager> Potion::Clone() const  {
-    return make_shared<Potion>(*this);  // 복사 생성
+shared_ptr<ItemManager> Potion::Clone() const
+{
+    return make_shared<Potion>(GetName(), GetPrice(), PotionType, Recovery, true);
 }
