@@ -36,7 +36,7 @@ void GameSystem::StartGame()
     GraphicManager& Gm = GraphicManager::GetInstance();
     CombatManager& Cm = CombatManager::GetInstance();
 
-    Gm.SetConsoleSize(160, 90);
+    //Gm.SetConsoleSize(160, 90);
 
     string Name = Gm.ShowTitle();
 
@@ -59,6 +59,7 @@ void GameSystem::StartGame()
 
     while (true)
     {
+        Gm.UpdateWindowSize();
         Gm.DrawLayout();
 
         Gm.DrawLobbyStatus(Player);
@@ -70,7 +71,8 @@ void GameSystem::StartGame()
         while (true)
         {
             Gm.GoSpace(3, 20);
-            cout << " Command (1.Search 2.Recovery 3.Quit): ";
+            //cout << " Command (1.Search 2.Recovery 3.Quit): ";
+            Gm.CommandAddLog(" Command (1.Search 2.Recovery 3.Quit): ");
 
             getline(cin, Input);
 

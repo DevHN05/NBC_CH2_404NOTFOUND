@@ -24,7 +24,8 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
     while (Player.GetHealth() > 0 && Monster.GetHealth() > 0)
     {
         Gm.GoSpace(3, 20);
-        cout << "[ Enter: Player Turn ]";
+        Gm.CommandAddLog("[ Enter: Player Turn ]");
+        //cout << "[ Enter: Player Turn ]";
         cin.get();
 
         // --- Player Turn ---
@@ -47,13 +48,14 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
         Monster.SetHealth(Monster.GetHealth() - Damage);
         Ls.LogAttack(Player.GetNickname(), Monster.GetNickname(), Damage);
 
-        Gm.HitShake(Monster.GetNickname(),74,1,0);
+        Gm.HitMonsterShake(Monster.GetNickname(),0);
         UpdateBattleUI(Player, Monster);
 
         if (Monster.GetHealth() <= 0) break;
 
         Gm.GoSpace(3, 20);
-        cout << "[ Enter: Monster Turn ]";
+        Gm.CommandAddLog("[ Enter: Monster Turn ]");
+        //cout << "[ Enter: Monster Turn ]";
         cin.get();
 
         // --- Monster Turn ---
@@ -67,7 +69,7 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
         Player.SetHealth(Player.GetHealth() - Damage);
         Ls.LogAttack(Monster.GetNickname(), Player.GetNickname(), Damage);
 
-        Gm.HitShake("PLAYER",12,5, 0);
+        Gm.HitPlayerShake("PLAYER", 0);
         UpdateBattleUI(Player, Monster);
     }
 
@@ -101,7 +103,8 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
     while (Player.GetHealth() > 0 && Boss.GetHealth() > 0)
     {
         Gm.GoSpace(3, 20);
-        cout << "[ Enter: Player Turn ]";
+        Gm.CommandAddLog("[ Enter: Player Turn ]");
+        //cout << "[ Enter: Player Turn ]";
         cin.get();
 
         // --- Player Turn ---
@@ -124,13 +127,14 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         Boss.SetHealth(Boss.GetHealth() - Damage);
         Ls.LogAttack(Player.GetNickname(), Boss.GetNickname(), Damage);
 
-        Gm.HitShake(Boss.GetNickname(),74,1,0);
+        Gm.HitMonsterShake(Boss.GetNickname(),0);
         UpdateBattleUI(Player, Boss);
 
         if (Boss.GetHealth() <= 0) break;
 
         Gm.GoSpace(3, 20);
-        cout << "[ Enter: Boss Turn ]";
+        //cout << "[ Enter: Boss Turn ]";
+        Gm.CommandAddLog("[ Enter: Boss Turn ]");
         cin.get();
 
         // --- Boss Turn ---
@@ -163,7 +167,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
             {
                 Player.SetHealth(Player.GetHealth() - Damage);
                 Ls.LogAttack(Boss.GetNickname(), Player.GetNickname(), Damage/2);
-                Gm.HitShake("PLAYER",12,5, 3);
+                Gm.HitPlayerShake("PLAYER", 3);
             }
         }
         else
@@ -195,37 +199,7 @@ void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
     GraphicManager& Gm = GraphicManager::GetInstance();
 
     Gm.DrawLayout();
-    //Monster
-    int MonsterStartX = 5;
-    Gm.GoSpace(MonsterStartX, 2);  cout << "[ ENEMY STATUS ]";
-    Gm.GoSpace(MonsterStartX, 3);  cout << "NAME : " << Monster.GetNickname();
-    int MonsterHpBarLen = 20;
-    int MonsterHpLen = (Monster.GetMaxHealth() == 0) ? 0 : (Monster.GetHealth() * MonsterHpBarLen / Monster.GetMaxHealth());
-    Gm.GoSpace(MonsterStartX, 4);  cout << "HP   : [";
-    for(int i=0; i<MonsterHpBarLen; i++)
-    {
-        if(i < MonsterHpLen) cout << "■";
-        else cout << " ";
-    }
-    cout << "] " << Monster.GetHealth() << " / " << Monster.GetMaxHealth();
-
-    //Player
-    int PlayerStartX = 72;
-    Gm.GoSpace(PlayerStartX, 13); cout << "[ PLAYER STATUS ]";
-    Gm.GoSpace(PlayerStartX, 14); cout << "NAME : " << Player.GetNickname();
-    Gm.GoSpace(PlayerStartX, 15); cout << "Lv." << Player.GetLevel() << "   HP: " << Player.GetHealth() << " / " << Player.GetMaxHealth();
-    int PlayerHpBarLen = 20;
-    int PlayerHpLen = (Monster.GetMaxHealth() == 0) ? 0 : (Player.GetHealth() * PlayerHpBarLen / Player.GetMaxHealth());
-    Gm.GoSpace(PlayerStartX, 16);  cout << "HP   : [";
-    for(int i=0; i<PlayerHpBarLen; i++)
-    {
-        if(i < PlayerHpLen) cout << "■";
-        else cout << " ";
-    }
-    cout << "] " << Player.GetHealth() << " / " << Player.GetMaxHealth();
-
-    Gm.DrawAsciiCombatArt("PLAYER", Monster.GetNickname()); //전자는 고정 후자는 몬스터 이름 넣어야댐
-    Gm.DrawInventoryData(Player);
+    Gm.DrawAsciiCombatArt(Player,Monster);
 }
 
 void CombatManager::UpdateStoreUI(PlayerManager& Player)
