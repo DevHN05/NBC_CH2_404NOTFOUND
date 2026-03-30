@@ -22,7 +22,7 @@ void LoggerSystem::PrintMainArea(const vector<string>& Lines)
         {
             cout << C;
             cout.flush();
-            this_thread::sleep_for(chrono::milliseconds(15));
+            this_thread::sleep_for(chrono::milliseconds(10));
         }
         this_thread::sleep_for(chrono::milliseconds(80));
     }
@@ -33,7 +33,7 @@ void LoggerSystem::PrintMainArea(const vector<string>& Lines)
 void LoggerSystem::LogMonsterAppear(const string& MonsterName)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    string Log = "[ DETECTION ] 버그 개체 [ " + MonsterName + " ] 접근 확인. 디버깅 개시.";
+    string Log = "[ DETECTION ] [ " + MonsterName + " ] 접근 확인. 디버깅 개시.";
 
     Gm.AddLog(Log);
 	EventLogs.push_back(Log);
@@ -43,7 +43,7 @@ void LoggerSystem::LogMonsterAppear(const string& MonsterName)
 void LoggerSystem::LogAttack(const string& Attacker, const string& Target, int Damage)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-	string Log = "[ ATTACK ] " + Attacker + " >> " + Target + " 에 디버깅 실행 / 데미지: " + to_string(Damage);
+	string Log = "[ ATTACK ] " + Attacker + " >> " + Target + " 에 디버깅 / 데미지: " + to_string(Damage);
 
     Gm.AddLog(Log);
 	EventLogs.push_back(Log);
@@ -54,7 +54,7 @@ void LoggerSystem::LogMonsterKill(const string& MonsterName)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
 	MonsterKillLogs[MonsterName]++;
-	string Log = "[ DEBUG COMPLETE ] " + MonsterName + " 제거됨. 데이터 수집 중...";
+	string Log = "[ DEBUG ] " + MonsterName + " 제거됨. 데이터 수집 중...";
 
     Gm.AddLog(Log);
 	EventLogs.push_back(Log);
@@ -64,10 +64,10 @@ void LoggerSystem::LogMonsterKill(const string& MonsterName)
 void LoggerSystem::LogBossPhaseChange(const string& Nickname, const string& SpecialSkillName, int BoostedStrength)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    string Log1 = "[ CRITICAL WARNING ] 버그 개체 [ " + Nickname + " ] 자가 코드 재작성 감지";
+    string Log1 = "[ CRITICAL WARNING ] [ " + Nickname + " ] 코드 재작성 감지";
 
     //이놈이 문제
-    string Log2 = "  >> 권한 레벨 상승 / " + SpecialSkillName + "활성";
+    string Log2 = "  >> 권한 레벨 상승 / " + SpecialSkillName + " 활성화";
 
     string Log3 = "  >> ATK -> " + to_string(BoostedStrength) + "  |  디버깅 난이도 상승";
 
@@ -105,8 +105,10 @@ void LoggerSystem::LogEventWanderer(int StrBonus, int DexBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 오브젝트를 근력으로 쓰러뜨려 평탄한 길을 확보합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 바위 파편 위를 건너뛰며 건너편으로 갑니다. (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("1. 오브젝트를 근력으로 쓰러뜨려 평탄한 길을 확보합니다.");
+    Gm.AddLog("   (판정값 13, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 바위 파편 위를 건너뛰며 건너편으로 갑니다.");
+    Gm.AddLog("   (판정값 13, 민첩 보정 +" + to_string(DexBonus) + ")");
 }
 
 //실패 메세지 - 방랑자::delete ptr;
@@ -131,8 +133,10 @@ void LoggerSystem::LogEventGuardian(int DexBonus, int IntBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 보안 취약점 사이로 재빠르게 지나갑니다. (판정값 13, 민첩 보정 +" + to_string(DexBonus) + ")");
-    Gm.AddLog("2. 방화벽의 취약점을 분석해 무력화하고 통과합니다. (판정값 13, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 보안 취약점 사이로 재빠르게 지나갑니다.");
+    Gm.AddLog("   (판정값 13, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 방화벽의 취약점을 분석해 무력화하고 통과합니다.");
+    Gm.AddLog("   (판정값 13, 지능 보정 +" + to_string(IntBonus) + ")");
 }
 
 //실패 메세지 - 파수꾼::시스템 보안 봇
@@ -156,8 +160,10 @@ void LoggerSystem::LogEventBreaker(int StrBonus, int IntBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 루프문 코드를 디버그 툴로 파괴해 물리적으로 종료합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 조건문을 수정해서 디버깅해, 반복문을 정상으로 되돌립니다. (판정값 10, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 루프문 코드를 디버그 툴로 파괴해 물리적으로 종료합니다.");
+    Gm.AddLog("   (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 조건문을 수정해 디버깅하고, 반복문을 정상으로 되돌립니다.");
+    Gm.AddLog("   (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
 }
 
 //실패 메세지 - 분쇄자::Break
@@ -181,8 +187,10 @@ void LoggerSystem::LogEventInvader(int DexBonus, int LukBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 오버플로우에 영향받기 전에 재빠르게 다음 구역으로 질주합니다. (판정값 13, 민첩 보정 +" + to_string(DexBonus) + ")");
-    Gm.AddLog("2. 자료형에 맞는 데이터가 담기길 기대하며 다음 구역으로 향합니다. (판정값 13, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("1. 영향받기 전에 재빠르게 다음 구역으로 질주합니다.");
+    Gm.AddLog("   (판정값 13, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 자료형에 맞는 데이터가 담기길 기대하며 구역을 나아갑니다.");
+    Gm.AddLog("   (판정값 13, 행운 보정 +" + to_string(LukBonus) + ")");
 }
 
 //실패 메세지 - 침략자::2147483648
@@ -207,8 +215,10 @@ void LoggerSystem::LogEventAssassin(int StrBonus, int IntBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 세미콜론이 빠진 곳을 잘 피해 성큼성큼 뛰어갑니다. (판정값 13, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 빠진 세미콜론을 넣고 계단 데이터를 복구하며 나아갑니다. (판정값 13, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 세미콜론이 빠진 곳을 잘 피해 성큼성큼 뛰어갑니다.");
+    Gm.AddLog("   (판정값 13, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 빠진 세미콜론을 넣고 계단 데이터를 복구하며 나아갑니다.");
+    Gm.AddLog("   (판정값 13, 지능 보정 +" + to_string(IntBonus) + ")");
 }
 
 //실패 메세지 - 암살자
@@ -233,9 +243,12 @@ void LoggerSystem::LogEventBridge(int DexBonus, int LukBonus, int StrBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 버그가 앞길을 막기 전에 다리를 빠르게 건너갑니다. (판정값 14, 민첩 보정 +" + to_string(DexBonus) + ")");
-    Gm.AddLog("2. 버그가 나타나지 않길 바라며 다리를 건넙니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
-    Gm.AddLog("3. 힘으로 절벽을 한 번에 뛰어넘어봅니다. (판정값 14, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("1. 버그가 막기 전에 다리를 빠르게 건너갑니다.");
+    Gm.AddLog("   (판정값 14, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 버그가 나타나지 않길 바라며 다리를 건넙니다.");
+    Gm.AddLog("   (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("3. 힘으로 절벽을 한 번에 뛰어넘어봅니다.");
+    Gm.AddLog("   (판정값 14, 힘 보정 +" + to_string(StrBonus) + ")");
 }
 
 //실패 메세지 - 통나무 다리
@@ -259,8 +272,10 @@ void LoggerSystem::LogEventForest(int IntBonus, int LukBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 버그의 흔적을 조사하고 방향을 유추해 피해갑니다. (판정값 14, 지능 보정 +" + to_string(IntBonus) + ")");
-    Gm.AddLog("2. 아무 일도 없길 바라며 행운에 기대 숲을 지나갑니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("1. 버그의 흔적을 조사하고 방향을 유추해 피해갑니다.");
+    Gm.AddLog("   (판정값 14, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 아무 일도 없길 바라며 행운에 기대 숲을 지나갑니다.");
+    Gm.AddLog("   (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
 }
 
 //실패 메세지 - 숲
@@ -285,8 +300,10 @@ void LoggerSystem::LogEventDataNoise(int IntBonus, int LukBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 구역의 구조를 파악하고 정상적인 코드를 골라 나아갑니다. (판정값 14, 지능 보정 +" + to_string(IntBonus) + ")");
-    Gm.AddLog("2. 버그가 안 옮길 빌며 행운에 기대 이 지역을 나아가봅니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("1. 구역의 구조를 파악하고 정상적인 코드를 골라 나아갑니다.");
+    Gm.AddLog("   (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 버그가 안 옮길 빌며 행운에 기대 이 지역을 나아가봅니다.");
+    Gm.AddLog("   (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
 }
 
 //실패 메세지 - 데이터 노이즈
@@ -310,8 +327,10 @@ void LoggerSystem::LogEventGravity(int LukBonus, int IntBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 떨어지는 적들을 운에 맡기며 안전 구역으로 대피합니다. (판정값 12, 행운 보정 +" + to_string(LukBonus) + ")");
-    Gm.AddLog("2. 중력이 뒤집힌 구역을 분석해 영향이 적은 곳으로 대피합니다. (판정값 12, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 떨어지는 적들을 운에 맡기며 안전 구역으로 대피합니다.");
+    Gm.AddLog("   (판정값 12, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("2. 중력이 뒤집힌 구역을 분석해 영향이 적은 곳으로 대피합니다.");
+    Gm.AddLog("   (판정값 12, 지식 보정 +" + to_string(IntBonus) + ")");
 }
 
 //실패 메세지 - 중력
@@ -335,16 +354,18 @@ void LoggerSystem::LogEventCliff(int DexBonus, int IntBonus)
     });
 
     Gm.ClearLogs();
-    Gm.AddLog("1. 절벽에 떠 있는 주석들을 발판 삼아 민첩하게 기어 올라갑니다. (판정값 12, 민첩 보정 +" + to_string(DexBonus) + ")");
-    Gm.AddLog("2. 지형 스크립트를 해킹해 절벽을 다시 평지로 롤백시킵니다. (판정값 15, 지능 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 절벽에 떠 있는 주석들을 발판 삼아 민첩하게 기어 올라갑니다.");
+    Gm.AddLog("   (판정값 12, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 지형 스크립트를 해킹해 절벽을 다시 평지로 롤백시킵니다.");
+    Gm.AddLog("   (판정값 15, 지식 보정 +" + to_string(IntBonus) + ")");
 }
 
 //실패 메세지 - 절벽
 void LoggerSystem::LogEventFailCliff()
 {
     PrintMainArea({
-        "이런, 불안정한 절벽을 너무 섣불리 건드린 것 같습니다. 바닥이 사라지며 아래로 떨어집니다.",
-        "수정된 코드를 지키기 위해, 충격에서 벗어나지 못한 당신에게 버그 하나가 접근합니다."
+        "이런, 불안정한 절벽을 너무 섣불리 건드린 것 같습니다.",
+        "발판이 무너지며 추락하는 순간, 버그가 당신에게 달려듭니다."
     });
 }
 
@@ -361,9 +382,10 @@ void LoggerSystem::ChoiceGarbageCollector(int DexBonus)
         "가비지 컬렉션의 눈에 띄면 당신마저 쓰레기 데이터로 분류되어 삭제될수도 있습니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 가비지 컬렉션에게 걸리지 않도록 주의하며 데이터를 챙겨봅니다. (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
-    Gm.AddLog("2. 가비지 컬렉션도 결국 코드덩어리. 정면으로 싸움을 겁니다. (전투 발생)");
-    Gm.AddLog("3. 삭제당할 위험을 감수할 수 없습니다. 빙 돌아서 지나갑니다. (전투 회피)");
+    Gm.AddLog("1. 가비지 컬렉션을 피해 조심스럽게 데이터를 챙겨봅니다.");
+    Gm.AddLog("   (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 가비지 컬렉션도 코드덩어리. 정면으로 싸웁니다. (전투 발생)");
+    Gm.AddLog("3. 삭제 위험을 감수할 수 없습니다. 빙 돌아 지나갑니다. (전투 회피)");
 }
 
 void LoggerSystem::ChoiceGarbageCollectorSuccess()
@@ -394,9 +416,10 @@ void LoggerSystem::ChoiceUndeclared(int StrBonus)
         "녀석의 뒤에서 본래 이곳을 관리해야 했던 #include <stdio.h>가 비웃고 있습니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 힘으로 #include <stdio.h>를 제압해 이곳을 다시 관리하도록 제자리에 둡니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 헤더를 고치기엔 너무 멀리 왔습니다. 저 버그 덩어리를 제압하는 수 밖에요. (전투 발생)");
-    Gm.AddLog("3. 이 지역을 지금 구할 필요가 있을까요? 빙 돌아서 지나갑니다. (전투 회피)");
+    Gm.AddLog("1. 힘으로 #include <stdio.h>를 제압해 다시 제자리에 둡니다.");
+    Gm.AddLog("   (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 헤더를 고치기엔 오래 걸립니다. 저 버그를 제압하는 수 밖에요. (전투 발생)");
+    Gm.AddLog("3. 이 지역을 지금 구할 필요가 있을까요? 빙 돌아 지나갑니다. (전투 회피)");
 }
 
 void LoggerSystem::ChoiceUndeclaredSuccess()
@@ -427,9 +450,10 @@ void LoggerSystem::ChoiceDanglingPointer(int StrBonus)
         "이 유령 데이터를 정리하지 않고는 지나갈 순 없겠습니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 직접 댕글링 포인터에 nullptr를 대입하여 원상 복구를 시도합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 실체가 없더라도 디버깅하면 그만이죠. 정면으로 싸움을 겁니다. (전투 발생)");
-    Gm.AddLog("3. 시스템 크래시는 무섭습니다. 욕심을 버리고 빙 돌아서 지나갑니다. (전투 회피)");
+    Gm.AddLog("1. 직접 댕글링 포인터에 nullptr를 대입해 원상 복구를 시도합니다.");
+    Gm.AddLog("   (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 실체가 없어도 디버깅하면 그만이죠. 정면으로 싸웁니다. (전투 발생)");
+    Gm.AddLog("3. 시스템 크래시는 무섭습니다. 빙 돌아서 지나갑니다. (전투 회피)");
 }
 
 void LoggerSystem::ChoiceDanglingPointerSuccess()
@@ -459,8 +483,10 @@ void LoggerSystem::ChoiceBrokenActor(int LukBonus, int IntBonus)
         "범인이 버그라면 아직 버그가 걸리지 않은 액터의 부산물을 주울 수 있을지도 모릅니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 난 운이 좋으니 버그가 떠났을거야. 운에게 맡기며 액터를 살펴봅니다. (판정값 10, 행운 보정 +" + to_string(LukBonus) + ")");
-    Gm.AddLog("2. 망가진 액터의 원형을 상상하며 쓸만한 아이템 코드가 있는지 살펴봅니다. (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 난 운이 좋으니 버그가 떠났을거야. 액터를 살펴봅니다.");
+    Gm.AddLog("   (판정값 10, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("2. 망가진 액터에서 쓸만한 아이템 코드가 있는지 살펴봅니다.");
+    Gm.AddLog("   (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
     Gm.AddLog("3. 위험을 감수할 순 없죠. 그냥 지나칩니다. (이벤트 종료)");
 }
 
@@ -492,9 +518,10 @@ void LoggerSystem::ChoiceUninitArray(int IntBonus)
         "왠지 잘 찾아보면 하나쯤은 NULL 값이 있는 방이 있을수도 있을 것 같습니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 방 번호 중 NULL이나 0이 저장된 빈방을 찾아봅니다. (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
-    Gm.AddLog("2. 고작해야 배열에게 막힐 순 없습니다. 정면으로 싸움을 겁니다. (전투 발생)");
-    Gm.AddLog("3. 쓰레기값은 예측할 수 없습니다. 빙 돌아서 지나갑니다. (전투 회피)");
+    Gm.AddLog("1. NULL이나 0이 저장된 빈방 번호를 찾아봅니다.");
+    Gm.AddLog("   (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 고작 배열에게 막힐 순 없습니다. 정면으로 싸웁니다. (전투 발생)");
+    Gm.AddLog("3. 쓰레기값은 예측 불가. 빙 돌아서 지나갑니다. (전투 회피)");
 }
 
 void LoggerSystem::ChoiceUninitArraySuccess()
@@ -526,8 +553,10 @@ void LoggerSystem::ChestNormal(int StrBonus, int DexBonus)
         "다행인 점은, 지금 당신을 지켜보는 사람은 없다는 거구요."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 힘으로 상자를 부숴서 내용물을 확인합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 락픽을 이용해 자물쇠를 따봅니다. (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("1. 힘으로 상자를 부숴서 내용물을 확인합니다.");
+    Gm.AddLog("   (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 락픽으로 자물쇠를 따봅니다.");
+    Gm.AddLog("   (판정값 10, 민첩 보정 +" + to_string(DexBonus) + ")");
 }
 
 void LoggerSystem::ChestNormalSuccess()
@@ -556,8 +585,10 @@ void LoggerSystem::ChestConstLock(int StrBonus, int IntBonus)
         "변하지 않게 된 이 잠금장치를 뚫어야만 내용물을 얻을 수 있을 것 같습니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 잠금 장치를 부술 수 없다면, 힘으로 상자를 부숩니다. (판정값 14, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 디버깅을 해서 const의 위치를 알맞은 곳으로 되돌립니다. (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 잠금 장치를 부술 수 없다면, 힘으로 상자를 부숩니다.");
+    Gm.AddLog("   (판정값 14, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 디버깅으로 const의 위치를 알맞은 곳으로 되돌립니다.");
+    Gm.AddLog("   (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
 }
 
 void LoggerSystem::ChestConstLockSuccess()
@@ -588,9 +619,12 @@ void LoggerSystem::ChestAndLogic(int DexBonus, int LukBonus, int IntBonus)
         "하지만 당신은 혼자이기에, 혼자서 타이밍을 맞추기란 쉽지 않습니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 정교하게 하면 되죠! 재빠르게 열쇠 두 개를 동시에 집어넣어 봅니다. (판정값 14, 민첩 보정 +" + to_string(DexBonus) + ")");
-    Gm.AddLog("2. 우연히 들어맞길 바라며 열쇠 두 개를 감으로 맞춰봅니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
-    Gm.AddLog("3. 회로 하나를 조작해 첫 번째 구멍이 참인 것처럼 속이고 열쇠를 넣습니다. (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 재빠르게 열쇠 두 개를 동시에 집어넣어 봅니다.");
+    Gm.AddLog("   (판정값 14, 민첩 보정 +" + to_string(DexBonus) + ")");
+    Gm.AddLog("2. 우연히 맞길 바라며 열쇠 두 개를 감으로 맞춰봅니다.");
+    Gm.AddLog("   (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("3. 첫 구멍이 참인 것처럼 회로를 속이고 열쇠를 넣습니다.");
+    Gm.AddLog("   (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
 }
 
 void LoggerSystem::ChestAndLogicSuccess()
@@ -621,8 +655,10 @@ void LoggerSystem::ChestPointerSearch(int IntBonus, int LukBonus)
         "잘못 찾아가면 허탕을 칠 것 같습니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 주변의 데이터 흐름을 분석해 *ptr이 가리키는 자료형(Type)을 알아냅니다. (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
-    Gm.AddLog("2. 우연히 자료형이 맞길 바라며 하나를 정하고 *ptr을 따라갑니다. (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
+    Gm.AddLog("1. 데이터 흐름을 분석해 *ptr의 자료형(Type)을 알아냅니다.");
+    Gm.AddLog("   (판정값 14, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("2. 자료형이 맞길 바라며 *ptr을 따라갑니다.");
+    Gm.AddLog("   (판정값 14, 행운 보정 +" + to_string(LukBonus) + ")");
 }
 
 void LoggerSystem::ChestPointerSearchSuccess()
@@ -652,8 +688,10 @@ void LoggerSystem::ChestBugActorFix(int StrBonus, int IntBonus)
         "어쩌면, 당신이 이 액터에게 원래 모습을 찾아줄 수 있을지도 모릅니다."
     });
     Gm.ClearLogs();
-    Gm.AddLog("1. 디버깅 툴을 이용해서 물리적으로 버그의 원흉을 제거합니다. (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
-    Gm.AddLog("2. 디버깅 툴을 이용해서 오류가 발생한 코드를 찾아 수정합니다. (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
+    Gm.AddLog("1. 디버깅 툴로 물리적으로 버그의 원흉을 제거합니다.");
+    Gm.AddLog("   (판정값 10, 힘 보정 +" + to_string(StrBonus) + ")");
+    Gm.AddLog("2. 디버깅 툴로 오류가 발생한 코드를 찾아 수정합니다.");
+    Gm.AddLog("   (판정값 10, 지식 보정 +" + to_string(IntBonus) + ")");
 }
 
 void LoggerSystem::ChestBugActorFixSuccess()
