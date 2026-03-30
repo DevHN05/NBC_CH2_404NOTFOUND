@@ -1,5 +1,6 @@
 #include "GraphicManager.h"
 #include "PlayerManager.h"
+#include "BaseMonster.h"
 #include "Inventory.h"
 #include "ItemManager.h"
 #include <windows.h>
@@ -308,119 +309,238 @@ void GraphicManager::SetConsoleSize(int Width, int Height) const
     SetConsoleWindowInfo(HOut, TRUE, &WindowSize);
 }
 
+void GraphicManager::UpdateWindowSize()
+{
+    CONSOLE_SCREEN_BUFFER_INFO Csbi;
+    if (GetConsoleScreenBufferInfo(HOut, &Csbi))
+    {
+        int w = Csbi.srWindow.Right - Csbi.srWindow.Left + 1;
+        int h = Csbi.srWindow.Bottom - Csbi.srWindow.Top + 1;
+
+        this->CurrentWidth = (w > 120) ? w : 120;
+        this->CurrentHeight = (h > 29) ? h : 29;
+
+        this->OffsetX = this->CurrentWidth - 120;
+        this->OffsetY = this->CurrentHeight - 29;
+
+        this->MainBottom  = (this->CurrentHeight * 64) / 100;
+        this->SplitColumn = (this->CurrentWidth * 63) / 100;
+        this->RightEdge   = this->CurrentWidth - 1;
+        this->BottomEdge  = this->CurrentHeight - 1;
+    }
+}
+
 void GraphicManager::DrawLayout() const
 {
     system("cls");
 
-    for (int i = 0; i < 120; i++)
+    for (int i = 0; i <= RightEdge; i++)
     {
-        GoSpace(i, 0); cout << "="; GoSpace(i, 18); cout << "=";
+        GoSpace(i, 0);          cout << "=";
+        GoSpace(i, MainBottom); cout << "=";
     }
-    for (int i = 0; i <= 18; i++)
+    for (int i = 0; i <= MainBottom; i++)
     {
-        GoSpace(0, i); cout << "|"; GoSpace(119, i); cout << "|";
+        GoSpace(0, i);         cout << "|";
+        GoSpace(RightEdge, i); cout << "|";
     }
 
-    for (int i = 19; i < 28; i++) {
-        GoSpace(0, i); cout << "|";
-        GoSpace(76, i); cout << "|";
-        GoSpace(119, i); cout << "|";
-    }
-    for (int i = 0; i < 120; i++)
+    for (int i = MainBottom + 1; i < BottomEdge; i++)
     {
-        GoSpace(i, 28); cout << "=";
+        GoSpace(0, i);           cout << "|";
+        GoSpace(SplitColumn, i); cout << "|";
+        GoSpace(RightEdge, i);   cout << "|";
     }
 
-    int Line = 0;
+    for (int i = 0; i <= RightEdge; i++)
+    {
+        GoSpace(i, BottomEdge); cout << "=";
+    }
+
+    int line = 0;
+    int logStartY = MainBottom + 2;
+
     for (const string& Log : GameLogs)
     {
-        GoSpace(2, 21 + Line++);
-        cout << "> " << Log;
+        if (logStartY + line < BottomEdge)
+        {
+            GoSpace(2, logStartY + line++);
+            cout << "> " << Log;
+        }
     }
 }
 
 void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
 {
-    GoSpace(40, 8); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
+    int centerX = SplitColumn / 2 - 10;
+    int centerY = MainBottom / 2;
+
+    GoSpace(centerX, centerY); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
     GoSpace(5, 2);  cout << ">> FIELD: SYSTEM CORE";
-    GoSpace(40, 9); cout << " HP:  [ ";
+
+    // HP Bar
+    GoSpace(centerX, centerY + 1); cout << " HP:  [ ";
     int MaxHpBar = 20;
     int FilledHPGauge = (int)(Player.GetHealth() * MaxHpBar / Player.GetMaxHealth());
     FilledHPGauge = min(FilledHPGauge, MaxHpBar);
-
-    for (int i = 0; i < MaxHpBar; i++)
-    {
-        if (i < FilledHPGauge)
-            cout << "■";
-        else
-            cout << " ";
-    }
+    for (int i = 0; i < MaxHpBar; i++) cout << (i < FilledHPGauge ? "■" : " ");
     cout << " ] " << Player.GetHealth() << " / " << Player.GetMaxHealth();
 
-    GoSpace(40, 10); cout << " EXP: [ ";
+    // EXP Bar
+    GoSpace(centerX, centerY + 2); cout << " EXP: [ ";
     int MaxExpBar = 20;
     int FilledExpGauge = (int)(Player.GetExperience() * MaxExpBar / Player.GetMaxExperience());
     FilledExpGauge = min(FilledExpGauge, MaxExpBar);
-
-    for (int i = 0; i < MaxExpBar; i++)
-    {
-        if (i < FilledExpGauge)
-            cout << "■";
-        else
-            cout << " ";
-    }
+    for (int i = 0; i < MaxExpBar; i++) cout << (i < FilledExpGauge ? "■" : " ");
     cout << " ] " << Player.GetExperience() << " / " << Player.GetMaxExperience();
 }
 
 void GraphicManager::DrawInventoryData(PlayerManager& Player) const
 {
-    GoSpace(2, 19); cout << "[ SYSTEM LOG ]";
+    GoSpace(2, MainBottom + 1); cout << "[ SYSTEM LOG ]";
 
-    GoSpace(78, 19); cout << "[ STATUS]";
-    //oSpace(78, 20); cout << "- LV: " << Player.GetLevel();
-    //GoSpace(78, 21); cout << "- EXP: " << Player.GetExperience() << " / " << Player.GetMaxExperience();
-    GoSpace(78, 20); cout << "- ATK: " << Player.GetStrength();
-    GoSpace(78, 21); cout << "- Dex: " << Player.GetDexterity();
-    GoSpace(78, 22); cout << "- Int: " << Player.GetIntelligence();
-    GoSpace(78, 23); cout << "- Lux: " << Player.GetLuck();
+    int statusX = SplitColumn + 2;
+    int startY = MainBottom + 1;
 
-    GoSpace(94, 19); cout << "[ Inventory ]";
-    GoSpace(94, 20); cout << "- GOLD: " << Player.GetGold() << " G";
-    for (int i =0; i < Player.GetPlayerInventory().size(); ++i)
+    GoSpace(statusX, startY); cout << "[ STATUS ]";
+    GoSpace(statusX, startY + 1); cout << "- ATK: " << Player.GetStrength();
+    GoSpace(statusX, startY + 2); cout << "- Dex: " << Player.GetDexterity();
+    GoSpace(statusX, startY + 3); cout << "- Int: " << Player.GetIntelligence();
+    GoSpace(statusX, startY + 4); cout << "- Lux: " << Player.GetLuck();
+
+    int invX = statusX + 16;
+    if (invX + 20 > RightEdge) invX = statusX; // 공간 부족 시 스탯 아래로
+
+    GoSpace(invX, startY); cout << "[ Inventory ]";
+    GoSpace(invX, startY + 1); cout << "- GOLD: " << Player.GetGold() << " G";
+    for (int i = 0; i < Player.GetPlayerInventory().size(); ++i)
     {
-        GoSpace(94, 21 + i); cout << "- " << Player.GetPlayerInventory()[i]->GetName();
+        if (startY + 2 + i < BottomEdge) {
+            GoSpace(invX, startY + 2 + i);
+            cout << "- " << Player.GetPlayerInventory()[i]->GetName();
+        }
     }
  }
 
 void GraphicManager::AddLog(const string& Log)
 {
-    GameLogs.push_back(Log);
-    if (GameLogs.size() > 7)
-        GameLogs.pop_front();
+    int maxLogLines = BottomEdge - MainBottom - 3;
+    if (maxLogLines < 1)
+        maxLogLines = 1;
 
-    for (int i = 0; i < 7; i++)
+    GameLogs.push_back(Log);
+    while (GameLogs.size() > maxLogLines)
     {
-        GoSpace(2, 21 + i);
-        cout << "                                                                          ";
+        GameLogs.pop_front();
+    }
+
+    int logStartY = MainBottom + 3;
+    int logWidth = SplitColumn - 4;
+
+    for (int i = 0; i < maxLogLines; i++)
+    {
+        GoSpace(2, logStartY + i);
+
+        for(int j = 0; j < logWidth; j++)
+            cout << " ";
+
         if (i < GameLogs.size())
         {
-            GoSpace(2, 21 + i);
+            GoSpace(2, logStartY + i);
             cout << "> " << GameLogs[i];
         }
     }
+}
+
+void GraphicManager::CommandAddLog(const string& Log)
+{
+    int targetY = MainBottom + 2;
+    int startX = 2;
+    int clearWidth = SplitColumn - 4;
+
+    GoSpace(startX, targetY);
+    for (int x = 0; x < clearWidth; x++)
+    {
+        cout << " ";
+    }
+
+    GoSpace(startX, targetY);
+    cout << "> " << Log;
 }
 
 void GraphicManager::ClearLogs()
 {
     GameLogs.clear();
 
-    for (int i = 0; i < 8; i++)
-    {
-        GoSpace(2, 20 + i);
+    int LogStartY = MainBottom + 1;
+    int LogEndY = BottomEdge - 1;
+    int ClearWidth = SplitColumn - 4;
 
-        cout << "                                                                          ";
+    for (int y = LogStartY; y <= LogEndY; y++)
+    {
+        GoSpace(2, y);
+
+        for (int x = 0; x < ClearWidth; x++)
+        {
+            cout << " ";
+        }
     }
-    GoSpace(0, 30);
+
+    GoSpace(0, BottomEdge);
+}
+
+void GraphicManager::HitMonsterShake(const string& TargetKey, int Force)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int Offsets[] = { -2 - Force, 2 + Force, -1- Force, 1 + Force, 0 };
+
+    int StartX = SplitColumn + ((RightEdge - SplitColumn) * 10 / 100);
+    int StartY = (MainBottom * 10) / 100;
+
+    for (int Offset : Offsets)
+    {
+        if (Offset != 0)
+            SetConsoleTextAttribute(hConsole, 0x0C);
+        else
+            SetConsoleTextAttribute(hConsole, 0x0F);
+
+        int LineOffset = 0;
+        for (const string& Line : AsciiAssets[TargetKey])
+        {
+            GoSpace(StartX + Offset, StartY + LineOffset++);
+            cout << "  " << Line << "  ";
+        }
+        Sleep(50);
+    }
+
+    SetConsoleTextAttribute(hConsole, 0x0F);
+}
+
+void GraphicManager::HitPlayerShake(const string& TargetKey, int Force)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int Offsets[] = { -2 - Force, 2 + Force, -1- Force, 1 + Force, 0 };
+
+    int StartX = (SplitColumn * 10) / 100;
+    int StartY = (MainBottom * 25) / 100 + 1;
+
+    for (int Offset : Offsets)
+    {
+        if (Offset != 0)
+            SetConsoleTextAttribute(hConsole, 0x0C);
+        else
+            SetConsoleTextAttribute(hConsole, 0x0F);
+
+        int LineOffset = 0;
+        for (const string& Line : AsciiAssets[TargetKey])
+        {
+            GoSpace(StartX + Offset, StartY + LineOffset++);
+            cout << "  " << Line << "  ";
+        }
+        Sleep(50);
+    }
+
+    SetConsoleTextAttribute(hConsole, 0x0F);
 }
 
 void GraphicManager::HitShake(const string& TargetKey, int StartX, int StartY, int Force)
@@ -538,8 +658,8 @@ void GraphicManager::DrawAsciiCombatArt(const string& Player,const string& Monst
         int LineOffset = 0;
         for (const string& Line : AsciiAssets["PLAYER"])
         {
-            int StartY = 5;
-            int StartX = 12;
+            int StartX = (SplitColumn * 10) / 100;
+            int StartY = (MainBottom * 20) / 100;
             GoSpace(StartX, StartY + LineOffset++);
             cout << Line;
         }
@@ -550,12 +670,71 @@ void GraphicManager::DrawAsciiCombatArt(const string& Player,const string& Monst
         int LineOffset = 0;
         for (const string& Line : AsciiAssets[Monster])
         {
-            int StartY = 1;
-            int StartX = 74;
+            int StartX = SplitColumn + ((RightEdge - SplitColumn) * 10 / 100);
+            int StartY = (MainBottom * 10) / 100;
             GoSpace(StartX, StartY + LineOffset++);
             cout << Line;
         }
     }
+}
+
+void GraphicManager::DrawAsciiCombatArt(PlayerManager& Player, BaseMonster& Monster)
+{
+    string PlayerKey = "PLAYER";
+    string MonsterKey = Monster.GetNickname();
+
+    if (AsciiAssets.find(PlayerKey) == AsciiAssets.end() || AsciiAssets.find(MonsterKey) == AsciiAssets.end())
+        return;
+
+    int MonsterStartX = 5;
+    int MonsterStartY = 2;
+
+    GoSpace(MonsterStartX, MonsterStartY);     cout << "[ ENEMY STATUS ]";
+    GoSpace(MonsterStartX, MonsterStartY + 1); cout << "NAME : " << MonsterKey;
+
+    int MonsterHpBarLen = 20;
+    int MMaxHp = Monster.GetMaxHealth();
+    int MonsterHpLen = (MMaxHp <= 0) ? 0 : (Monster.GetHealth() * MonsterHpBarLen / MMaxHp);
+
+    GoSpace(MonsterStartX, MonsterStartY + 2); cout << "HP   : [";
+    for(int i=0; i<MonsterHpBarLen; i++)
+        cout << (i < MonsterHpLen ? "■" : " ");
+    cout << "] " << Monster.GetHealth() << " / " << MMaxHp;
+
+
+    int MArtLine = 0;
+    int MArtX = SplitColumn + ((RightEdge - SplitColumn) * 10 / 100);
+    int MArtY = (MainBottom * 10) / 100;
+    for (const string& Line : AsciiAssets[MonsterKey]) {
+        GoSpace(MArtX, MArtY + MArtLine++);
+        cout << Line;
+    }
+
+    int PlayerStartX = SplitColumn;
+    int PlayerStartY = MainBottom - 6;
+
+    GoSpace(PlayerStartX, PlayerStartY);     cout << "[ PLAYER STATUS ]";
+    GoSpace(PlayerStartX, PlayerStartY + 1); cout << "NAME : " << Player.GetNickname();
+    GoSpace(PlayerStartX, PlayerStartY + 2); cout << "Lv." << Player.GetLevel() << "   HP: " << Player.GetHealth() << " / " << Player.GetMaxHealth();
+
+    int PlayerHpBarLen = 20;
+    int PMaxHp = Player.GetMaxHealth();
+    int PlayerHpLen = (PMaxHp <= 0) ? 0 : (Player.GetHealth() * PlayerHpBarLen / PMaxHp);
+
+    GoSpace(PlayerStartX, PlayerStartY + 3); cout << "HP   : [";
+    for(int i=0; i<PlayerHpBarLen; i++)
+        cout << (i < PlayerHpLen ? "■" : " ");
+    cout << "] " << Player.GetHealth() << " / " << PMaxHp;
+
+    int PArtLine = 0;
+    int PArtX = (SplitColumn * 10) / 100;
+    int PArtY = (MainBottom * 25) / 100 + 1;
+    for (const string& Line : AsciiAssets[PlayerKey]) {
+        GoSpace(PArtX, PArtY + PArtLine++);
+        cout << Line;
+    }
+
+    DrawInventoryData(Player);
 }
 
 void GraphicManager::DrawAsciiArt(const string& Name, const int& X,const int& Y)
