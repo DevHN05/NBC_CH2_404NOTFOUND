@@ -9,12 +9,8 @@ void LoggerSystem::PrintMainArea(const vector<string>& Lines)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
 
-    for (int i = 1; i < 17; i++)
-    {
-        Gm.GoSpace(2, i);
-        cout << string(106, ' ');
-    }
-
+    Gm.DrawCombatLayOut();
+    
     for (int i = 0; i < (int)Lines.size() && i < 15; ++i)
     {
         Gm.GoSpace(2, 2 + i);
