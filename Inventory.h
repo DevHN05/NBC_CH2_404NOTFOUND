@@ -12,13 +12,13 @@ class PlayerManager;
 class Inventory
 {
 private:
-	vector<shared_ptr<ItemManager>> Items;
+	vector<unique_ptr<ItemManager>> Items;
 
 public:
-    vector<shared_ptr<ItemManager>> GetInventoryItems();
+    const vector<unique_ptr<ItemManager>>& GetInventoryItems() const;
 
-	void AddItem(shared_ptr<ItemManager> Item);
-	shared_ptr<ItemManager> FindItem(const string& ItemName);
+	void AddItem(unique_ptr<ItemManager> Item);
+    ItemManager* FindItem(const string& ItemName) const;
 	void UseItem(const string& ItemName, PlayerManager& Character);
 	bool RemoveItem(const string& ItemName);
 };

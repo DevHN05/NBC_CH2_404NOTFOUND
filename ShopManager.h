@@ -3,7 +3,6 @@
 #pragma once
 #include "ItemManager.h"
 #include <vector>
-#include <algorithm>
 #include <random>
 
 // =====================================================
@@ -28,8 +27,8 @@ class ShopManager
 private:
     ShopManager();
 
-    vector<shared_ptr<ItemManager>> ShopItems;
-    vector<shared_ptr<ItemManager>> CurrentDisplayItems;
+    vector<unique_ptr<ItemManager>> ShopItems;
+    vector<ItemManager*> CurrentDisplayItems;
 
 public:
     ShopManager(const ShopManager&) = delete;
