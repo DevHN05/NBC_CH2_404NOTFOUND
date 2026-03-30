@@ -1,5 +1,6 @@
 ﻿#include <random>
 #include "DiceSystem.h"
+#include "GraphicManager.h"
 
 using namespace std;
 
@@ -43,6 +44,9 @@ void DiceSystem::RollDice(const int Size, const int Target, const int Bonus)
     SetDiceHead(FinalResult);
 
     Decise(Target, Bonus, FinalResult);
+
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawDiceRoll(Head, Size);
 }
 
 // target = 판정값, bonus = 보너스 판정값, result = 주사위 결과

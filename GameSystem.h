@@ -5,7 +5,19 @@ using namespace std;
 
 class GameSystem
 {
+private:
+    GameSystem() {};
+
 public:
+    GameSystem(const GameSystem&) = delete;
+    void operator=(const GameSystem&) = delete;
+
+    static GameSystem& GetInstance()
+    {
+        static GameSystem Instance;
+        return Instance;
+    }
+
     int GetChapter();
     int GetStage();
 
