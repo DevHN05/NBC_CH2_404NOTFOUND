@@ -10,7 +10,7 @@ void LoggerSystem::PrintMainArea(const vector<string>& Lines)
     GraphicManager& Gm = GraphicManager::GetInstance();
 
     Gm.DrawCombatLayOut();
-    
+
     for (int i = 0; i < (int)Lines.size() && i < 15; ++i)
     {
         Gm.GoSpace(2, 2 + i);

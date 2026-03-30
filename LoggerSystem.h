@@ -141,8 +141,8 @@ public:
     void ShopAccessDeniedSuccess();
     void ShopAccessDeniedFail();
 
-    // 튜토리얼 관련
-    void ShowStory();
+    //튜토리얼 관련
+    void ShowStory(); //배경 스토리 출력
 
     //요약
     void PrintSummary(); //처치 몬스터 수, 획득 골드, 획득 경험치
