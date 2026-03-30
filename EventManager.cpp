@@ -115,7 +115,7 @@ void EventManager::TutorialEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
-    //Logger.ShowStory();
+    Logger.ShowStory();
     Gm.GoSpace(30, 8); cout << "404 NOT FOUND, 알 수 없는 접속자입니다.";
     Gm.GoSpace(30, 9); cout << "...특수 디버깅 툴 확인. 비상모드 실행. 접속자 권한 확인.";
     Gm.GoSpace(30, 11); cout << "이름을 입력해 접속 권한을 확보해주세요 :";
