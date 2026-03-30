@@ -25,8 +25,12 @@ EventManager::EventManager(PlayerManager& InPlayer) : Player(InPlayer), CurrentE
 
 void EventManager::WaitEnter()
 {
+    // 엔터 두 번 눌러야 하는 현상 수정
     cin.clear();
-    cin.ignore(LLONG_MAX, '\n');
+    if (cin.rdbuf()->in_avail() > 0)
+    {
+        cin.ignore(LLONG_MAX, '\n');
+    }
     cin.get();
 }
 
@@ -90,7 +94,7 @@ void EventManager::TriggerNextEvent()
         case EV_ChestNormal:       ChestNormal(); break;             // 보상 #1 평범한 보물상자
         case EV_ChestConstLock:    ChestConstLock(); break;          // 보상 #2 const 보물상자
         case EV_ChestAndLogic:     ChestAndLogic(); break;           // 보상 #3 && 논리상자
-        case EV_ChestPointerSearch: ChestPointerSearch(); break;      // 보상 #4 *ptr 보물찾기
+        case EV_ChestPointerSearch: ChestPointerSearch(); break;     // 보상 #4 *ptr 보물찾기
         case EV_ChestBugActorFix:  ChestBugActorFix(); break;        // 보상 #5 버그 액터 수리
 
         // [21~25] 상점 방문 이벤트
@@ -107,18 +111,16 @@ void EventManager::TriggerNextEvent()
 }
 
 
-void EventManager::TutorialEvent()
-{
+void EventManager::TutorialEvent()                                   // 호출 전 Logger.ShowStory();
+{                                                                    // 이후 이름 입력 후 호출
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
-    Logger.ShowStory();
+    Logger.RunTutorial();
+    Logger.TutorialStatDice();
 
     random_device rd;
     mt19937 DiceVal(rd());
     uniform_int_distribution<int> RollStat(1, 20);
-
-    Gm.CommandAddLog("[ 캐릭터 초기 스탯 굴리기 ]");
-    Gm.CommandAddLog("Enter를 누를 때마다 스탯이 하나씩 결정됩니다.");
 
     WaitEnter();
     int str = RollStat(DiceVal);
