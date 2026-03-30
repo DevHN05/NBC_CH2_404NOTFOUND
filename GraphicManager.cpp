@@ -761,7 +761,7 @@ void GraphicManager::SetRageMode(bool IsRage)
     }
 }
 
-string GraphicManager::ShowTitle() const
+void GraphicManager::ShowTitle() const
 {
     system("cls");
     int StartX = 30, StartY = 12;
@@ -817,29 +817,9 @@ string GraphicManager::ShowTitle() const
 
     GoSpace(41, StartY + 7); cout << "[ PROJECT : 404 NOT FOUND ]";
 
-    GoSpace(38, StartY + 9); cout << "ENTER YOUR NICKNAME: ";
-
-    string InputName;
-    while (true)
-    {
-        GoSpace(59, StartY + 9);
-
-        getline(cin, InputName);
-
-        if (InputName.empty())
-        {
-            continue;
-        }
-
-        break;
-    }
-
-    GoSpace(42, StartY + 13); cout << "[Press Enter to Start]";
+    GoSpace(43, StartY + 9); cout << "[Press Enter to Start]";
 
     cin.ignore(100, '\n');
-    //cin.get();
-
-    return InputName;
 }
 
 void GraphicManager::DrawAsciiCombatArt(const string& Player,const string& Monster)

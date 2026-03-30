@@ -36,12 +36,11 @@ void GameSystem::StartGame()
     GraphicManager& Gm = GraphicManager::GetInstance();
     CombatManager& Cm = CombatManager::GetInstance();
 
-    //Gm.SetConsoleSize(160, 90);
     Gm.UpdateWindowSize();
 
-    string Name = Gm.ShowTitle();
+    Gm.ShowTitle();
 
-    PlayerManager Player(Name);
+    PlayerManager Player("Player");
     Player.SetLevel(1);
     Player.SetHealth(400);
     Player.SetMaxHealth(400);
