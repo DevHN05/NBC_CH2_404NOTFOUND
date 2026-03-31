@@ -512,6 +512,9 @@ void GraphicManager::DrawGameOver(PlayerManager& Player)
 void GraphicManager::DrawDiceRoll(int RollHead, int MaxNumber)
 {
     //애니메이션 연출 (주사위가 막 굴러가는 느낌)
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
+    Ls.hideCursor();
+
     for (int i = 0; i < 15; i++)
     {
         int tempRoll = (rand() % MaxNumber) + 1;
@@ -787,6 +790,9 @@ void GraphicManager::ShowTitle() const
 {
     system("cls");
     Sleep(100);
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
+    Ls.hideCursor();
+
     for (int i = 0; i <= RightEdge; i++)
     {
         GoSpace(i, 0); cout << "_";

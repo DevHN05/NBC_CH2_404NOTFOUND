@@ -14,6 +14,7 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+    Ls.hideCursor();
 
     Gm.ClearLogs();
     Ls.LogMonsterAppear(Monster.GetNickname());
@@ -86,12 +87,15 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
         Gm.DrawGameOver(Player);
     }
     Sleep(1000);
+    Ls.showCursor();
 }
 
 void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+
+    Ls.hideCursor();
 
     Gm.ClearLogs();
     Gm.BossAppearance(Boss.GetNickname());
@@ -211,6 +215,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         Gm.DrawGameOver(Player);
     }
     Sleep(1000);
+    Ls.showCursor();
 }
 
 void CombatManager::UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster)
