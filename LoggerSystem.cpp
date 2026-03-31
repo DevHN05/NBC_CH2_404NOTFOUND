@@ -3,6 +3,23 @@
 #include <thread>
 #include "GraphicManager.h"
 #include "EventManager.h"
+#include <windows.h>
+
+void hideCursor() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(hConsole, &cursorInfo);
+    cursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(hConsole, &cursorInfo);
+}
+
+void showCursor() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(hConsole, &cursorInfo);
+    cursorInfo.bVisible = TRUE;
+    SetConsoleCursorInfo(hConsole, &cursorInfo);
+}
 
 //상단 출력 헬퍼
 void LoggerSystem::PrintMainArea(const vector<string>& Lines)
@@ -1085,6 +1102,8 @@ void LoggerSystem::ShowStory()
     const int StartX = 25;
     int TotalLines = (int)StoryLines.size();
 
+    hideCursor(); //입력 커서 숨기기
+
     for (int scroll = 0; scroll < ScreenHeight + TotalLines; scroll++)
     {
         for (int row = 0; row < ScreenHeight; row++)
@@ -1102,6 +1121,8 @@ void LoggerSystem::ShowStory()
         }
         Sleep(250);
     }
+
+    showCursor(); //입력 커서 보이기
 }
 //튜토리얼 출력 헬퍼
 static void TypeText(GraphicManager& Gm, const string& text, int x, int y)
@@ -1243,12 +1264,13 @@ void LoggerSystem::TutorialStatDice()
     BlinkText(Gm, hConsole, "비상 상황", 3, 2);
     BlinkText(Gm, hConsole, "긴급 랜덤 구성 프로토콜 가동", 3, 3);
     TypeText(Gm, "20면체 주사위로 당신을 긴급 구성합니다", 3, 4);
-    TypeText(Gm, "지금부터 Enter 키를 누를 때마다 스탯이 무작위로 정해집니    다.", 3, 5);
+    TypeText(Gm, "지금부터 Enter 키를 누를 때마다 스탯이 무작위로 정해집니다.", 3, 5);
 
 }
 
 void LoggerSystem::RunTutorial()
 {
+    hideCursor();
 
     Tutorial1();
     EventManager::WaitEnter();
@@ -1267,6 +1289,8 @@ void LoggerSystem::RunTutorial()
 
     Tutorial6();
     EventManager::WaitEnter();
+
+    showCursor();
 }
 
 //-----------------------------요약----------------------------------
