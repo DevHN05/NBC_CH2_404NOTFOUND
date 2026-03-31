@@ -25,5 +25,6 @@ public:
     virtual unique_ptr<BaseItem> Clone() const = 0;
 
     virtual string GetPotionTypeStr() const;
+    virtual bool IsUsed() const;
 };
 

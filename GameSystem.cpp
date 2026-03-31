@@ -67,6 +67,7 @@ void GameSystem::StartGame()
     while (true)
     {
         Gm.DrawLayout();
+        Gm.ClearLogs();
 
         Gm.DrawLobbyStatus(Player);
         Gm.DrawInventoryData(Player);
