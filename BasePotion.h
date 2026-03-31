@@ -33,6 +33,7 @@ public:
     string GetPotionTypeStr() const override;
     void Use(PlayerManager& Character) override;
     void ShowInfo() const override;
+    bool IsUsed() const override;
 
     unique_ptr<BaseItem> Clone() const override; //복사 생성
 };

@@ -60,13 +60,14 @@ void GameSystem::StartGame()
 
     EventManager Em(Player);
 
-    cout << "Is your nickname " << Player.GetNickname() << "?\n";
+    //cout << "Is your nickname " << Player.GetNickname() << "?\n";
 
     Em.TutorialEvent();
 
     while (true)
     {
         Gm.DrawLayout();
+        Gm.ClearLogs();
 
         Gm.DrawLobbyStatus(Player);
         Gm.DrawInventoryData(Player);

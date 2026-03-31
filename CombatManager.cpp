@@ -8,6 +8,7 @@
 #include "DiceSystem.h"
 #include "ShopManager.h"
 #include "BaseItem.h"
+#include "Inventory.h"
 #include <random>
 
 void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
@@ -268,58 +269,92 @@ void CombatManager::UpdateEventUI(PlayerManager& Player, BaseMonster& Monster)
 void CombatManager::UpdateBagUI(PlayerManager& Player)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    LoggerSystem& Ls = LoggerSystem::GetInstance();
-
-    Gm.ClearLogs();
-    Gm.DrawCombatLayOut();
-
-    //여기서 Print로 인벤에 있는 아이템 목록 보여줘야함
     int LogStartX = 32;
     int LogStartY = 4;
 
-    Gm.GoSpace(LogStartX, LogStartY); cout << " [ Inventory ] ";
-    for (int i =1; i <= Player.GetPlayerInventory().size(); ++i)
+    while (true)
     {
-        Gm.GoSpace(LogStartX, LogStartY+2*i);
-        cout << to_string(i+1) + Player.GetPlayerInventory()[i]->GetName() + "->";
-    }
+        Gm.ClearLogs();
+        Gm.DrawCombatLayOut();
+        Gm.GoSpace(LogStartX, LogStartY);
+        cout << " [ Inventory ] ";
 
-    if (Player.GetPlayerInventory().size() == 0)
-    {
-        Gm.GoSpace(LogStartX, LogStartY+2);
-        cout << "소유한 아이템이 없습니다.";
-    }
+        const auto& FullInventory = Player.GetPlayerInventory().GetInventoryItems();
 
-    Gm.GoSpace(LogStartX, LogStartY + (Player.GetPlayerInventory().size() == 0 ? 4 :2 * Player.GetPlayerInventory().size()));
-    cout << "0. 나가기";
+        struct ItemGroup { int Count = 0; BaseItem* FirstItem; };
+        map<string, ItemGroup> ItemMap;
+        vector<string> DisplayOrder;
 
-    Gm.DrawAsciiArt("INVENTORY" , 93, LogStartY);
-
-    while(true)
-    {
-        Gm.CommandAddLog("번호를 눌러 아이템을 사용하세요 >> ");
-
-        string input;
-        getline(cin, input);
-        int Select = stoi(input);
-
-        if (Select == 0)
+        for (const auto& Item : FullInventory)
         {
-            Gm.AddLog("인벤토리 창을 떠났습니다.");
-            Sleep(100);
-            break;
+            if (!Item)
+                continue;
+            string name = Item->GetName();
+            if (ItemMap.find(name) == ItemMap.end())
+            {
+                ItemMap[name] = { 1, Item.get() };
+                DisplayOrder.push_back(name);
+            }
+            else
+            {
+                ItemMap[name].Count++;
+            }
+        }
+
+        int InvY = LogStartY + 2;
+        if (DisplayOrder.empty())
+        {
+            Gm.GoSpace(LogStartX, InvY);
+            cout << "소유한 아이템이 없습니다.";
+            InvY += 2;
         }
         else
         {
-            if (Select > Player.GetPlayerInventory().size())
-                Gm.AddLog("해당 목록에는 아이템이 없습니다.");
-            else
+            for (int i = 0; i < DisplayOrder.size(); ++i)
             {
-                Gm.AddLog(Player.GetPlayerInventory()[Select-1]->GetName() + "를 사용하셨습니다.");
-                Player.GetPlayerInventory()[Select]->Use(Player);
+                string Name = DisplayOrder[i];
+                Gm.GoSpace(LogStartX, InvY);
+                string DisplayText = to_string(i + 1) + ". " + Name;
+                if (ItemMap[Name].Count > 1) DisplayText += " (x" + to_string(ItemMap[Name].Count) + ")";
+                cout << DisplayText;
+                InvY += 2;
             }
+        }
+
+        Gm.GoSpace(LogStartX, InvY);
+        cout << "0. 나가기";
+        Gm.DrawAsciiArt("INVENTORY", 93, LogStartY);
+
+        Gm.CommandAddLog("번호를 눌러 아이템을 사용하세요 >> ");
+        string Input;
+        getline(cin, Input);
+
+        int Select;
+        try { if (Input.empty()) continue; Select = stoi(Input); }
+        catch (...) { continue; }
+
+        if (Select == 0) break;
+
+        if (Select < 1 || Select > DisplayOrder.size())
+        {
+            Gm.AddLog("해당 번호에는 아이템이 없습니다.");
+            Sleep(500);
+        }
+        else
+        {
+            string SelectedName = DisplayOrder[Select - 1];
+
+            BaseItem* TargetItem = ItemMap[SelectedName].FirstItem;
+
+            // 2. 아이템 사용 (스탯 반영 등)
+            TargetItem->Use(Player);
+            Gm.AddLog(SelectedName + "를 사용하셨습니다.");
+
+            Player.GetPlayerInventory().RemoveItem(SelectedName);
+
             Gm.DrawInventoryData(Player);
-            Sleep(100);
+            Sleep(500);
+            continue;
         }
     }
 }
@@ -331,12 +366,15 @@ void CombatManager::Reward(PlayerManager& Player, BaseMonster& Monster)
     int CurrentExp = Player.GetExperience() + Monster.GetExperienceReward();
     int Gold = Monster.GetGoldReward();
 
-    if (Player.GetMaxExperience() < CurrentExp)
+    if (Player.GetMaxExperience() <= CurrentExp)
     {
-        //Player.SetMaxExperience(CurrentExp);
-        Player.SetExperience(CurrentExp - Player.GetMaxExperience());
-        Player.SetLevel(Player.GetLevel() + 1);
-        Ls.LogLevelUp(Player.GetLevel());
+        while (Player.GetMaxExperience() <= CurrentExp)
+        {
+            CurrentExp -= Player.GetMaxExperience();
+            Player.SetExperience(CurrentExp);
+            Player.LevelUp();
+            Sleep(1000);
+        }
     }
     else
     {

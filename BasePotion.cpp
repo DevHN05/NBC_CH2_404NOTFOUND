@@ -1,6 +1,8 @@
 #include "BasePotion.h"
 #include <sstream>
 #include <iomanip>
+#include "GraphicManager.h"
+#include "GameSystem.h"
 
 map<string, int> BasePotion::PotionCounts;
 
@@ -44,9 +46,11 @@ string BasePotion::GetPotionTypeStr() const
 
 void BasePotion::Use(PlayerManager& User)
 {
+    GraphicManager& Gm = GraphicManager::GetInstance();
+
     if (PotionCounts[GetName()] <= 0)
     {
-        cout << "You have no more " << GetName() << " left!" << '\n';
+        Gm.AddLog("You have no more " + GetName() + " left!");
         return;
     }
 
@@ -57,10 +61,10 @@ void BasePotion::Use(PlayerManager& User)
             int NewHealth = User.GetHealth() + Recovery;
             User.SetHealth(min(NewHealth, User.GetMaxHealth()));
 
-            cout << "You used " << GetName()
-                 << ". Health recovered by " << Recovery
-                 << ". Current health: " << User.GetHealth()
-                 << "/" << User.GetMaxHealth() << "." << '\n';
+            Gm.AddLog("You used " + GetName()
+                 + ". Health recovered by " + to_string(Recovery)
+                 + ". Current health: " + to_string(User.GetHealth())
+                 + "/" + to_string(User.GetMaxHealth()) + ".");
             break;
         }
 
@@ -69,16 +73,16 @@ void BasePotion::Use(PlayerManager& User)
             int NewStrength = User.GetStrength() + Recovery;
             User.SetStrength(NewStrength);
 
-            cout << "You used " << GetName()
-                 << ". strength up " << Recovery
-                 << "." << '\n';
+            Gm.AddLog("You used " + GetName()
+                 + ". strength up " + to_string(Recovery)
+                 + ".");
             break;
         }
     }
 
     --PotionCounts[GetName()];
     IsCountRegistered = false;
-    cout << "Remaining count of " << GetName() << ": " << PotionCounts[GetName()] << '\n';
+    Gm.AddLog("Remaining count of " + GetName() + ": " + to_string(PotionCounts[GetName()]));
 }
 
 void BasePotion::ShowInfo() const
@@ -87,6 +91,14 @@ void BasePotion::ShowInfo() const
     cout << "Price: " << GetPrice() << " gold" << '\n';
     cout << "Recovery: " << Recovery << '\n';
     cout << "Count: " << PotionCounts[GetName()] << '\n';
+}
+
+bool BasePotion::IsUsed() const
+{
+    if (PotionCounts[GetName()] > 0)
+        return true;
+    else
+        return false;
 }
 
 unique_ptr<BaseItem> BasePotion::Clone() const

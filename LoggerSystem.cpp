@@ -1005,13 +1005,6 @@ void LoggerSystem::LogItemNotFound(const string& ItemName)
 //상점 메뉴 출력 함수
 void LoggerSystem::LogPrintShopMenu()
 {
-    /*GraphicManager& Gm = GraphicManager::GetInstance();
-    Gm.ClearLogs();
-    Gm.AddLog("1. 아이템 구매");
-    Gm.AddLog("2. 아이템 판매");
-    Gm.AddLog("3. 상점 나가기");
-    Gm.AddLog("선택 >> ");*/
-
     GraphicManager& Gm = GraphicManager::GetInstance();
     Gm.DrawLayout();
     //Gm.ClearLogs();
@@ -1143,7 +1136,7 @@ static void BlinkText(GraphicManager& Gm, HANDLE hConsole, const string& text, i
 {
     for (int i = 0; i < 3; i++)
     {
-        SetConsoleTextAttribute(hConsole, 0x4F);
+        SetConsoleTextAttribute(hConsole, 0x1F);
         Gm.GoSpace(x, y);
         cout << text;
         Sleep(180);
@@ -1153,7 +1146,7 @@ static void BlinkText(GraphicManager& Gm, HANDLE hConsole, const string& text, i
         cout << text;
         Sleep(180);
     }
-    SetConsoleTextAttribute(hConsole, 0x4F);
+    SetConsoleTextAttribute(hConsole, 0x1F);
     Gm.GoSpace(x, y);
     cout << text;
 }
@@ -1166,8 +1159,7 @@ void LoggerSystem::Tutorial1()
     TypeText(Gm, "접속 권한 확인 완료. 특수 디버깅 툴을 처음 사용하는 요원으로 확인됩니다.", 3, 2);
     TypeText(Gm, "특수 디버깅 툴을 사용하는 요원을 위한 교육 문구가 출력됩니다.", 3, 3);
     TypeText(Gm, "출력중인 교육은 S 키로 스킵할 수 있습니다.", 3, 5);
-
-    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
 }
 
 void LoggerSystem::Tutorial2()
@@ -1179,7 +1171,7 @@ void LoggerSystem::Tutorial2()
     TypeText(Gm, "특수 디버깅 툴은 게임 세계에서 직접 원하는 객체에 접촉하여 코드를 수정할 수 있는 능동적인 툴입니다.", 3, 2);
     TypeText(Gm, "그렇기에, 요원은 필연적으로 게임의 룰을 따르면서 디버깅해야 합니다. 게임의 룰을 설명드리겠습니다.", 3, 3);
     Gm.ClearLogs();
-    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
 }
 
 void LoggerSystem::Tutorial3()
@@ -1195,7 +1187,7 @@ void LoggerSystem::Tutorial3()
     TypeText(Gm, "주사위를 굴릴 땐, 스탯 5포인트당 +1의 보정치가 붙습니다.", 3, 8);
     TypeText(Gm, "STR이 15라면? 힘 주사위 값에 +3이 추가되는 식입니다.", 3, 9);
     Gm.ClearLogs();
-    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
 }
 
 void LoggerSystem::Tutorial4()
@@ -1208,8 +1200,7 @@ void LoggerSystem::Tutorial4()
     TypeText(Gm, "1. 튜토리얼을 이해해봅니다. (판정값 10, 지식 보정 +2)", 3, 4);
     TypeText(Gm, "2. 몸이 나쁘면 머리가 고생하는 거죠. 몸으로 부딪힙니다. (판정값 10, 힘 보정 +2)", 3, 5);
     TypeText(Gm, "전자의 경우 지식이 높은 사람이, 후자의 경우 힘이 높은 사람이 유리하겠죠.", 3, 7);
-
-    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
 }
 
 void LoggerSystem::Tutorial5()
@@ -1226,8 +1217,7 @@ void LoggerSystem::Tutorial5()
     TypeText(Gm, "바로, 대실패와 대성공 시스템입니다.", 3, 8);
     TypeText(Gm, "대실패: 주사위 눈이 1이 나오면 보정치와 상관없이 무조건 실패합니다.", 3, 10);
     TypeText(Gm, "대성공: 주사위 눈이 20이 나오면 무조건 성공합니다.", 3, 11);
-
-    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... (스킵: S) ]");
 }
 
 void LoggerSystem::Tutorial6()
@@ -1241,37 +1231,81 @@ void LoggerSystem::Tutorial6()
 
     TypeText(Gm, "튜토리얼이 끝났습니다. 게임에 접속합니다.", 3, 2);
 
-    SetConsoleTextAttribute(hConsole, 0x4F); // 빨간 배경 + 흰 글자
+    SetConsoleTextAttribute(hConsole, 0x1F); // 파란 배경 + 흰 글자
 
-    TypeText(Gm, "[캐릭터 생성창으로 이동합니다... ", 3, 4);
-    BlinkText(Gm, hConsole, " 실패. 접근 권한 없음.]", 35, 4);   // X=3 + 표시너비(32) = 35
+    TypeText(Gm, "[ 캐릭터 생성창으로 이동합니다... ", 3, 4);
+    BlinkText(Gm, hConsole, " 실패. 접근 권한 없음. ]", 35, 4);   // X=3 + 표시너비(32) = 35
 
-    TypeText(Gm, "[재시도... ", 3, 5);
-    BlinkText(Gm, hConsole, " 실패.]", 13, 5);                 // X=3 + 표시너비(10)  = 13
+    TypeText(Gm, "[ 재시도... ", 3, 5);
+    BlinkText(Gm, hConsole, " 실패. ]", 13, 5);                 // X=3 + 표시너비(10)  = 13
 
-    TypeText(Gm, "[캐릭터 생성 절차에 접근할 수 없습니다.] ERROR CODE:「404 NOT FOUND 」", 3, 6);
-    TypeText(Gm, "[비상 상황에 대비해 랜덤 구성 프로토콜이 시작됩니다.]", 3, 7);
+    TypeText(Gm, "[ 캐릭터 생성 절차에 접근할 수 없습니다.] ERROR CODE:「404 NOT FOUND 」", 3, 6);
+    TypeText(Gm, "[ 비상 상황에 대비해 랜덤 구성 프로토콜이 시작됩니다. ]", 3, 7);
 
+    TypeText(Gm, "잔여 시간 : 3", 3, 9);
+    Sleep(1000);
+    TypeText(Gm, "잔여 시간 : 2", 3, 9);
+    Sleep(1000);
+    TypeText(Gm, "잔여 시간 : 1", 3, 9);
+    Sleep(1000);
 
-    // 3 2 1 카운트 추가 예정
+    SetConsoleTextAttribute(hConsole, 0x0F);
+    system("cls");
+    Sleep(500);
 
-    //SetConsoleTextAttribute(hConsole, 0x0F);
-    //Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
-    //SetConsoleTextAttribute(hConsole, 0x4F);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+    int width = csbi.dwSize.X;
+
+    auto DrawHackScreen = [&]() { //해킹화면 임시 구현한 람다 함수
+        const string chars = "01#@$%&*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        for (int y = 0; y < Gm.GetCurrentHeight(); ++y) {
+            COORD pos = {0, static_cast<SHORT>(y)};
+            SetConsoleCursorPosition(hConsole, pos);
+
+            int len = rand() % width + 1;
+
+            for (int x = 0; x < len; ++x) {
+                cout << chars[rand() % chars.size()];
+            }
+        }
+    };
+
+    SetConsoleTextAttribute(hConsole, 0x1F);
+    system("cls");
+
+    int DrawHackScreenCnt = 15;
+    while (DrawHackScreenCnt)
+    {
+        DrawHackScreen();
+        Sleep(100);
+        --DrawHackScreenCnt;
+    }
+
+    SetConsoleTextAttribute(hConsole, 0x1F);
+    system("cls");
+    Sleep(700);
+
 }
 
 void LoggerSystem::TutorialStatDice()
 {
+    hideCursor();
     GraphicManager& Gm = GraphicManager::GetInstance();
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     Gm.ClearLogs();
-    Gm.DrawLayout();
-    BlinkText(Gm, hConsole, "비상 상황", 3, 2);
-    BlinkText(Gm, hConsole, "긴급 랜덤 구성 프로토콜 가동", 3, 3);
-    TypeText(Gm, "20면체 주사위로 당신을 긴급 구성합니다", 3, 4);
-    TypeText(Gm, "지금부터 Enter 키를 누를 때마다 스탯이 무작위로 정해집니다.", 3, 5);
 
+    SetConsoleTextAttribute(hConsole, 0x1F);
+    Gm.DrawLayout();
+    Sleep(1000);
+    BlinkText(Gm, hConsole, "[ 비상 상황 ]", 3, 2);
+    BlinkText(Gm, hConsole, ">> 긴급 랜덤 구성 프로토콜 가동", 3, 3);
+    TypeText(Gm, "20면체 주사위로 당신을 긴급 구성합니다.", 3, 5);
+    TypeText(Gm, "지금부터 Enter 키를 누를 때마다 스탯이 무작위로 정해집니다.", 3, 6);
+
+    showCursor();
 }
 
 bool LoggerSystem::WaitEnterOrSkip()
