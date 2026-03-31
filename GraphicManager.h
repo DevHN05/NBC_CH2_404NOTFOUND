@@ -75,7 +75,7 @@ public:
     void DrawDiceRoll(int RollHead, int MaxNumber);
     void DrawCustomDice(int Number, int MaxNumber);
 
-    void ShowTitle() const;
+    void ShowTitle();
 
     void DrawAsciiCombatArt(const string& Player,const string& Monster);
     void DrawAsciiCombatArt(PlayerManager& Player, BaseMonster& Monster);
