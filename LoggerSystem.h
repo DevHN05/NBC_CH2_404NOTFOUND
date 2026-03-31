@@ -156,6 +156,7 @@ public:
     void Tutorial6();
     void TutorialStatDice();
 
+    bool WaitEnterOrSkip();
 
     //요약
     void PrintSummary(); //처치 몬스터 수, 획득 골드, 획득 경험치
