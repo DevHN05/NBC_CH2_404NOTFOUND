@@ -32,6 +32,7 @@ public:
     void UpdateBattleUI(PlayerManager& Player, BaseMonster& Monster);
     void UpdateStoreUI(PlayerManager& Player);
     void UpdateEventUI(PlayerManager& Player, BaseMonster& Monster);
+    void UpdateBagUI(PlayerManager& Player);
 
     void Reward(PlayerManager& Player, BaseMonster& Monster);
 };

@@ -287,6 +287,28 @@ void GraphicManager::InitializeAssets()
         " ╚════════════════════════════════╝ ", // 14. 카운터 하단 마감
         "   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ", // 15. 바닥 그림자/질감 (15줄)
     };
+    AsciiAssets["INVENTORY"] =
+    {
+        "           .---.               ",
+        "          /_____\\              ",
+        "      ___|`^--^` |___          ",
+        "     |   |---|---|   |         ",
+        "     |   |---|---|   |         ",
+        "  .--|   |   |   |   |--.      ",
+        " /   |   |   |   |   |   \\     ",
+        "|    /---------------\\    |    ",
+        "|   /   ___________   \\   |    ",
+        "|  |   /           \\   |  |    ",
+        "|  |  |   [|||||]   |  |  |    ",
+        "'__|  |             |  |__'    ",
+        "   |  |  .-------.  |  |       ",
+        "   |  |  |  Bag  |  |  |       ",
+        "   |  |  '-------'  |  |       ",
+        "   |  |_____________|  |       ",
+        "   |                   |       ",
+        "   \\   /^^^^^^^^^^^\\   /       ",
+        "    \\_________________/        "
+    };
     //Logo
     AsciiAssets["YOUDIED"] =
     {
@@ -432,7 +454,7 @@ void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
 
 void GraphicManager::DrawInventoryData(PlayerManager& Player) const
 {
-    GoSpace(2, MainBottom + 1); cout << "[ SYSTEM LOG ]";
+    //GoSpace(2, MainBottom + 1); cout << "[ SYSTEM LOG ]";
 
     int statusX = SplitColumn + 2;
     int startY = MainBottom + 1;

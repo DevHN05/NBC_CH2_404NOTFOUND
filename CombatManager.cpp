@@ -34,11 +34,12 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
         bool IsSuccess = Dice.GetResult();
         int DiceValue = Dice.GetDiceHead();
         bool Critical = false;
-        int Damage = IsSuccess ? Player.GetStrength() : Player.GetStrength() / 2;
+        int Damage = Player.GetStrength() + Player.GetDexterity() + Player.GetIntelligence();
+        Damage = IsSuccess ? Damage : Damage / 2;
 
         Ls.LogDiceRoll(DiceValue, IsSuccess);
 
-        if (rand() % 100 < Player.GetCriticalProbability())
+        if (rand() % 100 < Player.GetCriticalProbability() + (Player.GetLuck()/2))
         {
             Critical = true;
             Gm.AddLog("Critical!");
@@ -114,11 +115,12 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
         bool IsSuccess = Dice.GetResult();
         int DiceValue = Dice.GetDiceHead();
         bool Critical = false;
-        int Damage = IsSuccess ? Player.GetStrength() : Player.GetStrength() / 2;
+        int Damage = Player.GetStrength() + Player.GetDexterity() + Player.GetIntelligence() + 20;
+        Damage = IsSuccess ? Damage : Damage / 2;
 
         Ls.LogDiceRoll(DiceValue, IsSuccess);
 
-        if (rand() % 100 < Player.GetCriticalProbability())
+        if (rand() % 100 < Player.GetCriticalProbability() + (Player.GetLuck()/2))
         {
             Critical = true;
             Gm.AddLog("Critical!");
@@ -258,15 +260,71 @@ void CombatManager::UpdateEventUI(PlayerManager& Player, BaseMonster& Monster)
     //cin.get();
 }
 
+void CombatManager::UpdateBagUI(PlayerManager& Player)
+{
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    LoggerSystem& Ls = LoggerSystem::GetInstance();
+
+    Gm.ClearLogs();
+    Gm.DrawCombatLayOut();
+
+    //여기서 Print로 인벤에 있는 아이템 목록 보여줘야함
+    int LogStartX = 32;
+    int LogStartY = 4;
+
+    Gm.GoSpace(LogStartX, LogStartY); cout << " [ Inventory ] ";
+    for (int i =1; i <= Player.GetPlayerInventory().size(); ++i)
+    {
+        Gm.GoSpace(LogStartX, LogStartY+2*i);
+        cout << to_string(i+1) + Player.GetPlayerInventory()[i]->GetName() + "->";
+    }
+
+    if (Player.GetPlayerInventory().size() == 0)
+    {
+        Gm.GoSpace(LogStartX, LogStartY+2);
+        cout << "소유한 아이템이 없습니다.";
+    }
+
+    Gm.GoSpace(LogStartX, LogStartY + (Player.GetPlayerInventory().size() == 0 ? 4 :2 * Player.GetPlayerInventory().size()));
+    cout << "0. 나가기";
+
+    Gm.DrawAsciiArt("INVENTORY" , 93, LogStartY);
+
+    while(true)
+    {
+        Gm.CommandAddLog("번호를 눌러 아이템을 사용하세요 >> ");
+
+        string input;
+        getline(cin, input);
+        int Select = stoi(input);
+
+        if (Select == 0)
+        {
+            Gm.AddLog("인벤토리 창을 떠났습니다.");
+            Sleep(100);
+            break;
+        }
+        else
+        {
+            if (Select > Player.GetPlayerInventory().size())
+                Gm.AddLog("해당 목록에는 아이템이 없습니다.");
+            else
+            {
+                Gm.AddLog(Player.GetPlayerInventory()[Select-1]->GetName() + "를 사용하셨습니다.");
+                Player.GetPlayerInventory()[Select]->Use(Player);
+            }
+            Gm.DrawInventoryData(Player);
+            Sleep(100);
+        }
+    }
+}
+
 void CombatManager::Reward(PlayerManager& Player, BaseMonster& Monster)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
 
     int CurrentExp = Player.GetExperience() + Monster.GetExperienceReward();
     int Gold = Monster.GetGoldReward();
-
-    Ls.LogExpGain(Monster.GetExperienceReward(),Player.GetExperience(),Player.GetMaxExperience());
-    Ls.LogGoldGain(Gold,Player.GetGold());
 
     if (Player.GetMaxExperience() < CurrentExp)
     {
@@ -281,6 +339,7 @@ void CombatManager::Reward(PlayerManager& Player, BaseMonster& Monster)
     }
 
     Player.SetGold(Player.GetGold() + Gold);
-
+    Ls.LogExpGain(Monster.GetExperienceReward(),Player.GetExperience(),Player.GetMaxExperience());
+    Ls.LogGoldGain(Gold,Player.GetGold());
     cout << "--------------------------\n";
 }
