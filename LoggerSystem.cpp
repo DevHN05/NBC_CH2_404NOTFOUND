@@ -1050,31 +1050,33 @@ void LoggerSystem::ShowStory()
         "",
         "수만 명의 플레이어가 가상 세계에 갇혀버렸다.",
         "",
-        "GM조차 제어할 수 없는 이 버그들은 시스템 권한을 찬탈해 버그 군단을 만들었어.",
+        "GM조차 제어할 수 없는 이 버그들은 시스템 권한을 찬탈해 버그 군단을 만들었고,",
         "",
-        "이 버그들은 어째서인지 코드 수정 권한까지 빼앗아버렸지.",
+        "이 버그들은 어째서인지 코드 수정 권한까지 빼앗아 버렸지만,",
         "",
-        "하지만 게임 전체를 망가뜨리진 않았는데, 무슨 목적이 있는걸까?",
+        "어째서인지 게임 전체를 망가뜨리진 않았다.",
         "",
-        "디버깅을 하기 위해선 게임의 룰을 따르면서 버그를 제거해야 한다.",
+        "무슨 목적이라도 있는 걸까? 아니, 사소한 생각은 그만두자.",
+        "",
+        "디버깅을 하기 위해선, 게임의 룰을 따르면서 버그를 제거해야 한다.",
         "",
         "",
         "이에 개발팀은 최후의 수단으로 '특수 디버깅 툴'을 장착한 요원을 투입하기로 결정했다.",
         "",
-        "그게 바로 나야--",
+        "그게 바로 나--",
         "",
         "",
         "게임의 물리 법칙과 스킬 시스템은 그대로 유지되기 때문에,",
         "",
         "우리는 게임의 규칙을 따라서 디버깅 툴을 무기 삼아야 한다.",
         "",
-        "디버깅 툴로 적을 타격해서 코드에 접근해 디버깅을 진행해야 해.",
+        "디버깅 툴로 적을 타격해서 코드에 접근해, 디버깅을 진행해야만 한다.",
         "",
-        "하지만, 적들은 룰을 무시하는 버그 덩어리들이야.",
+        "하지만, 적들은 룰을 무시하는 버그 덩어리들.",
         "",
-        "그들을 하나하나 제거하며 데이터를 수집하고 레벨을 올리며 전진해서,",
+        "그들을 하나하나 제거하며, 데이터를 수집하고 레벨을 올리며 전진해서,",
         "",
-        "이 지옥 같은 게임을 클리어하고, 갇힌 사람들을 현실로 귀환시켜야 해!",
+        "이 지옥 같은 게임을 클리어하고, 갇힌 사람들을 현실로 귀환시켜야만 한다!",
         "",
         "",
         "",
@@ -1141,25 +1143,25 @@ void LoggerSystem::Tutorial1()
     TypeText(Gm, "특수 디버깅 툴을 사용하는 요원을 위한 교육 문구가 출력됩니다.", 3, 3);
     TypeText(Gm, "출력중인 교육은 Enter 키로 스킵할 수 있습니다.", 3, 5);
 
-    Gm.GoSpace(3, 20);
-    cout << "[ 계속하려면 Enter 키를 누르세요... ]";
+    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 }
 
 void LoggerSystem::Tutorial2()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.ClearLogs();
     Gm.DrawLayout();
 
     TypeText(Gm, "특수 디버깅 툴은 게임 세계에서 직접 원하는 객체에 접촉하여 코드를 수정할 수 있는 능동적인 툴입니다.", 3, 2);
     TypeText(Gm, "그렇기에, 요원은 필연적으로 게임의 룰을 따르면서 디버깅해야 합니다. 게임의 룰을 설명드리겠습니다.", 3, 3);
-
-    Gm.GoSpace(3, 20);
-    cout << "[ 계속하려면 Enter 키를 누르세요... ]";
+    Gm.ClearLogs();
+    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 }
 
 void LoggerSystem::Tutorial3()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.ClearLogs();
     Gm.DrawLayout();
 
     TypeText(Gm, "이 세계의 모든 행동은 20면체 주사위가 결정합니다.", 3, 2);
@@ -1168,14 +1170,14 @@ void LoggerSystem::Tutorial3()
     TypeText(Gm, "당신의 능력 보정치를 더한 최종 숫자가 제시된 목표값보다 높아야 성공합니다.", 3, 6);
     TypeText(Gm, "주사위를 굴릴 땐, 스탯 5포인트당 +1의 보정치가 붙습니다.", 3, 8);
     TypeText(Gm, "STR이 15라면? 힘 주사위 값에 +3이 추가되는 식입니다.", 3, 9);
-
-    Gm.GoSpace(3, 20);
-    cout << "[ 계속하려면 Enter 키를 누르세요... ]";
+    Gm.ClearLogs();
+    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 }
 
 void LoggerSystem::Tutorial4()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.ClearLogs();
     Gm.DrawLayout();
 
     TypeText(Gm, "선택지를 고르기 전, 특수 디버깅 툴은 이러한 보정값을 가시적으로 보여줍니다.", 3, 2);
@@ -1183,13 +1185,13 @@ void LoggerSystem::Tutorial4()
     TypeText(Gm, "2. 몸이 나쁘면 머리가 고생하는 거죠. 몸으로 부딪힙니다. (판정값 10, 힘 보정 +2)", 3, 5);
     TypeText(Gm, "전자의 경우 지식이 높은 사람이, 후자의 경우 힘이 높은 사람이 유리하겠죠.", 3, 7);
 
-    Gm.GoSpace(3, 20);
-    cout << "[ 계속하려면 Enter 키를 누르세요... ]";
+    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 }
 
 void LoggerSystem::Tutorial5()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.ClearLogs();
     Gm.DrawLayout();
 
     TypeText(Gm, "하지만, 스탯이 낮더라도 주사위 값만 높으면 성공할 수 있습니다.", 3, 2);
@@ -1201,8 +1203,7 @@ void LoggerSystem::Tutorial5()
     TypeText(Gm, "대실패: 주사위 눈이 1이 나오면 보정치와 상관없이 무조건 실패합니다.", 3, 10);
     TypeText(Gm, "대성공: 주사위 눈이 20이 나오면 무조건 성공합니다.", 3, 11);
 
-    Gm.GoSpace(3, 20);
-    cout << "[ 계속하려면 Enter 키를 누르세요... ]";
+    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 }
 
 void LoggerSystem::Tutorial6()
@@ -1210,6 +1211,7 @@ void LoggerSystem::Tutorial6()
     GraphicManager& Gm = GraphicManager::GetInstance();
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
+    Gm.ClearLogs();
     Gm.DrawLayout();
     SetConsoleTextAttribute(hConsole, 0x0F);
 
@@ -1226,8 +1228,9 @@ void LoggerSystem::Tutorial6()
     TypeText(Gm, "[캐릭터 생성 절차에 접근할 수 없습니다.] ERROR CODE:「404 NOT FOUND 」", 3, 6);
     TypeText(Gm, "[비상 상황에 대비해 랜덤 구성 프로토콜이 시작됩니다. 튜토리얼이 이어서 진행됩니다.]", 3, 7);
 
-    Gm.GoSpace(3, 20);
-    cout << "[ 계속하려면 Enter 키를 누르세요... ]";
+    SetConsoleTextAttribute(hConsole, 0x0F);
+    Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
+    SetConsoleTextAttribute(hConsole, 0x4F);
 }
 
 void LoggerSystem::TutorialStatDice()
@@ -1235,11 +1238,12 @@ void LoggerSystem::TutorialStatDice()
     GraphicManager& Gm = GraphicManager::GetInstance();
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
+    Gm.ClearLogs();
     Gm.DrawLayout();
     BlinkText(Gm, hConsole, "비상 상황", 3, 2);
     BlinkText(Gm, hConsole, "긴급 랜덤 구성 프로토콜 가동", 3, 3);
     TypeText(Gm, "20면체 주사위로 당신을 긴급 구성합니다", 3, 4);
-    TypeText(Gm, "지금부터 엔터를 누를 때마다 스탯이 무작위로 정해집니다.", 3, 5);
+    TypeText(Gm, "지금부터 Enter 키를 누를 때마다 스탯이 무작위로 정해집니    다.", 3, 5);
 
 }
 
