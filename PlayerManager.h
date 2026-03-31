@@ -18,7 +18,7 @@ public:
     int GetLuck() const;
     int GetCriticalProbability() const;
     int GetGold() const;
-    const vector<unique_ptr<BaseItem>>& GetPlayerInventory() const;
+    Inventory& GetPlayerInventory();
 
     void SetLevel(int Level);
     void SetExperience(int Experience);
