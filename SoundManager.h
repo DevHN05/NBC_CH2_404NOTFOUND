@@ -9,6 +9,8 @@ using namespace std;
 enum class SoundType
 {
     TitleBGM,
+    BattleBGM,
+    ChooseBGM,
     DiceSFX,
     DiceWinSFX,
     DiceLoseSFX
