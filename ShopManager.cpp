@@ -35,9 +35,12 @@ void ShopManager::EnterShop(PlayerManager& Player)
 	    Gm.DrawInventoryData(Player);
 	    Gm.CommandAddLog("상점 서비스를 선택하세요 >> ");
 
-	    string input;
-	    getline(cin, input);
-	    int MenuChoice = stoi(input);
+	    string Input;
+	    if (!getline(cin, Input) || Input.empty())
+	    {
+	        continue; // 빈 입력이면 루프 다시 시작
+	    }
+	    int MenuChoice = stoi(Input);
 
 		int ItemChoice;
 		string ItemToSellName;
@@ -50,8 +53,8 @@ void ShopManager::EnterShop(PlayerManager& Player)
 		    Ls.LogPrintShopItems(CurrentDisplayItems);
 		    Gm.DrawInventoryData(Player);
 		    Gm.CommandAddLog("구매할 아이템을 선택하세요 >> ");
-		    getline(cin, input);
-		    ItemChoice = stoi(input);
+		    getline(cin, Input);
+		    ItemChoice = stoi(Input);
 			BuyItem(ItemChoice, Player);
 			break;
 		case 2:
