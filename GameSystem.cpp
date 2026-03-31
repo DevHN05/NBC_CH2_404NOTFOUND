@@ -93,7 +93,7 @@ void GameSystem::StartGame()
         }
         else if (Choice == 2)
         {
-
+            Cm.UpdateBagUI(Player);
         }
         else
         {
