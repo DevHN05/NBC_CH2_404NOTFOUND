@@ -17,10 +17,12 @@ enum class SoundType
 class SoundManager
 {
 public:
+
     void RegisterSound(SoundType type, const wstring& fileName);
     bool PlayBGM(SoundType type);
     bool PlaySFX(SoundType type);
     void Stop();
+
 
     void SetBGMVolume(int volume);
     void SetSFXVolume(int volume);

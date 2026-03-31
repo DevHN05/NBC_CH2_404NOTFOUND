@@ -6,6 +6,7 @@
 #include "GraphicManager.h"
 #include "CombatManager.h"
 #include "EventManager.h"
+#include "SoundManager.h"
 #include <algorithm>
 #include <string>
 
@@ -35,7 +36,11 @@ void GameSystem::StartGame()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     CombatManager& Cm = CombatManager::GetInstance();
+    SoundManager Sm;
 
+    Sm.RegisterSound(SoundType::TitleBGM, L"BGM/BGM.wav");
+    Sm.PlayBGM(SoundType::TitleBGM);
+    Sm.SetBGMVolume(10);
     Gm.UpdateWindowSize();
 
     Gm.ShowTitle();
