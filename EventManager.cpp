@@ -180,7 +180,7 @@ void EventManager::TutorialEvent()
 
     WaitEnter();
     Gm.ClearLogs();
-    Gm.AddLog("[ 최종 스탯표 ]");
+    Gm.GoSpace(3, 26); cout << "[ 최종 스탯표 ]";
     Gm.AddLog("근력(STR) : " + to_string(str) + "/20");
     Gm.AddLog("민첩(DEX) : " + to_string(dex) + "/20");
     Gm.AddLog("지능(INT) : " + to_string(intel) + "/20");
