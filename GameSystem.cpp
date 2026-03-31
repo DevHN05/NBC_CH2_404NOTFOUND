@@ -60,7 +60,7 @@ void GameSystem::StartGame()
 
     EventManager Em(Player);
 
-    cout << "Is your nickname " << Player.GetNickname() << "?\n";
+    //cout << "Is your nickname " << Player.GetNickname() << "?\n";
 
     Em.TutorialEvent();
 
