@@ -39,6 +39,8 @@ void GameSystem::StartGame()
     SoundManager& Sm = SoundManager::GetInstance();
 
     Sm.RegisterSound(SoundType::TitleBGM, L"BGM/BGM.wav");
+    Sm.RegisterSound(SoundType::ChooseBGM, L"BGM/ChooseBGM.wav");
+    Sm.RegisterSound(SoundType::BattleBGM, L"BGM/BattleBGM.wav");
     Sm.SetBGMVolume(5);
     Sm.PlayBGM(SoundType::TitleBGM);
 
@@ -81,7 +83,7 @@ void GameSystem::StartGame()
             Gm.GoSpace(3, 20);
             //cout << " Command (1.Search 2.Recovery 3.Quit): ";
             Gm.CommandAddLog(" Command (1.탐색 2.아이템 사용 3.끝내기): ");
-
+            Sm.PlayBGM(SoundType::ChooseBGM);
             getline(cin, Input);
 
             if (Input.empty())
