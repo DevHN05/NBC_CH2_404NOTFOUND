@@ -1100,7 +1100,7 @@ void GraphicManager::PerformAddLog(const string& Log)
         if (i < GameLogs.size())
         {
             GoSpace(2, LogStartY + i);
-            cout << "> " << GameLogs[i];
+            cout << " " << GameLogs[i];
         }
     }
 }
