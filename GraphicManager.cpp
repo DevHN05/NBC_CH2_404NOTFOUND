@@ -891,7 +891,7 @@ void GraphicManager::ShowTitle() const
     cout << "[ TERMINAL_READY ]  _";
 
     int LogoW = 60;
-    int StartX = (CurrentWidth / 2) - (LogoW / 2);
+    int StartX = (CurrentWidth / 2) - (LogoW / 2) + 1;
     int StartY = (CurrentHeight / 2) - 4;
 
     Sleep(200);
@@ -904,7 +904,7 @@ void GraphicManager::ShowTitle() const
     GoSpace(StartX, StartY + 4); cout << "   o  o-o     o   o   o o-o  o    o    o-o o--o o  o  o-o  ";
 
     GoSpace((CurrentWidth / 2) - 13, StartY + 6); cout << "[ PROJECT : 404 NOT FOUND ]";
-    GoSpace((CurrentWidth / 2) - 11, StartY + 8); cout << "[ Press Enter to Start ]";
+    GoSpace((CurrentWidth / 2) - 8, StartY + 10); cout << "> Press Enter <";
 
     cin.ignore(100, '\n');
 }
