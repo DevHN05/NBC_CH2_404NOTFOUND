@@ -859,9 +859,9 @@ void GraphicManager::ShowTitle() const
     GoSpace(RightEdge - 25, 1); cout << "[ STATUS: 0xDEADC0DE ]";
 
     const char* logs[] = {
-        "[CPU] [|||||||||||||||||||||||||||||||          ] 72% | [MEM] [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■□□] 92% | [TEMP] 42'C",
+        "[ CPU ] [|||||||||||||||||||||||||||||||          ] 72% | [ MEM ] [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■□□] 92% | [ TEMP ] 42'C",
         "-------------------------------------------------------------------------------------------------------------------------------------------------------------",
-        "[NET_LOG]",
+        "[ NET_LOG ]",
         "> TRACE: 127.0.0.1 ... OK",
         "> ADDR_RECURSIVE ... DETECTED",
         "> ERR: SEG_FAULT (0xDEADBEEF)"
@@ -875,15 +875,15 @@ void GraphicManager::ShowTitle() const
     }
 
     int storageY = BottomEdge - 7;
-    GoSpace(2, storageY);     cout << "[STORAGE]";
+    GoSpace(2, storageY);     cout << "[ STORAGE ]";
     GoSpace(2, storageY + 1); cout << "SEC_A: [■■■■■■■□□] 70%";
     GoSpace(2, storageY + 2); cout << "SEC_B: [■■■□□□□□□] 30%";
     GoSpace(2, storageY + 3); cout << "SEC_C: [■■■■■■■■■] 100%";
 
     GoSpace(2, BottomEdge - 1);
-    cout << "[CMD] : /START  /OPTIONS  /RECOVERY  /SHUTDOWN";
+    cout << "[ CMD ] : /START  /OPTIONS  /RECOVERY  /SHUTDOWN";
     GoSpace(RightEdge - 25, BottomEdge - 1);
-    cout << "[TERMINAL_READY]  _";
+    cout << "[ TERMINAL_READY ]  _";
 
     int logoW = 60;
     int StartX = (CurrentWidth / 2) - (logoW / 2);
@@ -899,7 +899,7 @@ void GraphicManager::ShowTitle() const
     GoSpace(StartX, StartY + 4); cout << "   o  o-o     o   o   o o-o  o    o    o-o o--o o  o  o-o  ";
 
     GoSpace((CurrentWidth / 2) - 13, StartY + 6); cout << "[ PROJECT : 404 NOT FOUND ]";
-    GoSpace((CurrentWidth / 2) - 11, StartY + 8); cout << "[Press Enter to Start]";
+    GoSpace((CurrentWidth / 2) - 11, StartY + 8); cout << "[ Press Enter to Start ]";
 
     cin.ignore(100, '\n');
 }
