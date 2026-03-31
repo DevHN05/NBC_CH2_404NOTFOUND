@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <conio.h>
 
+
+//커서 숨기기
 void LoggerSystem::hideCursor() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cursorInfo;
@@ -1324,49 +1326,127 @@ void LoggerSystem::RunTutorial()
 //처치한 몬스터와 획득한 총 골드와 경험치를 보여주는 함수
 void LoggerSystem::PrintSummary()
 {
-    vector<string> Lines;
-    Lines.push_back("======================================");
-    Lines.push_back("[ DEBUG REPORT ] 디버깅 세션 종료");
-    Lines.push_back("======================================");
-    Lines.push_back("[ 제거된 버그 개체 ]");
+   GraphicManager& Gm = GraphicManager::GetInstance();
 
+    vector<string> MonsterLines;
     if (MonsterKillLogs.empty())
     {
-        Lines.push_back("  제거된 버그 개체 없음");
+        MonsterLines.push_back("  제거된 버그 개체 없음");
     }
     else
     {
         for (auto& Entry : MonsterKillLogs)
         {
-            Lines.push_back("  >> " + Entry.first + " x" + to_string(Entry.second) + " 제거 완료");
+            MonsterLines.push_back("  >> " + Entry.first + " x" + to_string(Entry.second) + " 제거 완료");
         }
     }
+    //시작 지점, 페이지 수 계산
+    int MainBottom  = Gm.GetMainBottom();
+    int StartY = MainBottom - 4;
+    int MonsterPerPage = StartY - 6;
+    int TotalMonsters   = (int)MonsterLines.size();
+    int TotalPages    = (TotalMonsters + MonsterPerPage - 1) / MonsterPerPage;
+    int CurrentPage = 0;
 
-    Lines.push_back("[ 총 확보 골드    ] : " + to_string(TotalGold) + " G");
-    Lines.push_back("[ 총 수집 데이터  ] : " + to_string(TotalExp) + " EXP");
-    Lines.push_back("======================================");
+    while (true)
+    {
+        Gm.DrawLayout();
 
-    PrintMainArea(Lines);
+        //고정값
+        Gm.GoSpace(2, 2); cout << "======================================";
+        Gm.GoSpace(2, 3); cout << "[ DEBUG REPORT ] 디버깅 세션 종료";
+        Gm.GoSpace(2, 4); cout << "======================================";
+        Gm.GoSpace(2, 5); cout << "[ 제거된 버그 개체 ]";
+
+        //몬스터 목록 출력
+        int start = CurrentPage * MonsterPerPage;
+        int end   = min(start + MonsterPerPage, TotalMonsters);
+
+        for (int i = start; i < end; i++)
+        {
+            Gm.GoSpace(2, 6 + (i - start));
+            cout << MonsterLines[i];
+        }
+        //고정값
+        Gm.GoSpace(2, StartY);     cout << "[ 총 확보 골드 ] : " + to_string(TotalGold) + " G";
+        Gm.GoSpace(2, StartY + 1); cout << "[ 총 수집 데이터  ] : " + to_string(TotalExp) + " EXP";
+
+        Gm.ClearLogs();
+
+        //페이지 넘기기(Enter)
+        if (TotalPages > 1)
+            Gm.AddLog("[ " + to_string(CurrentPage + 1) + " / " + to_string(TotalPages) + " 페이지 ]");
+
+        if (CurrentPage < TotalPages - 1)
+            Gm.AddLog("[ Enter: 다음 페이지 ]");
+        else
+            Gm.AddLog("[ Enter: 종료 ]");
+
+        EventManager::WaitEnter();
+
+        if (CurrentPage < TotalPages - 1)
+            CurrentPage++;
+        else
+            break;
+    }
 }
 
 
 //출력한 로그들을 한번에 보여주는 함수(플레이 이력)
 void LoggerSystem::PrintEventLog()
 {
-	cout << "======================================\n";
-	cout << "[ SYSTEM LOG ] 디버깅 이력 전체 출력\n";
-	cout << "======================================\n";
+    GraphicManager& Gm = GraphicManager::GetInstance();
+
+    Gm.DrawLayout();
+
+    Gm.GoSpace(3, 1);
+    cout << "[ SYSTEM LOG ] 디버깅 이력 전체 출력";
 
     if (EventLogs.empty())
-	{
-		cout << "  기록된 이력이 없습니다.\n";
-	}
-	else
-	{
-		for (const string& Log : EventLogs)
-		{
-			cout << "  " << Log << "\n";
-		}
-	}
-	cout << "======================================\n";
+    {
+        Gm.GoSpace(3, 3);
+        cout << "기록된 이력이 없습니다.";
+        return;
+    }
+
+    //시작 지점, 페이지 수 계산
+    int MainBottom = Gm.GetMainBottom();
+    int LogsPerPage = MainBottom - 3;
+    int TotalLogs = (int)EventLogs.size();
+    int TotalPages = (TotalLogs + LogsPerPage - 1) / LogsPerPage;
+    int CurrentPage = 0;
+
+    while (true)
+    {
+        Gm.DrawCombatLayOut();
+
+        Gm.GoSpace(3, 1);
+        cout << "[ SYSTEM LOG ] 디버깅 이력 전체 출력";
+
+        //현재 페이지 로그 출력
+        int start = CurrentPage * LogsPerPage;
+        int end = min(start + LogsPerPage, TotalLogs);
+
+        for (int i = start; i < end; i++)
+        {
+            Gm.GoSpace(3, 2 + (i - start));
+            cout << EventLogs[i];
+        }
+
+        //페이지 넘기기(Enter)
+        Gm.ClearLogs();
+        Gm.AddLog("[ " + to_string(CurrentPage + 1) + " / " + to_string(TotalPages) + " 페이지 ]");
+
+        if (CurrentPage < TotalPages - 1)
+            Gm.AddLog("[ Enter: 다음 페이지 ]");
+        else
+            Gm.AddLog("[ Enter: 종료 ]");
+
+        EventManager::WaitEnter();
+
+        if (CurrentPage < TotalPages - 1)
+            CurrentPage++;
+        else
+            break;
+    }
 }
