@@ -523,7 +523,7 @@ void GraphicManager::DrawGameOver(PlayerManager& Player)
     {
         exit(0);
     }
-    Gm.ClearLogs();
+    ClearLogs();
 }
 
 void GraphicManager::DrawDiceRoll(int RollHead, int MaxNumber)
