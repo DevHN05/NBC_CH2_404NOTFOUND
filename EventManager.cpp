@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "LoggerSystem.h"
 #include "MonsterData.h"
+#include <conio.h>
 
 using namespace std;
 CombatManager& cm = CombatManager::GetInstance();
@@ -25,13 +26,19 @@ EventManager::EventManager(PlayerManager& InPlayer) : Player(InPlayer), CurrentE
 
 void EventManager::WaitEnter()
 {
-    // 엔터 두 번 눌러야 하는 현상 수정
     cin.clear();
-    if (cin.rdbuf()->in_avail() > 0)
-    {
-        cin.ignore(LLONG_MAX, '\n');
+    cin.sync();
+    while (_kbhit()) {
+        _getch();
     }
-    cin.get();
+    while (true) {
+        if (_kbhit()) { // 키 입력이 감지되면
+            int key = _getch();
+            if (key == 13 || key == 10) { // 엔터 키의 아스키 코드
+                break; // 엔터면 탈출!
+            }
+        }
+    }
 }
 
 void EventManager::ShuffleEvents()
@@ -120,18 +127,29 @@ void EventManager::TutorialEvent()
     Gm.GoSpace(30, 9); cout << "...특수 디버깅 툴 확인. 비상모드 실행. 접속자 권한 확인.";
     Gm.GoSpace(30, 11); cout << "이름을 입력해 접속 권한을 확보해주세요 > ";
     string InputName;
+
+    cin.clear();
+    cin.sync();
     while (true)
     {
         getline(cin, InputName);
 
-        if (InputName.empty())
+        if (InputName.empty() || InputName.find_first_not_of(' ') == string::npos)
         {
+            Gm.GoSpace(30, 13); cout << "이름은 한 글자 이상 입력해야 합니다.";
+            Gm.GoSpace(30, 11); cout << "이름을 입력해 접속 권한을 확보해주세요 > ";
+
+            cin.clear();
+            cin.sync();
             continue;
         }
 
         break;
     }
 
+    Gm.GoSpace(30, 13); cout << "[ 시스템 접속 권한 승인. 접속자명 : " << InputName << " ]";
+    Gm.GoSpace(30, 14); cout << "[ Enter 키를 눌러 시스템 접속을 시도해주세요. ]";
+    WaitEnter();
 
     Logger.RunTutorial();
     Logger.TutorialStatDice();
@@ -157,13 +175,17 @@ void EventManager::TutorialEvent()
 
     WaitEnter();
     int luk = RollStat(DiceVal);
-    Player.SetLuck(luk);
-    Gm.CommandAddLog("[ 최종 스탯표 ]");
-    Gm.CommandAddLog("근력(STR) : " + to_string(str) + "/20");
-    Gm.CommandAddLog("민첩(DEX) : " + to_string(dex) + "/20");
-    Gm.CommandAddLog("지능(INT) : " + to_string(intel) + "/20");
-    Gm.CommandAddLog("행운(LUK) : " + to_string(luk) + "/20");
-    Gm.CommandAddLog("모든 스탯 설정이 완료되었습니다! 디버깅을 시작합니다.");
+    Player.SetIntelligence(intel);
+    Gm.CommandAddLog("행운(Luk) 주사위 값 : " + to_string(luk) + "/20");
+
+    WaitEnter();
+    Gm.AddLog("[ 최종 스탯표 ]");
+    Gm.AddLog("근력(STR) : " + to_string(str) + "/20");
+    Gm.AddLog("민첩(DEX) : " + to_string(dex) + "/20");
+    Gm.AddLog("지능(INT) : " + to_string(intel) + "/20");
+    Gm.AddLog("행운(LUK) : " + to_string(luk) + "/20");
+    Gm.AddLog("모든 스탯 설정이 완료되었습니다! 디버깅을 시작합니다.");
+    Gm.ClearLogs();
 
     WaitEnter();
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
