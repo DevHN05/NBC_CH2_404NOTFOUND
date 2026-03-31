@@ -281,28 +281,28 @@ void CombatManager::UpdateBagUI(PlayerManager& Player)
 
         const auto& FullInventory = Player.GetPlayerInventory().GetInventoryItems();
 
-        struct ItemGroup { int count = 0; BaseItem* firstItem; };
-        map<string, ItemGroup> itemMap;
-        vector<string> displayOrder;
+        struct ItemGroup { int Count = 0; BaseItem* FirstItem; };
+        map<string, ItemGroup> ItemMap;
+        vector<string> DisplayOrder;
 
-        for (const auto& item : FullInventory)
+        for (const auto& Item : FullInventory)
         {
-            if (!item)
+            if (!Item)
                 continue;
-            string name = item->GetName();
-            if (itemMap.find(name) == itemMap.end())
+            string name = Item->GetName();
+            if (ItemMap.find(name) == ItemMap.end())
             {
-                itemMap[name] = { 1, item.get() };
-                displayOrder.push_back(name);
+                ItemMap[name] = { 1, Item.get() };
+                DisplayOrder.push_back(name);
             }
             else
             {
-                itemMap[name].count++;
+                ItemMap[name].Count++;
             }
         }
 
         int InvY = LogStartY + 2;
-        if (displayOrder.empty())
+        if (DisplayOrder.empty())
         {
             Gm.GoSpace(LogStartX, InvY);
             cout << "소유한 아이템이 없습니다.";
@@ -310,12 +310,12 @@ void CombatManager::UpdateBagUI(PlayerManager& Player)
         }
         else
         {
-            for (int i = 0; i < displayOrder.size(); ++i)
+            for (int i = 0; i < DisplayOrder.size(); ++i)
             {
-                string Name = displayOrder[i];
+                string Name = DisplayOrder[i];
                 Gm.GoSpace(LogStartX, InvY);
                 string DisplayText = to_string(i + 1) + ". " + Name;
-                if (itemMap[Name].count > 1) DisplayText += " (x" + to_string(itemMap[Name].count) + ")";
+                if (ItemMap[Name].Count > 1) DisplayText += " (x" + to_string(ItemMap[Name].Count) + ")";
                 cout << DisplayText;
                 InvY += 2;
             }
@@ -335,16 +335,16 @@ void CombatManager::UpdateBagUI(PlayerManager& Player)
 
         if (Select == 0) break;
 
-        if (Select < 1 || Select > displayOrder.size())
+        if (Select < 1 || Select > DisplayOrder.size())
         {
             Gm.AddLog("해당 번호에는 아이템이 없습니다.");
             Sleep(500);
         }
         else
         {
-            string SelectedName = displayOrder[Select - 1];
+            string SelectedName = DisplayOrder[Select - 1];
 
-            BaseItem* TargetItem = itemMap[SelectedName].firstItem;
+            BaseItem* TargetItem = ItemMap[SelectedName].FirstItem;
 
             // 2. 아이템 사용 (스탯 반영 등)
             TargetItem->Use(Player);
