@@ -1,6 +1,7 @@
 ﻿#include <random>
 #include "DiceSystem.h"
 #include "GraphicManager.h"
+#include "SoundManager.h"
 
 using namespace std;
 
@@ -36,6 +37,11 @@ void DiceSystem::SetResult(const bool IsSucceeded)
 
 void DiceSystem::RollDice(const int Size, const int Target, const int Bonus)
 {
+    SoundManager sm;
+    sm.RegisterSound(SoundType::DiceSFX, L"BGM/DiceSound.wav");
+    sm.PlaySFX(SoundType::DiceSFX);
+    sm.SetSFXVolume(50);
+
     random_device Rd;
     mt19937 Mt(Rd());
     uniform_int_distribution<int> Dist(1, Size);

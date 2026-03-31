@@ -9,9 +9,7 @@ using namespace std;
 enum class SoundType
 {
     TitleBGM,
-    LobbyBGM,
-    BattleBGM,
-    AttackSFX
+    DiceSFX
 };
 
 class SoundManager
