@@ -5,6 +5,7 @@
 #include "BaseMonster.h"
 #include "Inventory.h"
 #include "BaseItem.h"
+#include "BasePotion.h"
 #include <windows.h>
 
 using namespace std;
@@ -454,10 +455,20 @@ void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
 
 void GraphicManager::DrawInventoryData(PlayerManager& Player) const
 {
-    //GoSpace(2, MainBottom + 1); cout << "[ SYSTEM LOG ]";
-
     int statusX = SplitColumn + 2;
     int startY = MainBottom + 1;
+    int areaWidth = RightEdge - statusX - 1;
+    int areaHeight = BottomEdge - startY - 1;
+
+    string blank(areaWidth, ' ');
+    for (int i = 0; i <= areaHeight; ++i)
+    {
+        if (startY + i < BottomEdge)
+        {
+            GoSpace(statusX, startY + i);
+            cout << blank;
+        }
+    }
 
     GoSpace(statusX, startY); cout << "[ STATUS ]";
     GoSpace(statusX, startY + 1); cout << "- ATK: " << Player.GetStrength();
@@ -466,15 +477,20 @@ void GraphicManager::DrawInventoryData(PlayerManager& Player) const
     GoSpace(statusX, startY + 4); cout << "- Lux: " << Player.GetLuck();
 
     int invX = statusX + 16;
+    int InvY = startY + 2;
     if (invX + 20 > RightEdge) invX = statusX;
 
     GoSpace(invX, startY); cout << "[ Inventory ]";
     GoSpace(invX, startY + 1); cout << "- GOLD: " << Player.GetGold() << " G";
     for (int i = 0; i < Player.GetPlayerInventory().size(); ++i)
     {
-        if (startY + 2 + i < BottomEdge) {
-            GoSpace(invX, startY + 2 + i);
-            cout << "- " << Player.GetPlayerInventory()[i]->GetName();
+        if (startY + 2 + i < BottomEdge)
+        {
+            if (Player.GetPlayerInventory()[i]->IsUsed())
+            {
+                GoSpace(invX, InvY++);
+                cout << "- " << Player.GetPlayerInventory()[i]->GetName();
+            }
         }
     }
  }
@@ -507,6 +523,7 @@ void GraphicManager::DrawGameOver(PlayerManager& Player)
     {
         exit(0);
     }
+    Gm.ClearLogs();
 }
 
 void GraphicManager::DrawDiceRoll(int RollHead, int MaxNumber)

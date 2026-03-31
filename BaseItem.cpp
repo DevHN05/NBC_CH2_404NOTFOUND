@@ -16,3 +16,8 @@ string BaseItem::GetPotionTypeStr() const
 {
     return "Unknown";
 }
+
+bool BaseItem::IsUsed() const
+{
+    return false;
+}
