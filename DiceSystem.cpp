@@ -37,10 +37,10 @@ void DiceSystem::SetResult(const bool IsSucceeded)
 
 void DiceSystem::RollDice(const int Size, const int Target, const int Bonus)
 {
-    SoundManager sm;
-    sm.RegisterSound(SoundType::DiceSFX, L"BGM/DiceSound.wav");
-    sm.PlaySFX(SoundType::DiceSFX);
-    sm.SetSFXVolume(50);
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::DiceSFX, L"BGM/DiceSound.wav");
+    Sm.SetSFXVolume(50);
+    Sm.PlaySFX(SoundType::DiceSFX);
 
     random_device Rd;
     mt19937 Mt(Rd());

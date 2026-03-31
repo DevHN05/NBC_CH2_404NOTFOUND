@@ -36,7 +36,7 @@ void GameSystem::StartGame()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     CombatManager& Cm = CombatManager::GetInstance();
-    SoundManager Sm;
+    SoundManager& Sm = SoundManager::GetInstance();
 
     Sm.RegisterSound(SoundType::TitleBGM, L"BGM/BGM.wav");
     Sm.PlayBGM(SoundType::TitleBGM);

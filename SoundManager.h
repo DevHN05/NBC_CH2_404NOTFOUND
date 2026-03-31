@@ -20,6 +20,14 @@ enum class SoundType
 class SoundManager
 {
 public:
+    static SoundManager& GetInstance()
+    {
+        static SoundManager instance;
+        return instance;
+    }
+    SoundManager(const SoundManager&) = delete;
+    void operator=(const SoundManager&) = delete;
+
     void RegisterSound(SoundType type, const wstring& fileName);
     bool PlayBGM(SoundType type);
     bool PlaySFX(SoundType type);
@@ -29,6 +37,8 @@ public:
     void SetSFXVolume(int volume);
 
 private:
+    SoundManager() = default;
+
     unordered_map<SoundType, wstring> soundTable;
     int bgmVolume = 50;
     int sfxVolume = 50;
