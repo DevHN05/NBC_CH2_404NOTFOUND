@@ -34,6 +34,7 @@ private:
     bool IsBattle;
     void ShuffleEvents();
 
+
     // --- [01~10] 전투 이벤트 ---
     void BattleGuardian();                   // 노말 이벤트 #1 파수꾼 :: 시스템 보안 봇
     void BattleWanderer();                   // 노말 이벤트 #2 방랑자 :: delete ptr
