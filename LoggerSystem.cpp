@@ -1141,7 +1141,7 @@ static void BlinkText(GraphicManager& Gm, HANDLE hConsole, const string& text, i
 {
     for (int i = 0; i < 3; i++)
     {
-        SetConsoleTextAttribute(hConsole, 0x4F);
+        SetConsoleTextAttribute(hConsole, 0x1F);
         Gm.GoSpace(x, y);
         cout << text;
         Sleep(180);
@@ -1151,7 +1151,7 @@ static void BlinkText(GraphicManager& Gm, HANDLE hConsole, const string& text, i
         cout << text;
         Sleep(180);
     }
-    SetConsoleTextAttribute(hConsole, 0x4F);
+    SetConsoleTextAttribute(hConsole, 0x1F);
     Gm.GoSpace(x, y);
     cout << text;
 }
@@ -1239,7 +1239,7 @@ void LoggerSystem::Tutorial6()
 
     TypeText(Gm, "튜토리얼이 끝났습니다. 게임에 접속합니다.", 3, 2);
 
-    SetConsoleTextAttribute(hConsole, 0x4F); // 빨간 배경 + 흰 글자
+    SetConsoleTextAttribute(hConsole, 0x1F); // 파란 배경 + 흰 글자
 
     TypeText(Gm, "[캐릭터 생성창으로 이동합니다... ", 3, 4);
     BlinkText(Gm, hConsole, " 실패. 접근 권한 없음.]", 35, 4);   // X=3 + 표시너비(32) = 35
@@ -1250,26 +1250,107 @@ void LoggerSystem::Tutorial6()
     TypeText(Gm, "[캐릭터 생성 절차에 접근할 수 없습니다.] ERROR CODE:「404 NOT FOUND 」", 3, 6);
     TypeText(Gm, "[비상 상황에 대비해 랜덤 구성 프로토콜이 시작됩니다.]", 3, 7);
 
+    TypeText(Gm, "잔여 시간 : 3", 3, 9);
+    Sleep(1000);
+    TypeText(Gm, "잔여 시간 : 2", 3, 9);
+    Sleep(1000);
+    TypeText(Gm, "잔여 시간 : 1", 3, 9);
+    Sleep(1000);
 
-    // 3 2 1 카운트 추가 예정
+    SetConsoleTextAttribute(hConsole, 0x0F);
+    system("cls");
+    Sleep(500);
 
-    //SetConsoleTextAttribute(hConsole, 0x0F);
-    //Gm.AddLog("[ 계속하려면 Enter 키를 누르세요... ]");
-    //SetConsoleTextAttribute(hConsole, 0x4F);
+
+    // 3 2 1 카운트
+    int CountDownLocation_Y = Gm.GetCurrentHeight()/2-6;
+
+
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+    int width = csbi.dwSize.X;
+
+    /*auto FillRedBand = [&](int startY, int endY) { //임시 구현한 람다 함수
+        for (int y = startY; y <= endY; ++y) {
+            COORD pos = {0, static_cast<SHORT>(y)};
+            SetConsoleCursorPosition(hConsole, pos);
+            cout << string(width, ' ');
+        }
+    };*/
+
+    auto DrawHackScreen = [&]() { //임시 구현한 람다 함수
+        const string chars = "01#@$%&*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        for (int y = 0; y < Gm.GetCurrentHeight(); ++y) {
+            COORD pos = {0, static_cast<SHORT>(y)};
+            SetConsoleCursorPosition(hConsole, pos);
+
+            int len = rand() % width + 1;
+
+            for (int x = 0; x < len; ++x) {
+                cout << chars[rand() % chars.size()];
+            }
+        }
+    };
+
+
+    /*//FillRedBand(Gm.GetCurrentHeight()/2-5, Gm.GetCurrentHeight()/2+5);
+    SetConsoleTextAttribute(hConsole, 0x01);
+
+    Gm.DrawAsciiArt("CountDown_3" , Gm.GetCurrentWidth()/2-7, Gm.GetCurrentHeight()/2-3);
+    Sleep(900);
+    //FillRedBand(Gm.GetCurrentHeight()/2-5, Gm.GetCurrentHeight()/2+5);
+    Sleep(500);
+
+    Gm.DrawAsciiArt("CountDown_2" , Gm.GetCurrentWidth()/2-7, Gm.GetCurrentHeight()/2-3);
+    Sleep(900);
+    //FillRedBand(Gm.GetCurrentHeight()/2-5, Gm.GetCurrentHeight()/2+5);
+    Sleep(500);
+
+    Gm.DrawAsciiArt("CountDown_1" , Gm.GetCurrentWidth()/2-7, Gm.GetCurrentHeight()/2-3);
+    Sleep(900);
+    //FillRedBand(Gm.GetCurrentHeight()/2-5, Gm.GetCurrentHeight()/2+5);
+    Sleep(500);
+
+    SetConsoleTextAttribute(hConsole, 0x1F);
+    system("cls");*/
+
+    //SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN  | FOREGROUND_INTENSITY);
+
+    SetConsoleTextAttribute(hConsole, 0x1F);
+    system("cls");
+
+    int DrawHackScreenCnt = 15;
+    while (DrawHackScreenCnt)
+    {
+        DrawHackScreen();
+        Sleep(100);
+        --DrawHackScreenCnt;
+    }
+
+    SetConsoleTextAttribute(hConsole, 0x1F);
+    system("cls");
+    Sleep(700);
+
 }
 
 void LoggerSystem::TutorialStatDice()
 {
+    hideCursor();
     GraphicManager& Gm = GraphicManager::GetInstance();
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     Gm.ClearLogs();
-    Gm.DrawLayout();
-    BlinkText(Gm, hConsole, "비상 상황", 3, 2);
-    BlinkText(Gm, hConsole, "긴급 랜덤 구성 프로토콜 가동", 3, 3);
-    TypeText(Gm, "20면체 주사위로 당신을 긴급 구성합니다", 3, 4);
-    TypeText(Gm, "지금부터 Enter 키를 누를 때마다 스탯이 무작위로 정해집니다.", 3, 5);
 
+    SetConsoleTextAttribute(hConsole, 0x1F);
+    Gm.DrawLayout();
+    Sleep(1000);
+    BlinkText(Gm, hConsole, "[비상 상황]", 3, 2);
+    BlinkText(Gm, hConsole, ">> 긴급 랜덤 구성 프로토콜 가동", 3, 3);
+    TypeText(Gm, "20면체 주사위로 당신을 긴급 구성합니다.", 3, 5);
+    TypeText(Gm, "지금부터 Enter 키를 누를 때마다 스탯이 무작위로 정해집니다.", 3, 6);
+
+    showCursor();
 }
 
 bool LoggerSystem::WaitEnterOrSkip()
