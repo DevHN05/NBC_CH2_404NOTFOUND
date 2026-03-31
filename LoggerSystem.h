@@ -18,6 +18,10 @@ public:
         return Instance;
     }
 
+    //입력 커서 관련
+    void hideCursor();
+    void showCursor();
+
     //전투 관련
     void LogMonsterAppear(const string& MonsterName); //몬스터 등장
     void LogAttack(const string& Attacker, const string& Target, int Damage); //공격시 출력

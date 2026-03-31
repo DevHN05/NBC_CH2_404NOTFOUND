@@ -5,7 +5,7 @@
 #include "EventManager.h"
 #include <windows.h>
 
-void hideCursor() {
+void LoggerSystem::hideCursor() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cursorInfo;
     GetConsoleCursorInfo(hConsole, &cursorInfo);
@@ -13,7 +13,7 @@ void hideCursor() {
     SetConsoleCursorInfo(hConsole, &cursorInfo);
 }
 
-void showCursor() {
+void LoggerSystem::showCursor() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cursorInfo;
     GetConsoleCursorInfo(hConsole, &cursorInfo);
