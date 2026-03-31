@@ -526,6 +526,7 @@ void GraphicManager::DrawGameOver(PlayerManager& Player)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
     DrawLayout();
+    ClearLogs();
     DrawInventoryData(Player);
 
     int TargetX = (CurrentWidth / 2) - (72 / 2);
@@ -551,6 +552,8 @@ void GraphicManager::DrawGameOver(PlayerManager& Player)
     {
         exit(0);
     }
+
+    cin.ignore(100,'\n');
 }
 
 void GraphicManager::DrawDiceRoll(int RollHead, int MaxNumber)
@@ -653,7 +656,7 @@ void GraphicManager::CommandAddLog(const string& Log)
     }
 
     GoSpace(StartX, TargetY - 1);
-    cout << "  [System Log]";
+    cout << "  [ System Log ]";
 
     GoSpace(StartX, TargetY);
     cout << "> " << Log;
@@ -1028,4 +1031,34 @@ void GraphicManager::DrawAsciiArtCenter(const string& Name)
     int TargetY = (MainBottom / 2) - (ArtHeight / 2);
 
     DrawAsciiArt(Name, TargetX, TargetY);
+}
+
+void GraphicManager::PerformAddLog(const string& Log)
+{
+    int MaxLogLines = BottomEdge - MainBottom - 1;
+    if (MaxLogLines < 1)
+        MaxLogLines = 1;
+
+    GameLogs.push_back(Log);
+    while (GameLogs.size() > MaxLogLines)
+    {
+        GameLogs.pop_front();
+    }
+
+    int LogStartY = MainBottom + 1;
+    int LogWidth = SplitColumn - 4;
+
+    for (int i = 0; i < MaxLogLines; i++)
+    {
+        GoSpace(2, LogStartY + i);
+
+        for(int j = 0; j < LogWidth; j++)
+            cout << " ";
+
+        if (i < GameLogs.size())
+        {
+            GoSpace(2, LogStartY + i);
+            cout << "> " << GameLogs[i];
+        }
+    }
 }

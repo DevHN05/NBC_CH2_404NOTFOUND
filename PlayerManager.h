@@ -2,6 +2,7 @@
 
 #include "BaseCharacter.h"
 #include "Inventory.h"
+#include "DiceSystem.h"
 
 class BaseItem;
 
@@ -34,6 +35,7 @@ public:
     void RemoveItem(const string& ItemName);
     //void ShowItems();
 
+    void LevelUp();
     BaseItem* FindItem(const string& ItemName);
 
     void PrintPlayerStatus();
@@ -47,6 +49,8 @@ private:
     int Luck = 0;
     int CriticalProbability = 0;
     int Gold = 0;
+
+    DiceSystem Dice;
 
     Inventory PlayerInventory;
 };

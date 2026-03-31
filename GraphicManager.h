@@ -83,6 +83,7 @@ public:
     void DrawAsciiArtCenter(const string& Name);
 
     //System Log
+    void PerformAddLog(const string& Log);
     void AddLog(const string& Log);
     void CommandAddLog(const string& Log);
     void ClearLogs();

@@ -366,12 +366,15 @@ void CombatManager::Reward(PlayerManager& Player, BaseMonster& Monster)
     int CurrentExp = Player.GetExperience() + Monster.GetExperienceReward();
     int Gold = Monster.GetGoldReward();
 
-    if (Player.GetMaxExperience() < CurrentExp)
+    if (Player.GetMaxExperience() <= CurrentExp)
     {
-        //Player.SetMaxExperience(CurrentExp);
-        Player.SetExperience(CurrentExp - Player.GetMaxExperience());
-        Player.SetLevel(Player.GetLevel() + 1);
-        Ls.LogLevelUp(Player.GetLevel());
+        while (Player.GetMaxExperience() <= CurrentExp)
+        {
+            CurrentExp -= Player.GetMaxExperience();
+            Player.SetExperience(CurrentExp);
+            Player.LevelUp();
+            Sleep(1000);
+        }
     }
     else
     {
