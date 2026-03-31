@@ -269,73 +269,92 @@ void CombatManager::UpdateEventUI(PlayerManager& Player, BaseMonster& Monster)
 void CombatManager::UpdateBagUI(PlayerManager& Player)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    LoggerSystem& Ls = LoggerSystem::GetInstance();
-
-    Gm.ClearLogs();
-    Gm.DrawCombatLayOut();
-
     int LogStartX = 32;
     int LogStartY = 4;
 
-    while(true)
+    while (true)
     {
+        Gm.ClearLogs();
         Gm.DrawCombatLayOut();
-        Gm.GoSpace(LogStartX, LogStartY); cout << " [ Inventory ] ";
-        auto& Inventory = Player.GetPlayerInventory();
-        int InvY = LogStartY + 2;
+        Gm.GoSpace(LogStartX, LogStartY);
+        cout << " [ Inventory ] ";
 
-        for (int i = 0; i < Inventory.size(); ++i)
+        const auto& FullInventory = Player.GetPlayerInventory().GetInventoryItems();
+
+        struct ItemGroup { int count = 0; BaseItem* firstItem; };
+        map<string, ItemGroup> itemMap;
+        vector<string> displayOrder;
+
+        for (const auto& item : FullInventory)
         {
-            if (Player.GetPlayerInventory()[i]->IsUsed())
+            if (!item)
+                continue;
+            string name = item->GetName();
+            if (itemMap.find(name) == itemMap.end())
             {
-                Gm.GoSpace(LogStartX, InvY);
-                InvY += 2;
-                cout << to_string(i + 1) + ". " + Inventory[i]->GetName();
+                itemMap[name] = { 1, item.get() };
+                displayOrder.push_back(name);
+            }
+            else
+            {
+                itemMap[name].count++;
             }
         }
 
-        if (Inventory.empty())
+        int InvY = LogStartY + 2;
+        if (displayOrder.empty())
         {
-            Gm.GoSpace(LogStartX, LogStartY + 2);
+            Gm.GoSpace(LogStartX, InvY);
             cout << "소유한 아이템이 없습니다.";
-        }
-
-        //int exitY = Inventory.empty() ? InvY : InvY + 2;
-        Gm.GoSpace(LogStartX, InvY);
-        cout << "0. 나가기";
-
-        Gm.DrawAsciiArt("INVENTORY", 93, LogStartY);
-
-
-        Gm.CommandAddLog("번호를 눌러 아이템을 사용하세요 >> ");
-
-        string input;
-        getline(cin, input);
-
-        int Select;
-        try { Select = stoi(input); }
-        catch (...) { continue; }
-
-        if (Select == 0)
-        {
-            Gm.AddLog("인벤토리 창을 떠났습니다.");
-            Sleep(500);
-            break;
-        }
-
-        if (Select < 1 || Select > Inventory.size())
-        {
-            Gm.AddLog("해당 번호에는 아이템이 없습니다.");
+            InvY += 2;
         }
         else
         {
-            int targetIdx = Select - 1;
-            Gm.AddLog(Inventory[targetIdx]->GetName() + "를 사용하셨습니다.");
+            for (int i = 0; i < displayOrder.size(); ++i)
+            {
+                string Name = displayOrder[i];
+                Gm.GoSpace(LogStartX, InvY);
+                string DisplayText = to_string(i + 1) + ". " + Name;
+                if (itemMap[Name].count > 1) DisplayText += " (x" + to_string(itemMap[Name].count) + ")";
+                cout << DisplayText;
+                InvY += 2;
+            }
+        }
 
-            Inventory[targetIdx]->Use(Player);
+        Gm.GoSpace(LogStartX, InvY);
+        cout << "0. 나가기";
+        Gm.DrawAsciiArt("INVENTORY", 93, LogStartY);
+
+        Gm.CommandAddLog("번호를 눌러 아이템을 사용하세요 >> ");
+        string Input;
+        getline(cin, Input);
+
+        int Select;
+        try { if (Input.empty()) continue; Select = stoi(Input); }
+        catch (...) { continue; }
+
+        if (Select == 0) break;
+
+        if (Select < 1 || Select > displayOrder.size())
+        {
+            Gm.AddLog("해당 번호에는 아이템이 없습니다.");
+            Sleep(500);
+        }
+        else
+        {
+            string SelectedName = displayOrder[Select - 1];
+
+            BaseItem* TargetItem = itemMap[SelectedName].firstItem;
+
+            // 2. 아이템 사용 (스탯 반영 등)
+            TargetItem->Use(Player);
+            Gm.AddLog(SelectedName + "를 사용하셨습니다.");
+
+            Player.GetPlayerInventory().RemoveItem(SelectedName);
 
             Gm.DrawInventoryData(Player);
             Sleep(500);
+            continue;
         }
     }
 }

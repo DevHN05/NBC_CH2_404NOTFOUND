@@ -455,41 +455,68 @@ void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
 
 void GraphicManager::DrawInventoryData(PlayerManager& Player) const
 {
-    int statusX = SplitColumn + 2;
-    int startY = MainBottom + 1;
-    int areaWidth = RightEdge - statusX - 1;
-    int areaHeight = BottomEdge - startY - 1;
+    int StatusX = SplitColumn + 2;
+    int StartY = MainBottom + 1;
+    int AreaWidth = RightEdge - StatusX - 1;
+    int AreaHeight = BottomEdge - StartY - 1;
 
-    string blank(areaWidth, ' ');
-    for (int i = 0; i <= areaHeight; ++i)
+    string Blank(AreaWidth, ' ');
+    for (int i = 0; i <= AreaHeight; ++i)
     {
-        if (startY + i < BottomEdge)
+        if (StartY + i < BottomEdge)
         {
-            GoSpace(statusX, startY + i);
-            cout << blank;
+            GoSpace(StatusX, StartY + i);
+            cout << Blank;
         }
     }
 
-    GoSpace(statusX, startY); cout << "[ STATUS ]";
-    GoSpace(statusX, startY + 1); cout << "- ATK: " << Player.GetStrength();
-    GoSpace(statusX, startY + 2); cout << "- Dex: " << Player.GetDexterity();
-    GoSpace(statusX, startY + 3); cout << "- Int: " << Player.GetIntelligence();
-    GoSpace(statusX, startY + 4); cout << "- Lux: " << Player.GetLuck();
+    GoSpace(StatusX, StartY); cout << "[ STATUS ]";
+    GoSpace(StatusX, StartY + 1); cout << "- ATK: " << Player.GetStrength();
+    GoSpace(StatusX, StartY + 2); cout << "- Dex: " << Player.GetDexterity();
+    GoSpace(StatusX, StartY + 3); cout << "- Int: " << Player.GetIntelligence();
+    GoSpace(StatusX, StartY + 4); cout << "- Lux: " << Player.GetLuck();
 
-    int invX = statusX + 16;
-    int InvY = startY + 2;
-    if (invX + 20 > RightEdge) invX = statusX;
+    int InvX = StatusX + 18;
+    int currentInvY = StartY + 2;
+    if (InvX + 20 > RightEdge)
+        InvX = StatusX;
 
-    GoSpace(invX, startY); cout << "[ Inventory ]";
-    GoSpace(invX, startY + 1); cout << "- GOLD: " << Player.GetGold() << " G";
-    for (int i = 0; i < Player.GetPlayerInventory().size(); ++i)
+    GoSpace(InvX, StartY);     cout << "[ Inventory ]";
+    GoSpace(InvX, StartY + 1); cout << "- GOLD: " << Player.GetGold() << " G";
+    const auto& FullInventory = Player.GetPlayerInventory().GetInventoryItems();
+
+    map<string, int> ItemCounts;
+    vector<string> DisplayOrder;
+
+    for (const auto& Item : FullInventory)
     {
-        if (startY + 2 + i < BottomEdge)
+        if (!Item) continue;
+
+        string name = Item->GetName();
+        if (ItemCounts.find(name) == ItemCounts.end())
         {
-            if (Player.GetPlayerInventory()[i]->IsUsed())
+            ItemCounts[name] = 1;
+            DisplayOrder.push_back(name);
+        }
+        else
+        {
+            ItemCounts[name]++;
+        }
+    }
+
+    for (const string& ItemName : DisplayOrder)
+    {
+        if (currentInvY < BottomEdge)
+        {
+            GoSpace(InvX, currentInvY++);
+
+            if (ItemCounts[ItemName] > 1)
             {
-                GoSpace(invX, InvY++);
-                cout << "- " << Player.GetPlayerInventory()[i]->GetName();
+                cout << "- " << ItemName << " (x" << ItemCounts[ItemName] << ")";
+            }
+            else
+            {
+                cout << "- " << ItemName;
             }
         }
     }

@@ -45,9 +45,9 @@ int PlayerManager::GetGold() const
     return Gold;
 }
 
-const vector<unique_ptr<BaseItem>>& PlayerManager::GetPlayerInventory() const
+Inventory& PlayerManager::GetPlayerInventory()
 {
-    return PlayerInventory.GetInventoryItems();
+    return PlayerInventory;
 }
 
 void PlayerManager::SetLevel(int Level)
