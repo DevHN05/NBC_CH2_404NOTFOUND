@@ -39,8 +39,9 @@ void GameSystem::StartGame()
     SoundManager& Sm = SoundManager::GetInstance();
 
     Sm.RegisterSound(SoundType::TitleBGM, L"BGM/BGM.wav");
+    Sm.SetBGMVolume(5);
     Sm.PlayBGM(SoundType::TitleBGM);
-    Sm.SetBGMVolume(10);
+
     Gm.UpdateWindowSize();
 
     Gm.ShowTitle();
