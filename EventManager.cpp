@@ -152,6 +152,7 @@ void EventManager::TutorialEvent()
     WaitEnter();
 
     Logger.RunTutorial();
+    WaitEnter();
     Logger.TutorialStatDice();
 
     random_device rd;
