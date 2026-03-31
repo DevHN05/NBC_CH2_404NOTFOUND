@@ -4,8 +4,6 @@
 #include "DiceSystem.h"
 #include "PlayerManager.h"
 
-using namespace std;
-
 enum EEventId {
     // [01~10] 전투 이벤트
     EV_Guardian = 1, EV_Wanderer, EV_Breaker, EV_Invader, EV_Assassin,
@@ -21,20 +19,20 @@ enum EEventId {
 class EventManager
 {
 public:
-    EventManager();
     EventManager(PlayerManager& InPlayer);
     static void WaitEnter();
     void TriggerNextEvent();
     void TutorialEvent();                    // 튜토리얼 이벤트 호출 함수
 
 private:
+    PlayerManager& Player;
+    vector<int> ShopEventIds;
+    vector<int> NormalEventIds;
+    vector<int> EventIds;
+    size_t CurrentEventIndex = 0;
     int Choice;
     bool IsBattle;
     void ShuffleEvents();
-    vector<int> NormalEventIds;
-    vector<int> ShopEventIds;
-    vector<int> EventIds;
-    size_t CurrentEventIndex = 0;
 
     // --- [01~10] 전투 이벤트 ---
     void BattleGuardian();                   // 노말 이벤트 #1 파수꾼 :: 시스템 보안 봇
@@ -69,7 +67,6 @@ private:
     void ShopBugStoreFix();                  // #24 상점 디버깅
     void ShopAccessDenied();                 // #25 Access Denied 상점
 
-    PlayerManager& Player;
     DiceSystem Dice;
 
     // --- [스탯 보정값 계산기] ---
