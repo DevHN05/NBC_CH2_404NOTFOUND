@@ -1,9 +1,10 @@
 #include "BasePotion.h"
+
 #include <sstream>
 #include <iomanip>
-#include "GraphicManager.h"
-#include "SoundManager.h"
-#include "GameSystem.h"
+#include "../BasicSystem/GraphicManager.h"
+#include "../BasicSystem/SoundManager.h"
+#include "../GameSystem.h"
 
 map<string, int> BasePotion::PotionCounts;
 

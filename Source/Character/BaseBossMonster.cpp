@@ -1,7 +1,7 @@
 // BaseBossMonster.cpp
 
 #include "BaseBossMonster.h"
-#include "LoggerSystem.h"
+#include "../BasicSystem/LoggerSystem.h"
 
 BaseBossMonster::BaseBossMonster(
                 const string&   InName,

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include "DiceSystem.h"
-#include "PlayerManager.h"
+#include "../Character/PlayerManager.h"
 
 enum EEventId {
     // [01~10] 전투 이벤트

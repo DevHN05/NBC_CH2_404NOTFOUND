@@ -1,6 +1,6 @@
 ﻿#include "PlayerManager.h"
-#include "LoggerSystem.h"
-#include "GraphicManager.h"
+#include "../BasicSystem/LoggerSystem.h"
+#include "../BasicSystem/GraphicManager.h"
 
 PlayerManager::PlayerManager(string Nickname) : BaseCharacter(Nickname)
 {

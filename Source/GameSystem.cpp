@@ -1,12 +1,12 @@
 ﻿#include "GameSystem.h"
-#include "BaseCharacter.h"
-#include "PlayerManager.h"
-#include "BaseMonster.h"
-#include "BaseBossMonster.h"
-#include "GraphicManager.h"
-#include "CombatManager.h"
-#include "EventManager.h"
-#include "SoundManager.h"
+#include "Character/BaseCharacter.h"
+#include "Character/PlayerManager.h"
+#include "Character/BaseMonster.h"
+#include "Character/BaseBossMonster.h"
+#include "BasicSystem/GraphicManager.h"
+#include "BasicSystem/CombatManager.h"
+#include "BasicSystem/EventManager.h"
+#include "BasicSystem/SoundManager.h"
 #include <algorithm>
 #include <string>
 

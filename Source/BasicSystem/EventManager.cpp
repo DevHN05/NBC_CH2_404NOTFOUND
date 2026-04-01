@@ -4,12 +4,12 @@
 #include <conio.h>
 #include "EventManager.h"
 #include "CombatManager.h"
-#include "BaseMonster.h"
 #include "GraphicManager.h"
 #include "LoggerSystem.h"
-#include "MonsterData.h"
 #include "SoundManager.h"
-#include "GameSystem.h"
+#include "../GameSystem.h"
+#include "../Character/BaseMonster.h"
+#include "../Character/MonsterData.h"
 
 using namespace std;
 CombatManager& cm = CombatManager::GetInstance();

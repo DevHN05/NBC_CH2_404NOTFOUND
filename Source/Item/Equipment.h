@@ -1,6 +1,7 @@
 #pragma once
+
 #include "BaseItem.h"
-#include "PlayerManager.h"
+#include "../Character/PlayerManager.h"
 
 class PlayerManager;
 

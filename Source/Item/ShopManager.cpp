@@ -1,11 +1,11 @@
 ﻿//ShopManager.cpp
 
 #include "ShopManager.h"
-#include "PlayerManager.h"
-#include "LoggerSystem.h"
-#include "GraphicManager.h"
+#include "../Character/PlayerManager.h"
+#include "../BasicSystem/LoggerSystem.h"
+#include "../BasicSystem/GraphicManager.h"
 #include "BasePotion.h"
-#include "SoundManager.h"
+#include "../BasicSystem/SoundManager.h"
 #include <algorithm>
 
 ShopManager::ShopManager()

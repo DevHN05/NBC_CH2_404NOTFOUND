@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "BaseCharacter.h"
-#include "Inventory.h"
-#include "DiceSystem.h"
+#include "../Item/Inventory.h"
+#include "../BasicSystem/DiceSystem.h"
 
 class BaseItem;
 

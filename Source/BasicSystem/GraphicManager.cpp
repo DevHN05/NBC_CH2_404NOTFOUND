@@ -1,11 +1,11 @@
 #include "GraphicManager.h"
-#include "PlayerManager.h"
 #include "LoggerSystem.h"
-#include "GameSystem.h"
-#include "BaseMonster.h"
-#include "Inventory.h"
-#include "BaseItem.h"
-#include "BasePotion.h"
+#include "../GameSystem.h"
+#include "../Character/PlayerManager.h"
+#include "../Character/BaseMonster.h"
+#include "../Item/Inventory.h"
+#include "../Item/BaseItem.h"
+#include "../Item/BasePotion.h"
 #include <windows.h>
 
 using namespace std;
