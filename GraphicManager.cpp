@@ -588,7 +588,7 @@ void GraphicManager::DrawGameWin(PlayerManager& Player)
     int Input;
 
     Ls.LogPlayerDeath();
-    CommandAddLog("1. 다시 컴파일하기 / 2. 끝내기");
+    CommandAddLog("VR RPG 'NBC' 복구 성공");
     cin >> Input;
 
     //게임 다시하기
