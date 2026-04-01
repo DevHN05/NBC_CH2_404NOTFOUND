@@ -83,6 +83,7 @@ void GameSystem::StartGame()
             Gm.GoSpace(3, 20);
             //cout << " Command (1.Search 2.Recovery 3.Quit): ";
             Gm.CommandAddLog(" Command (1.탐색 2.아이템 사용 3.끝내기): ");
+            Sm.SetBGMVolume(2);
             Sm.PlayBGM(SoundType::ChooseBGM);
             getline(cin, Input);
 

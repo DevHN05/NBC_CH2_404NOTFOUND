@@ -105,7 +105,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-
+    Sm.SetBGMVolume(2);
     Sm.PlayBGM(SoundType::BattleBGM);
     Ls.hideCursor();
 
