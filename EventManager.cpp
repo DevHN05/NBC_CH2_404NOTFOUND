@@ -84,6 +84,7 @@ void EventManager::ShuffleEvents()
 void EventManager::TriggerNextEvent()
 {
     GameSystem& gs = GameSystem::GetInstance();
+    GraphicManager& Gm = GraphicManager::GetInstance();
     int nextStage = gs.GetStage() + 1;
     gs.SetStage(nextStage);
 
@@ -326,6 +327,9 @@ void EventManager::BattleGuardian()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventGuardian(DexBonus(), IntBonus());
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
@@ -405,6 +409,9 @@ void EventManager::BattleWanderer()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventWanderer(Player.GetStrength() / 5, Player.GetDexterity() / 5);
 
     //Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
@@ -487,6 +494,9 @@ void EventManager::BattleBreaker()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventBreaker(StrBonus(), IntBonus());
 
     //Gm.GoSpace(4, 20);
@@ -563,6 +573,9 @@ void EventManager::BattleInvader()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventInvader(DexBonus(), LukBonus());
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
@@ -636,6 +649,9 @@ void EventManager::BattleAssassin()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventAssassin(StrBonus(), IntBonus());
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
@@ -709,6 +725,9 @@ void EventManager::BattleBridge()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventBridge(DexBonus(), LukBonus(), StrBonus());
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
@@ -787,6 +806,9 @@ void EventManager::BattleForest()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventForest(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -864,6 +886,9 @@ void EventManager::BattleDataNoise()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventDataNoise(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -941,6 +966,9 @@ void EventManager::BattleGravity()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventGravity(LukBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1018,6 +1046,9 @@ void EventManager::BattleCliff()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.LogEventCliff(DexBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1097,6 +1128,9 @@ void EventManager::ChoiceGarbageCollector()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChoiceGarbageCollector(DexBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1167,6 +1201,9 @@ void EventManager::ChoiceUndeclared()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChoiceUndeclared(StrBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1244,6 +1281,9 @@ void EventManager::ChoiceDanglingPointer()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChoiceDanglingPointer(StrBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1318,6 +1358,9 @@ void EventManager::ChoiceBrokenActor()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChoiceBrokenActor(LukBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1391,6 +1434,9 @@ void EventManager::ChoiceUninitArray()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChoiceDanglingPointer(IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1472,6 +1518,9 @@ void EventManager::ChestNormal()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChestNormal(StrBonus(), DexBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1545,6 +1594,9 @@ void EventManager::ChestConstLock()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChestConstLock(StrBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1615,6 +1667,9 @@ void EventManager::ChestAndLogic()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChestAndLogic(DexBonus(), LukBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1692,6 +1747,9 @@ void EventManager::ChestPointerSearch()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChestPointerSearch(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1762,6 +1820,9 @@ void EventManager::ChestBugActorFix()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ChestBugActorFix(StrBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1837,6 +1898,9 @@ void EventManager::ShopChoiceEvent()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ShopChoiceEvent(LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1901,6 +1965,9 @@ void EventManager::ShopVillageWay()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ShopVillageWay(StrBonus(), DexBonus()); // 바위 길막기 로거
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -1972,6 +2039,9 @@ void EventManager::ShopGamblerBet()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ShopGamblerBet(LukBonus(), DexBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -2043,6 +2113,9 @@ void EventManager::ShopBugStoreFix()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ShopBugStoreFix(IntBonus(), LukBonus() - 5); // 상점 디버깅 로거
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
@@ -2113,6 +2186,9 @@ void EventManager::ShopAccessDenied()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage();
+    Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
     Logger.ShopAccessDenied(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
