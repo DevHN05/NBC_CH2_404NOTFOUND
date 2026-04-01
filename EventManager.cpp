@@ -1,15 +1,15 @@
-﻿#include "EventManager.h"
+﻿#include <iostream>
+#include <random>
+#include <algorithm>
+#include <conio.h>
+#include "EventManager.h"
 #include "CombatManager.h"
 #include "BaseMonster.h"
 #include "GraphicManager.h"
-#include <iostream>
-#include <random>
-#include <algorithm>
 #include "LoggerSystem.h"
 #include "MonsterData.h"
-#include <conio.h>
-
 #include "SoundManager.h"
+#include "GameSystem.h"
 
 using namespace std;
 CombatManager& cm = CombatManager::GetInstance();
@@ -18,7 +18,11 @@ CombatManager& cm = CombatManager::GetInstance();
 EventManager::EventManager(PlayerManager& InPlayer) : Player(InPlayer), CurrentEventIndex(0)
 {
     // 1~20번: 전투 및 보상 이벤트
-    for (int i = 1; i <= 20; ++i) NormalEventIds.push_back(i);
+    for (int i = 1; i <= 20; ++i)
+    {
+        if (i == 11) continue; // 11번 이벤트 가비지 컬렉션 리스트에서 제거
+        NormalEventIds.push_back(i);
+    }
 
     // 21~25번: 상점 이벤트
     for (int i = 21; i <= 25; ++i) ShopEventIds.push_back(i);
@@ -53,14 +57,20 @@ void EventManager::ShuffleEvents()
 
     EventIds.clear();
 
-    for (int i = 0; i < 5; ++i)     // 다섯씩 묶어서 상점 이벤트를 랜덤하게 하나씩 배치
-    {                               // 운에 따라 망할 수 있는 최소한의 요소가 존재하는 구조
+    int normalIdx = 0;
+    for (int i = 0; i < 5; ++i)
+    {
         vector<int> Chunk;
-        for (int j = 0; j < 4; ++j)
+        for (int j = 0; j < 4 && normalIdx < NormalEventIds.size(); ++j)
         {
-            Chunk.push_back(NormalEventIds[i * 4 + j]);
+            Chunk.push_back(NormalEventIds[normalIdx++]);
         }
-        Chunk.push_back(ShopEventIds[i]);
+
+        if (i < ShopEventIds.size())
+        {
+            Chunk.push_back(ShopEventIds[i]);
+        }
+
         shuffle(Chunk.begin(), Chunk.end(), EventRandomRoll);
         for (int id : Chunk)
         {
@@ -73,6 +83,16 @@ void EventManager::ShuffleEvents()
 // 함수 호출시 랜덤하게 섞인 이벤트가 순서대로 실행
 void EventManager::TriggerNextEvent()
 {
+    GameSystem& gs = GameSystem::GetInstance();
+    int nextStage = gs.GetStage() + 1;
+    gs.SetStage(nextStage);
+
+    if (nextStage == 11) // 11번째 이벤트는 보스전으로 고정
+    {
+        ChoiceGarbageCollector();
+        GraphicManager& Gm = GraphicManager::GetInstance();
+        Gm.DrawGameWin(Player);
+    }
     if (CurrentEventIndex >= EventIds.size()) ShuffleEvents();
 
     int id = EventIds[CurrentEventIndex++];
@@ -1033,19 +1053,12 @@ void EventManager::ChoiceGarbageCollector()
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 10, DexBonus());
-            // 민첩 보정치
+            Dice.RollDice(20, 15, DexBonus());
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
             IsBattle = true;
-        }
-        else if (Choice == 3)
-        {
-            WaitEnter();
-            Gm.ClearLogs();
-            return; // 전투 회피 후 즉시 이벤트 종료
         }
         else
         {
@@ -1064,34 +1077,32 @@ void EventManager::ChoiceGarbageCollector()
         DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Player.SetExperience(Player.GetExperience() + 60);
-        Logger.LogExpGain(60, Player.GetExperience(), Player.GetMaxExperience());
 
-        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
-        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Player.SetHealth(Player.GetHealth() + 20);
+        Gm.AddLog("Hp가 20 회복됩니다.");
 
+        Logger.ChoiceGarbageCollectorSuccess();
         WaitEnter();
         Gm.ClearLogs();
+        cm.StartBossBattle(Player, *MonsterData::CreateShadowLord());
     }
     else
     {
-        if (Choice == 1) // 2를 골랐는데도 실패 선택지를 출력하고 패널티를 받지 않도록 수정
+        if (Choice == 1)
         {
             Gm.ClearLogs();
             DiceLose();
             Gm.AddLog("판정 실패!");
-
-            if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + " [ 실패 ]");
-            else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+            Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + " [ 실패 ]");
 
             Logger.ChoiceGarbageCollectorFail();
-            Player.SetHealth(max(0, Player.GetHealth() - 10));
-            // HP 10 차감
+            Player.SetHealth(max(0, Player.GetHealth() - 20));
+            Gm.AddLog("Hp가 20 손실됩니다.");
             WaitEnter();
             Gm.ClearLogs();
+            cm.StartBossBattle(Player, *MonsterData::CreateShadowLord());
         }
-        cm.StartBossBattle(Player, *MonsterData::CreateShadowLord());
-        // 보스 전투 시작
     }
 }
 
@@ -1145,6 +1156,7 @@ void EventManager::ChoiceUndeclared()
 
         if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Logger.ChoiceUndeclaredSuccess();
 
         WaitEnter();
         Gm.ClearLogs();
@@ -1219,6 +1231,7 @@ void EventManager::ChoiceDanglingPointer()
 
         if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Logger.ChoiceDanglingPointerSuccess();
 
         WaitEnter();
         Gm.ClearLogs();
@@ -1296,6 +1309,7 @@ void EventManager::ChoiceBrokenActor()
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Logger.ChoiceBrokenActorSuccess();
         WaitEnter();
         Gm.ClearLogs();
     }
