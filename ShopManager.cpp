@@ -31,6 +31,7 @@ void ShopManager::EnterShop(PlayerManager& Player)
 	while (InShop)
 	{
 	    Ls.LogPrintShopMenu();
+	    Gm.DrawStatus(Player, Gm.GetRightEdge() -50, 2);
 
 	    Gm.DrawInventoryData(Player);
 	    Gm.CommandAddLog("상점 서비스를 선택하세요 >> ");
@@ -45,12 +46,11 @@ void ShopManager::EnterShop(PlayerManager& Player)
 		int ItemChoice;
 		string ItemToSellName;
 
-	    Gm.DrawInventoryData(Player);
-
 		switch (MenuChoice)
 	    {
 		case 1:
 		    Ls.LogPrintShopItems(CurrentDisplayItems);
+		    //Gm.DrawStatus(Player, Gm.GetRightEdge() -44, 2);
 		    Gm.DrawInventoryData(Player);
 		    Gm.CommandAddLog("구매할 아이템을 선택하세요 >> ");
 		    getline(cin, Input);

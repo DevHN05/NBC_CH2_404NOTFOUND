@@ -447,16 +447,13 @@ void GraphicManager::DrawCombatLayOut() const
     }
 }
 
-void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
+void GraphicManager::DrawStatus(PlayerManager& Player, const int& X, const int& Y) const
 {
-    int CenterX = SplitColumn / 2 - 10;
-    int CenterY = MainBottom / 2;
-
-    GoSpace(CenterX, CenterY); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
+    GoSpace(X, Y); cout << " [ " << Player.GetNickname() << " ]  Lv." << Player.GetLevel();
     GoSpace(5, 2);  cout << ">> FIELD: SYSTEM CORE";
 
     // HP Bar
-    GoSpace(CenterX, CenterY + 1); cout << " HP:  [ ";
+    GoSpace(X, Y + 1); cout << " HP:  [ ";
     int MaxHpBar = 20;
     int FilledHPGauge = (int)(Player.GetHealth() * MaxHpBar / Player.GetMaxHealth());
     FilledHPGauge = min(FilledHPGauge, MaxHpBar);
@@ -464,7 +461,7 @@ void GraphicManager::DrawLobbyStatus(PlayerManager& Player) const
     cout << " ] " << Player.GetHealth() << " / " << Player.GetMaxHealth();
 
     // EXP Bar
-    GoSpace(CenterX, CenterY + 2); cout << " EXP: [ ";
+    GoSpace(X, Y + 2); cout << " EXP: [ ";
     int MaxExpBar = 20;
     int FilledExpGauge = (int)(Player.GetExperience() * MaxExpBar / Player.GetMaxExperience());
     FilledExpGauge = min(FilledExpGauge, MaxExpBar);

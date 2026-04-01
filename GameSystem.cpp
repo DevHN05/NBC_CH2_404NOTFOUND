@@ -72,7 +72,7 @@ void GameSystem::StartGame()
         Gm.DrawLayout();
         Gm.ClearLogs();
 
-        Gm.DrawLobbyStatus(Player);
+        Gm.DrawStatus(Player, Gm.GetRightEdge() / 2 - 20, Gm.GetMainBottom() / 2);
         Gm.DrawInventoryData(Player);
 
         int Choice;
