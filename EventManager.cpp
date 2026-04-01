@@ -154,6 +154,17 @@ void DiceLose()
     Sm.SetSFXVolume(50);
 };
 
+void PlayDiceVisualEffect(int Result, int DiceSize)
+{
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::DiceSFX, L"BGM/DiceSound.wav");
+    Sm.SetSFXVolume(50);
+    Sm.PlaySFX(SoundType::DiceSFX);
+
+    GraphicManager& Gm = GraphicManager::GetInstance();
+    Gm.DrawDiceRoll(Result, DiceSize);
+}
+
 void EventManager::TutorialEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
@@ -207,6 +218,17 @@ void EventManager::TutorialEvent()
     WaitEnter();
     int str = RollStat(DiceVal);
     Player.SetStrength(str);
+
+    PlayDiceVisualEffect(str, 20);
+    if (str > 10)
+    {
+        DiceWin();
+    }
+    else
+    {
+        DiceLose();
+    }
+
     Gm.PerformAddLog("근력(STR) 주사위 값 : " + to_string(str) + "/20");
     Gm.PerformAddLog(" ");
     Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
@@ -215,6 +237,17 @@ void EventManager::TutorialEvent()
     Gm.ClearLogs();
     int dex = RollStat(DiceVal);
     Player.SetDexterity(dex);
+
+    PlayDiceVisualEffect(dex, 20);
+    if (dex > 10)
+    {
+        DiceWin();
+    }
+    else
+    {
+        DiceLose();
+    }
+
     Gm.PerformAddLog("민첩(DEX) 주사위 값 : " + to_string(dex) + "/20");
     Gm.PerformAddLog(" ");
     Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
@@ -224,6 +257,17 @@ void EventManager::TutorialEvent()
     Gm.ClearLogs();
     int intel = RollStat(DiceVal);
     Player.SetIntelligence(intel);
+
+    PlayDiceVisualEffect(intel, 20);
+    if (intel > 10)
+    {
+        DiceWin();
+    }
+    else
+    {
+        DiceLose();
+    }
+
     Gm.PerformAddLog("지능(INT) 주사위 값 : " + to_string(intel) + "/20");
     Gm.PerformAddLog(" ");
     Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
@@ -231,7 +275,18 @@ void EventManager::TutorialEvent()
     WaitEnter();
     Gm.ClearLogs();
     int luk = RollStat(DiceVal);
-    Player.SetIntelligence(intel);
+    Player.SetLuck(luk);
+
+    PlayDiceVisualEffect(luk, 20);
+    if (luk > 10)
+    {
+        DiceWin();
+    }
+    else
+    {
+        DiceLose();
+    }
+
     Gm.PerformAddLog("행운(Luk) 주사위 값 : " + to_string(luk) + "/20");
     Gm.PerformAddLog(" ");
     Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
