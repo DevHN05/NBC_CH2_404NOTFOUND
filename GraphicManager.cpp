@@ -322,6 +322,14 @@ void GraphicManager::InitializeAssets()
         "   ▒█████   ▒▒██████  ▒▒████████   ▒██████████  ▒█████▒▒██████ ▒▒████████",
         "   ▒▒▒▒▒     ▒▒▒▒▒▒    ▒▒▒▒▒▒▒▒    ▒▒▒▒▒▒▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒ "
     };
+    AsciiAssets["404NotFound"] =
+    {
+        "o  o  o-o  o  o   o   o      o    o--o                  o  ",
+        "|  | o  /o |  |   |\\  |      |    |                     |  ",
+        "o--O | / | o--O   | \\ | o-o -o-   O-o  o-o o  o o-o   o-O  ",
+        "   | o/  o    |   |  \\| | |  |    |    | | |  | |  | |  |  ",
+        "   o  o-o     o   o   o o-o  o    o    o-o o--o o  o  o-o  "
+    };
 }
 
 void GraphicManager::GoSpace(int X, int Y) const
@@ -833,7 +841,7 @@ void GraphicManager::SetRageMode(bool IsRage)
     }
 }
 
-void GraphicManager::ShowTitle() const
+void GraphicManager::ShowTitle()
 {
     system("cls");
     Sleep(100);
@@ -894,17 +902,49 @@ void GraphicManager::ShowTitle() const
     int StartX = (CurrentWidth / 2) - (LogoW / 2) + 1;
     int StartY = (CurrentHeight / 2) - 4;
 
-    Sleep(200);
-    GoSpace(StartX, StartY);     cout << "o  o  o-o  o  o   o   o      o    o--o                  o  ";
-    Sleep(100);
-    GoSpace(StartX, StartY + 1); cout << "|  | o  /o |  |   |\\  |      |    |                     |  ";
-    GoSpace(StartX, StartY + 2); cout << "o--O | / | o--O   | \\ | o-o -o-   O-o  o-o o  o o-o   o-O  ";
-    Sleep(50);
-    GoSpace(StartX, StartY + 3); cout << "   | o/  o    |   |  \\| | |  |    |    | | |  | |  | |  |  ";
-    GoSpace(StartX, StartY + 4); cout << "   o  o-o     o   o   o o-o  o    o    o-o o--o o  o  o-o  ";
-
     GoSpace((CurrentWidth / 2) - 13, StartY + 6); cout << "[ PROJECT : 404 NOT FOUND ]";
-    GoSpace((CurrentWidth / 2) - 8, StartY + 10); cout << "> Press Enter <";
+
+    DrawAsciiArt("404NotFound", StartX, StartY);
+
+    int Counter = 0;
+    bool ShowEnter = false;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    while (true)
+    {
+        Counter++;
+
+        if (!ShowEnter && Counter > 60)
+        {
+            GoSpace((CurrentWidth / 2) - 8, StartY + 10); cout << "> Press Enter <";
+            ShowEnter = true;
+        }
+
+        if (Counter > 120)
+        {
+            HitShake("404NotFound", StartX -2, StartY, rand() % 2);
+            Counter = 0;
+        }
+
+        if (GetAsyncKeyState(VK_RETURN) & 1) //Enter 눌림 1회 감지
+        {
+            while (GetAsyncKeyState(VK_RETURN) & 0x8000) //손 뗄 때까지 대기 (입력 방지)
+                Sleep(10);
+
+            for (int i = 0; i < 5; ++i)
+            {
+                GoSpace(StartX-2, StartY + i);
+                SetConsoleTextAttribute(hConsole, 0x0F);
+                cout << string(AsciiAssets["404NotFound"][i].size(), ' ');
+                Sleep(60);
+            }
+
+            SetConsoleTextAttribute(hConsole, 0x0F);
+            break;
+        }
+
+        Sleep(10);
+    }
 
     cin.ignore(100, '\n');
 }
@@ -1060,7 +1100,7 @@ void GraphicManager::PerformAddLog(const string& Log)
         if (i < GameLogs.size())
         {
             GoSpace(2, LogStartY + i);
-            cout << "> " << GameLogs[i];
+            cout << " " << GameLogs[i];
         }
     }
 }

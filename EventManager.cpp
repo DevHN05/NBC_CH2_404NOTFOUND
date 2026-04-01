@@ -9,6 +9,8 @@
 #include "MonsterData.h"
 #include <conio.h>
 
+#include "SoundManager.h"
+
 using namespace std;
 CombatManager& cm = CombatManager::GetInstance();
 
@@ -60,7 +62,6 @@ void EventManager::ShuffleEvents()
         }
         Chunk.push_back(ShopEventIds[i]);
         shuffle(Chunk.begin(), Chunk.end(), EventRandomRoll);
-
         for (int id : Chunk)
         {
             EventIds.push_back(id);
@@ -117,26 +118,46 @@ void EventManager::TriggerNextEvent()
     }
 }
 
+void DiceWin()
+{
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::DiceWinSFX, L"BGM/DiceWin.wav");
+    Sm.PlaySFX(SoundType::DiceWinSFX);
+    Sm.SetSFXVolume(50);
+};
+
+void DiceLose()
+{
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::DiceLoseSFX, L"BGM/DiceLose.wav");
+    Sm.PlaySFX(SoundType::DiceLoseSFX);
+    Sm.SetSFXVolume(50);
+};
 
 void EventManager::TutorialEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Logger.ShowStory();
-    Gm.GoSpace(30, 8); cout << "404 NOT FOUND, 알 수 없는 접속자입니다.";
-    Gm.GoSpace(30, 9); cout << "...특수 디버깅 툴 확인. 비상모드 실행. 접속자 권한 확인.";
-    Gm.GoSpace(30, 11); cout << "이름을 입력해 접속 권한을 확보해주세요 > ";
+
+    Gm.GoSpace(30, 8);
+    cout << "404 NOT FOUND, 알 수 없는 접속자입니다.";
+    Gm.GoSpace(30, 9);
+    cout << "...특수 디버깅 툴 확인. 비상모드 실행. 접속자 권한 확인.";
+    Gm.GoSpace(30, 11);
+    cout << "이름을 입력해 접속 권한을 확보해주세요 > ";
     string InputName;
+
 
     cin.clear();
     cin.sync();
     while (true)
     {
         getline(cin, InputName);
-
         if (InputName.empty() || InputName.find_first_not_of(' ') == string::npos)
         {
-            Gm.GoSpace(30, 13); cout << "이름은 한 글자 이상 입력해야 합니다.";
+            Gm.GoSpace(30, 13);
+            cout << "이름은 한 글자 이상 입력해야 합니다.";
             Gm.GoSpace(30, 11); cout << "이름을 입력해 접속 권한을 확보해주세요 > ";
 
             cin.clear();
@@ -147,8 +168,13 @@ void EventManager::TutorialEvent()
         break;
     }
 
-    Gm.GoSpace(30, 13); cout << "[ 시스템 접속 권한 승인. 접속자명 : " << InputName << " ]";
-    Gm.GoSpace(30, 14); cout << "[ Enter 키를 눌러 시스템 접속을 시도해주세요. ]";
+
+    Logger.hideCursor();
+    Gm.GoSpace(30, 13);
+    cout << "[ 시스템 접속 권한 승인. 접속자명 : " << InputName << " ]";
+    Gm.GoSpace(30, 14);
+    cout << "[ Enter 키를 눌러 시스템 접속을 시도해주세요. ]";
+
     WaitEnter();
 
     Logger.RunTutorial();
@@ -157,38 +183,57 @@ void EventManager::TutorialEvent()
     random_device rd;
     mt19937 DiceVal(rd());
     uniform_int_distribution<int> RollStat(1, 20);
-
+    Logger.hideCursor();
     WaitEnter();
     int str = RollStat(DiceVal);
     Player.SetStrength(str);
-    Gm.CommandAddLog("근력(STR) 주사위 값 : " + to_string(str) + "/20");
+    Gm.PerformAddLog("근력(STR) 주사위 값 : " + to_string(str) + "/20");
+    Gm.PerformAddLog(" ");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 
     WaitEnter();
+    Gm.ClearLogs();
     int dex = RollStat(DiceVal);
     Player.SetDexterity(dex);
-    Gm.CommandAddLog("민첩(DEX) 주사위 값 : " + to_string(dex) + "/20");
+    Gm.PerformAddLog("민첩(DEX) 주사위 값 : " + to_string(dex) + "/20");
+    Gm.PerformAddLog(" ");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
+
 
     WaitEnter();
+    Gm.ClearLogs();
     int intel = RollStat(DiceVal);
     Player.SetIntelligence(intel);
-    Gm.CommandAddLog("지능(INT) 주사위 값 : " + to_string(intel) + "/20");
+    Gm.PerformAddLog("지능(INT) 주사위 값 : " + to_string(intel) + "/20");
+    Gm.PerformAddLog(" ");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 
     WaitEnter();
+    Gm.ClearLogs();
     int luk = RollStat(DiceVal);
     Player.SetIntelligence(intel);
-    Gm.CommandAddLog("행운(Luk) 주사위 값 : " + to_string(luk) + "/20");
+    Gm.PerformAddLog("행운(Luk) 주사위 값 : " + to_string(luk) + "/20");
+    Gm.PerformAddLog(" ");
+    Gm.PerformAddLog("[ 계속하려면 Enter 키를 누르세요... ]");
 
     WaitEnter();
     Gm.ClearLogs();
-    Gm.GoSpace(3, 26); cout << "[ 최종 스탯표 ]";
-    Gm.AddLog("근력(STR) : " + to_string(str) + "/20");
-    Gm.AddLog("민첩(DEX) : " + to_string(dex) + "/20");
-    Gm.AddLog("지능(INT) : " + to_string(intel) + "/20");
-    Gm.AddLog("행운(LUK) : " + to_string(luk) + "/20");
-    Gm.AddLog("모든 스탯 설정이 완료되었습니다! 디버깅을 시작합니다.");
+    Gm.PerformAddLog("[ 최종 스탯표 ]");
+    Gm.PerformAddLog("");
+    Gm.PerformAddLog("근력(STR) : " + to_string(str) + "/20");
+    Gm.PerformAddLog("민첩(DEX) : " + to_string(dex) + "/20");
+    Gm.PerformAddLog("지능(INT) : " + to_string(intel) + "/20");
+    Gm.PerformAddLog("행운(LUK) : " + to_string(luk) + "/20");
 
     WaitEnter();
     Gm.ClearLogs();
+    Gm.PerformAddLog("모든 스탯 설정이 완료되었습니다!");
+    Gm.PerformAddLog("");
+    Gm.PerformAddLog("[ Enter 키를 눌러 디버깅을 시작하세요... ]");
+
+    WaitEnter();
+    Gm.ClearLogs();
+    Logger.showCursor();
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, 0x0F);
 }
@@ -200,32 +245,32 @@ void EventManager::TutorialEvent()
 // ========== 구분선 ===========
 // 일반 전투 이벤트는 맨 앞에 Battle을 붙여서 구분
 
-// 일반 전투 이벤트 #1 파수꾼 :: 시스템 보안 봇 이벤트. BattleGuardian
+// 일반 전투 이벤트 #1 파수꾼 :: 시스템 보안 봇 이벤트.
 void EventManager::BattleGuardian()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
     Logger.LogEventGuardian(DexBonus(), IntBonus());
-
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
         cin >> Choice;
-
         bool IsValid = true;
         IsBattle = false;
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 13, DexBonus()); // 보정치 13
-            if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)
+            Dice.RollDice(20, 13, DexBonus());
+            // 보정치 13
+            if (!Dice.GetResult()) IsBattle = true;
+            // 결과가 실패면 실패 선택지 메세지(IsBattle=true)
         }
         else if (Choice == 2)
         {
             Dice.RollDice(20, 13, IntBonus());
-           if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)
+            if (!Dice.GetResult()) IsBattle = true;      // 결과가 실패면 실패 선택지 메세지(IsBattle=true)
         }
         else if (Choice == 3)                           // 3번 선택 시 즉시 전투 출력
         {
@@ -238,7 +283,8 @@ void EventManager::BattleGuardian()
             IsValid = false;
 
             cin.clear();
-            cin.ignore(100, '\n');        // 한글 등 잘못된 입력을 지우는 역할의 함수
+            cin.ignore(100, '\n');
+            // 한글 등 잘못된 입력을 지우는 역할의 함수
             Gm.ClearLogs();
         }
 
@@ -247,18 +293,29 @@ void EventManager::BattleGuardian()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
     else
     {
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailGuardian();
         WaitEnter();
         Gm.ClearLogs();
@@ -266,7 +323,8 @@ void EventManager::BattleGuardian()
     }
 }
 
-// 일반 전투 이벤트 #2 방랑자 :: delete ptr; 이벤트 BattleWanderer
+// 일반 전투 이벤트 #2 방랑자 :: delete ptr;
+// 이벤트 BattleWanderer
 void EventManager::BattleWanderer()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
@@ -279,7 +337,6 @@ void EventManager::BattleWanderer()
     while (true)
     {
         cin >> Choice;
-
         bool IsValid = true;
         IsBattle = false;
 
@@ -295,7 +352,8 @@ void EventManager::BattleWanderer()
         }
         else if (Choice == 3)                            // 3번 선택 시 즉시 전투 출력
         {
-            cm.StartBattle(Player, *MonsterData::CreateDeletePtr()); break;
+            cm.StartBattle(Player, *MonsterData::CreateDeletePtr());
+            break;
         }
         else
         {
@@ -312,20 +370,32 @@ void EventManager::BattleWanderer()
     }
 
     if (!IsBattle && Choice != 3) {
-        // 성공 메세지
+         // 성공 메시지
+        DiceWin();
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 성공!");
+        Gm.AddLog("판정 성공!");
         // 경험치 오르고 골드 보상 없이 종료
         Player.SetExperience(Player.GetExperience() + 10);
         Logger.LogExpGain(10, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + (Player.GetStrength() / 5)) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + (Player.GetDexterity() / 5)) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        DiceWin();
         WaitEnter();
         Gm.ClearLogs();
     }
     else if (IsBattle) {
         // 실패 메세지 + hp 5 차감
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + (Player.GetStrength() / 5)) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + (Player.GetDexterity() / 5)) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailWanderer();
         Player.SetHealth(Player.GetHealth() - 5);
         WaitEnter();
@@ -335,7 +405,8 @@ void EventManager::BattleWanderer()
 }
 
 
-// 일반 전투 이벤트 #3 분쇄자 :: Break. BattleBreaker
+// 일반 전투 이벤트 #3 분쇄자 :: Break.
+// BattleBreaker
 void EventManager::BattleBreaker()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
@@ -343,7 +414,8 @@ void EventManager::BattleBreaker()
     Gm.ClearLogs();
     Logger.LogEventBreaker(StrBonus(), IntBonus());
 
-    //Gm.GoSpace(4, 20); cout << "숫자를 입력해 행동 선택 > ";
+    //Gm.GoSpace(4, 20);
+    cout << "숫자를 입력해 행동 선택 > ";
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
     while (true)
     {
@@ -377,11 +449,16 @@ void EventManager::BattleBreaker()
     if (!IsBattle)
     {
         // 성공 메세지
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 30);
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -389,7 +466,13 @@ void EventManager::BattleBreaker()
     {
         // 실패 메세지 및 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailBreaker();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
         WaitEnter();
@@ -398,20 +481,19 @@ void EventManager::BattleBreaker()
     }
 }
 
-// 일반 전투 이벤트 #4 침략자 :: 오버플로우. BattleInvader
+// 일반 전투 이벤트 #4 침략자 :: 오버플로우.
+// BattleInvader
 void EventManager::BattleInvader()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
     Logger.LogEventInvader(DexBonus(), LukBonus());
-
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
         cin >> Choice;
-
         bool IsValid = true;
         IsBattle = false;
 
@@ -440,11 +522,16 @@ void EventManager::BattleInvader()
     if (!IsBattle)
     {
         // 성공 메세지
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 30);
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -452,7 +539,13 @@ void EventManager::BattleInvader()
     {
         // 실패 메세지 및 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailInvader();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         WaitEnter();
@@ -461,20 +554,19 @@ void EventManager::BattleInvader()
     }
 }
 
-// 일반 전투 이벤트 #5 암살자 :: 세그멘테이션 폴트. BattleAssassin
+// 일반 전투 이벤트 #5 암살자 :: 세그멘테이션 폴트.
+// BattleAssassin
 void EventManager::BattleAssassin()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
     Logger.LogEventAssassin(StrBonus(), IntBonus());
-
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
         cin >> Choice;
-
         bool IsValid = true;
         IsBattle = false;
 
@@ -503,11 +595,16 @@ void EventManager::BattleAssassin()
     if (!IsBattle)
     {
         // 성공 메세지
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience() + 30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -515,7 +612,13 @@ void EventManager::BattleAssassin()
     {
         // 실패 메세지 및 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailAssassin();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         WaitEnter();
@@ -524,20 +627,19 @@ void EventManager::BattleAssassin()
     }
 }
 
-// 일반 전투 이벤트 #6 몬스터 재활용 :: 통나무 다리. BattleBridge
+// 일반 전투 이벤트 #6 몬스터 재활용 :: 통나무 다리.
+// BattleBridge
 void EventManager::BattleBridge()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     Gm.ClearLogs();
     Logger.LogEventBridge(DexBonus(), LukBonus(), StrBonus());
-
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
 
     while (true)
     {
         cin >> Choice;
-
         bool IsValid = true;
         IsBattle = false;
 
@@ -571,11 +673,17 @@ void EventManager::BattleBridge()
     if (!IsBattle)
     {
         // 성공 메세지
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -583,7 +691,14 @@ void EventManager::BattleBridge()
     {
         // 실패 메세지 및 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailBridge();
         WaitEnter();
         Gm.ClearLogs();
@@ -600,7 +715,6 @@ void EventManager::BattleForest()
     Logger.LogEventForest(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -610,12 +724,14 @@ void EventManager::BattleForest()
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 14, IntBonus()); // 지능 보정치
+            Dice.RollDice(20, 14, IntBonus());
+            // 지능 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            Dice.RollDice(20, 14, LukBonus()); // 행운 보정치
+            Dice.RollDice(20, 14, LukBonus());
+            // 행운 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -635,12 +751,17 @@ void EventManager::BattleForest()
     if (!IsBattle)
     {
         // 성공 메세지 출력 (전투 미 발생, 패널티 면제)
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         // 경험치 오르고 골드 보상 없이 종료
         Player.SetExperience(Player.GetExperience() + 30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -648,7 +769,13 @@ void EventManager::BattleForest()
     {
         // 실패 메세지 출력 및 몬스터 랜덤 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailForest();
         WaitEnter();
         Gm.ClearLogs();
@@ -665,7 +792,6 @@ void EventManager::BattleDataNoise()
     Logger.LogEventDataNoise(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -675,12 +801,14 @@ void EventManager::BattleDataNoise()
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 14, IntBonus()); // 지식 보정치
+            Dice.RollDice(20, 14, IntBonus());
+            // 지식 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            Dice.RollDice(20, 14, LukBonus()); // 행운 보정치
+            Dice.RollDice(20, 14, LukBonus());
+            // 행운 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -700,11 +828,16 @@ void EventManager::BattleDataNoise()
     if (!IsBattle)
     {
         // 성공 메세지 출력
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience() + 30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -712,7 +845,13 @@ void EventManager::BattleDataNoise()
     {
         // HP 10 차감, 실패 메세지 출력 및 몬스터 랜덤 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailDataNoise();
         Player.SetHealth(max(0, Player.GetHealth() - 10));
         WaitEnter();
@@ -730,7 +869,6 @@ void EventManager::BattleGravity()
     Logger.LogEventGravity(LukBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -740,12 +878,14 @@ void EventManager::BattleGravity()
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 12, LukBonus()); // 행운 보정치
+            Dice.RollDice(20, 12, LukBonus());
+            // 행운 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            Dice.RollDice(20, 12, IntBonus()); // 지식 보정치
+            Dice.RollDice(20, 12, IntBonus());
+            // 지식 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -765,11 +905,16 @@ void EventManager::BattleGravity()
     if (!IsBattle)
     {
         // 성공 메세지 출력
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 30);
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -777,7 +922,13 @@ void EventManager::BattleGravity()
     {
         // 실패 메세지 출력, HP 5 차감 및 몬스터 랜덤 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailGravity();
         Player.SetHealth(max(0, Player.GetHealth() - 5));
         WaitEnter();
@@ -795,7 +946,6 @@ void EventManager::BattleCliff()
     Logger.LogEventCliff(DexBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -828,11 +978,16 @@ void EventManager::BattleCliff()
     if (!IsBattle)
     {
         // 성공 메세지
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience() + 30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -840,7 +995,13 @@ void EventManager::BattleCliff()
     {
         // 실패 메세지 및 전투 발생
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.LogEventFailCliff();
         WaitEnter();
         Gm.ClearLogs();
@@ -864,7 +1025,6 @@ void EventManager::ChoiceGarbageCollector()
     Logger.ChoiceGarbageCollector(DexBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -873,7 +1033,8 @@ void EventManager::ChoiceGarbageCollector()
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 10, DexBonus()); // 민첩 보정치
+            Dice.RollDice(20, 10, DexBonus());
+            // 민첩 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
@@ -900,11 +1061,15 @@ void EventManager::ChoiceGarbageCollector()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience() + 60);
         Logger.LogExpGain(60, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -913,13 +1078,20 @@ void EventManager::ChoiceGarbageCollector()
         if (Choice == 1) // 2를 골랐는데도 실패 선택지를 출력하고 패널티를 받지 않도록 수정
         {
             Gm.ClearLogs();
-            Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+            DiceLose();
+            Gm.AddLog("판정 실패!");
+
+            if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + " [ 실패 ]");
+            else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+
             Logger.ChoiceGarbageCollectorFail();
-            Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
+            Player.SetHealth(max(0, Player.GetHealth() - 10));
+            // HP 10 차감
             WaitEnter();
             Gm.ClearLogs();
         }
-        cm.StartBossBattle(Player, *MonsterData::CreateShadowLord()); // 보스 전투 시작
+        cm.StartBossBattle(Player, *MonsterData::CreateShadowLord());
+        // 보스 전투 시작
     }
 }
 
@@ -932,7 +1104,6 @@ void EventManager::ChoiceUndeclared()
     Logger.ChoiceUndeclared(StrBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -966,10 +1137,15 @@ void EventManager::ChoiceUndeclared()
     if (!IsBattle)
     {
         // 성공 메세지 출력
+        DiceWin();
+        Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience() + 60);
         Logger.LogExpGain(60, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -979,13 +1155,19 @@ void EventManager::ChoiceUndeclared()
         if (Choice == 1)
         {
             Gm.ClearLogs();
-            Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+            DiceLose();
+            Gm.AddLog("판정 실패!");
+
+            if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + " [ 실패 ]");
+            else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+
             Logger.ChoiceUndeclaredFail();
             Player.SetHealth(max(0, Player.GetHealth() - 10));
             WaitEnter();
             Gm.ClearLogs();
         }
-        cm.StartBossBattle(Player, *MonsterData::CreateVolcanicDragon()); // 보스 전투 시작
+        cm.StartBossBattle(Player, *MonsterData::CreateVolcanicDragon());
+        // 보스 전투 시작
     }
 }
 
@@ -998,7 +1180,6 @@ void EventManager::ChoiceDanglingPointer()
     Logger.ChoiceDanglingPointer(StrBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1030,11 +1211,15 @@ void EventManager::ChoiceDanglingPointer()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Logger.LogExpGain(60, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 60);
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -1043,13 +1228,19 @@ void EventManager::ChoiceDanglingPointer()
         if (Choice == 1)
         {
             Gm.ClearLogs();
-            Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+            DiceLose();
+            Gm.AddLog("판정 실패!");
+
+            if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + " [ 실패 ]");
+            else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+
             Logger.ChoiceDanglingPointerFail();
             Player.SetHealth(max(0, Player.GetHealth() - 10));
             WaitEnter();
             Gm.ClearLogs();
         }
-        cm.StartBossBattle(Player, *MonsterData::CreateForestGuardian()); // 보스 전투 시작
+        cm.StartBossBattle(Player, *MonsterData::CreateForestGuardian());
+        // 보스 전투 시작
     }
 }
 
@@ -1062,7 +1253,6 @@ void EventManager::ChoiceBrokenActor()
     Logger.ChoiceBrokenActor(LukBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1096,18 +1286,29 @@ void EventManager::ChoiceBrokenActor()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience() + 30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
     else
     {
         Gm.ClearLogs();
-        Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChoiceBrokenActorFail();
         WaitEnter();
         cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
@@ -1124,7 +1325,6 @@ void EventManager::ChoiceUninitArray()
     Logger.ChoiceDanglingPointer(IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1159,11 +1359,15 @@ void EventManager::ChoiceUninitArray()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
         Player.SetExperience(Player.GetExperience() + 30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -1172,12 +1376,19 @@ void EventManager::ChoiceUninitArray()
         if (Choice == 1)
         {
             Gm.ClearLogs();
-            Gm.AddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
-            Player.SetHealth(max(0, Player.GetHealth() - 10)); // HP 10 차감
+            DiceLose();
+            Gm.AddLog("판정 실패!");
+
+            if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + " [ 실패 ]");
+            else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + " [ 실패 ]");
+
+            Player.SetHealth(max(0, Player.GetHealth() - 10));
+            // HP 10 차감
             WaitEnter();
             Gm.ClearLogs();
         }
-        cm.StartBattle(Player, *MonsterData::CreateRandomMonster()); // 일반 전투 시작
+        cm.StartBattle(Player, *MonsterData::CreateRandomMonster());
+        // 일반 전투 시작
     }
 }
 
@@ -1195,7 +1406,6 @@ void EventManager::ChestNormal()
     Logger.ChestNormal(StrBonus(), DexBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1204,12 +1414,14 @@ void EventManager::ChestNormal()
 
         if (Choice == 1)
         {
-            Dice.RollDice(20, 10, StrBonus()); // 힘 보정치
+            Dice.RollDice(20, 10, StrBonus());
+            // 힘 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else if (Choice == 2)
         {
-            Dice.RollDice(20, 10, DexBonus()); // 민첩 보정치
+            Dice.RollDice(20, 10, DexBonus());
+            // 민첩 보정치
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
@@ -1225,8 +1437,14 @@ void EventManager::ChestNormal()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Gm.AddLog("판정 성공!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestNormalSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1239,7 +1457,13 @@ void EventManager::ChestNormal()
     else
     {
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestNormalFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1255,7 +1479,6 @@ void EventManager::ChestConstLock()
     Logger.ChestConstLock(StrBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1284,8 +1507,14 @@ void EventManager::ChestConstLock()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Gm.AddLog("판정 성공!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestConstLockSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1298,7 +1527,13 @@ void EventManager::ChestConstLock()
     else
     {
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestConstLockFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1314,7 +1549,6 @@ void EventManager::ChestAndLogic()
     Logger.ChestAndLogic(DexBonus(), LukBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1348,8 +1582,15 @@ void EventManager::ChestAndLogic()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Gm.AddLog("판정 성공!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestAndLogicSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1362,7 +1603,14 @@ void EventManager::ChestAndLogic()
     else
     {
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestAndLogicFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1378,7 +1626,6 @@ void EventManager::ChestPointerSearch()
     Logger.ChestPointerSearch(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1407,8 +1654,14 @@ void EventManager::ChestPointerSearch()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Gm.AddLog("판정 성공!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestPointerSearchSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1421,7 +1674,13 @@ void EventManager::ChestPointerSearch()
     else
     {
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestPointerSearchFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1437,7 +1696,6 @@ void EventManager::ChestBugActorFix()
     Logger.ChestBugActorFix(StrBonus(), IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1466,8 +1724,14 @@ void EventManager::ChestBugActorFix()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        Gm.AddLog("판정 성공!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestBugActorFixSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1480,7 +1744,13 @@ void EventManager::ChestBugActorFix()
     else
     {
         Gm.ClearLogs();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ChestBugActorFixFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1501,7 +1771,6 @@ void EventManager::ShopChoiceEvent()
     Logger.ShopChoiceEvent(LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1529,9 +1798,13 @@ void EventManager::ShopChoiceEvent()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopChoiceEventSuccess();
         WaitEnter();
         Gm.ClearLogs();
@@ -1540,8 +1813,12 @@ void EventManager::ShopChoiceEvent()
     else
     {
         Gm.ClearLogs();
-        cin.clear();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopChoiceEventFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1558,7 +1835,6 @@ void EventManager::ShopVillageWay()
     Logger.ShopVillageWay(StrBonus(), DexBonus()); // 바위 길막기 로거
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1591,9 +1867,14 @@ void EventManager::ShopVillageWay()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopVillageWaySuccess();
         WaitEnter();
         Gm.ClearLogs();
@@ -1602,8 +1883,13 @@ void EventManager::ShopVillageWay()
     else
     {
         Gm.ClearLogs();
-        cin.clear();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopVillageWayFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1620,7 +1906,6 @@ void EventManager::ShopGamblerBet()
     Logger.ShopGamblerBet(LukBonus(), DexBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1653,9 +1938,14 @@ void EventManager::ShopGamblerBet()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopGamblerBetSuccess();
         WaitEnter();
         Gm.ClearLogs();
@@ -1664,8 +1954,13 @@ void EventManager::ShopGamblerBet()
     else
     {
         Gm.ClearLogs();
-        cin.clear();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopGamblerBetFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1682,7 +1977,6 @@ void EventManager::ShopBugStoreFix()
     Logger.ShopBugStoreFix(IntBonus(), LukBonus() - 5); // 상점 디버깅 로거
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1715,9 +2009,14 @@ void EventManager::ShopBugStoreFix()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + (LukBonus() - 5)) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopBugStoreFixSuccess();
         WaitEnter();
         Gm.ClearLogs();
@@ -1726,8 +2025,13 @@ void EventManager::ShopBugStoreFix()
     else
     {
         Gm.ClearLogs();
-        cin.clear();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + (LukBonus() - 5)) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopBugStoreFixFail();
         WaitEnter();
         Gm.ClearLogs();
@@ -1743,7 +2047,6 @@ void EventManager::ShopAccessDenied()
     Logger.ShopAccessDenied(IntBonus(), LukBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
-
     while (true)
     {
         cin >> Choice;
@@ -1776,9 +2079,14 @@ void EventManager::ShopAccessDenied()
 
     if (!IsBattle)
     {
+        DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopAccessDeniedSuccess();
         cin.ignore(LLONG_MAX, '\n');
         WaitEnter();
@@ -1787,8 +2095,13 @@ void EventManager::ShopAccessDenied()
     else
     {
         Gm.ClearLogs();
-        cin.clear();
-        Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        DiceLose();
+        Gm.AddLog("판정 실패!");
+
+        if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+        else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
+
         Logger.ShopAccessDeniedFail();
         cin.ignore(LLONG_MAX, '\n');
         WaitEnter();

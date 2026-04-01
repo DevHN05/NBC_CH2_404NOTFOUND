@@ -9,12 +9,17 @@
 #include "ShopManager.h"
 #include "BaseItem.h"
 #include "Inventory.h"
+#include "SoundManager.h"
 #include <random>
 
 void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+
+    Sm.PlayBGM(SoundType::BattleBGM);
+    Sm.RegisterSound(SoundType::AttackSFX, L"BGM/AttackSFX.wav");
     Ls.hideCursor();
 
     Gm.ClearLogs();
@@ -49,6 +54,8 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 
         Damage = (Critical? Damage * 2 : Damage);
         Monster.SetHealth(Monster.GetHealth() - Damage);
+        Sm.PlaySFX(SoundType::AttackSFX);
+        Sm.SetSFXVolume(80);
         Ls.LogAttack(Player.GetNickname(), Monster.GetNickname(), Damage);
 
         Gm.HitMonsterShake(Monster.GetNickname(),0);
@@ -70,6 +77,8 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
 
         Ls.LogDiceRoll(DiceValue, IsSuccess);
         Player.SetHealth(Player.GetHealth() - Damage);
+        Sm.PlaySFX(SoundType::AttackSFX);
+        Sm.SetSFXVolume(80);
         Ls.LogAttack(Monster.GetNickname(), Player.GetNickname(), Damage);
 
         Gm.HitPlayerShake("PLAYER", 0);
@@ -95,7 +104,9 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
 
+    Sm.PlayBGM(SoundType::BattleBGM);
     Ls.hideCursor();
 
     Gm.ClearLogs();
