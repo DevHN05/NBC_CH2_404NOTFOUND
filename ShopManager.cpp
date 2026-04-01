@@ -5,6 +5,7 @@
 #include "LoggerSystem.h"
 #include "GraphicManager.h"
 #include "BasePotion.h"
+#include "SoundManager.h"
 #include <algorithm>
 
 ShopManager::ShopManager()
@@ -112,6 +113,9 @@ void ShopManager::RandomShuffleShopItems()
 bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+
 	int ItemIndex = SelectedNumber - 1;
 	if (ItemIndex < 0 || ItemIndex >= CurrentDisplayItems.size()) return false;
 
@@ -125,6 +129,7 @@ bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player)
 
     Player.CollectItem(CurrentDisplayItems[ItemIndex]->Clone()); //복제본 만들기
 
+    Sm.PlaySFX(SoundType::GoldSFX);
     Player.SetGold(Player.GetGold() - Item->GetPrice());
 
 	Ls.LogBuyItem(Item->GetName(), Item->GetPrice());
@@ -135,6 +140,9 @@ bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player)
 bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+
 	auto Item = Player.FindItem(ItemName);
 
     if (Item == nullptr)
@@ -143,6 +151,7 @@ bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player)
 		return false;
 	}
 
+    Sm.PlaySFX(SoundType::GoldSFX);
 	int SellPrice = Item->GetPrice() * 6 / 10;
 	Player.SetGold(Player.GetGold() + SellPrice);
 

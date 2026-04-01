@@ -15,7 +15,10 @@ enum class SoundType
     AttackSFX,
     DiceSFX,
     DiceWinSFX,
-    DiceLoseSFX
+    DiceLoseSFX,
+    GoldSFX,
+    KilkilSFX,
+    BossBattleBGM
 };
 
 class SoundManager

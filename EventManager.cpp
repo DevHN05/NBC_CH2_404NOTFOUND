@@ -1524,6 +1524,8 @@ void EventManager::ChestNormal()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
@@ -1570,6 +1572,7 @@ void EventManager::ChestNormal()
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Sm.PlaySFX(SoundType::GoldSFX);
         Logger.ChestNormalSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1600,6 +1603,9 @@ void EventManager::ChestConstLock()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
@@ -1643,6 +1649,7 @@ void EventManager::ChestConstLock()
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Sm.PlaySFX(SoundType::GoldSFX);
         Logger.ChestConstLockSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1673,6 +1680,8 @@ void EventManager::ChestAndLogic()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
@@ -1722,6 +1731,7 @@ void EventManager::ChestAndLogic()
         else if (Choice == 3) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Sm.PlaySFX(SoundType::GoldSFX);
         Logger.ChestAndLogicSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1753,6 +1763,9 @@ void EventManager::ChestPointerSearch()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
@@ -1796,6 +1809,7 @@ void EventManager::ChestPointerSearch()
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Sm.PlaySFX(SoundType::GoldSFX);
         Logger.ChestPointerSearchSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -1826,6 +1840,9 @@ void EventManager::ChestBugActorFix()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
@@ -1869,6 +1886,7 @@ void EventManager::ChestBugActorFix()
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Sm.PlaySFX(SoundType::GoldSFX);
         Logger.ChestBugActorFixSuccess();
         Player.SetExperience(Player.GetExperience()+30);
         Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
@@ -2045,6 +2063,9 @@ void EventManager::ShopGamblerBet()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::KilkilSFX, L"BGM/KilkilSFX.wav");
+    Sm.PlaySFX(SoundType::KilkilSFX);
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
