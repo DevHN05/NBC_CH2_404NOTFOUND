@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <vector>
-#include <iostream>
 #include "DiceSystem.h"
 #include "PlayerManager.h"
 
@@ -29,6 +28,7 @@ private:
     vector<int> ShopEventIds;
     vector<int> NormalEventIds;
     vector<int> EventIds;
+    DiceSystem Dice;
     size_t CurrentEventIndex = 0;
     int Choice;
     bool IsBattle;
@@ -68,7 +68,6 @@ private:
     void ShopBugStoreFix();                  // #24 상점 디버깅
     void ShopAccessDenied();                 // #25 Access Denied 상점
 
-    DiceSystem Dice;
 
     // --- [스탯 보정값 계산기] ---
     int StrBonus() { return Player.GetStrength() / 5; }

@@ -57,11 +57,11 @@ void EventManager::ShuffleEvents()
 
     EventIds.clear();
 
-    int normalIdx = 0;
-    for (int i = 0; i < 5; ++i)
+    size_t normalIdx = 0;
+    for (size_t i = 0; i < 5; ++i)
     {
         vector<int> Chunk;
-        for (int j = 0; j < 4 && normalIdx < NormalEventIds.size(); ++j)
+        for (size_t j = 0; j < 4 && normalIdx < NormalEventIds.size(); ++j)
         {
             Chunk.push_back(NormalEventIds[normalIdx++]);
         }
@@ -84,7 +84,6 @@ void EventManager::ShuffleEvents()
 void EventManager::TriggerNextEvent()
 {
     GameSystem& gs = GameSystem::GetInstance();
-    GraphicManager& Gm = GraphicManager::GetInstance();
     int nextStage = gs.GetStage() + 1;
     gs.SetStage(nextStage);
 
@@ -143,23 +142,23 @@ void DiceWin()
 {
     SoundManager& Sm = SoundManager::GetInstance();
     Sm.RegisterSound(SoundType::DiceWinSFX, L"BGM/DiceWin.wav");
+    Sm.SetSFXVolume(4);
     Sm.PlaySFX(SoundType::DiceWinSFX);
-    Sm.SetSFXVolume(50);
 };
 
 void DiceLose()
 {
     SoundManager& Sm = SoundManager::GetInstance();
     Sm.RegisterSound(SoundType::DiceLoseSFX, L"BGM/DiceLose.wav");
+    Sm.SetSFXVolume(4);
     Sm.PlaySFX(SoundType::DiceLoseSFX);
-    Sm.SetSFXVolume(50);
 };
 
 void PlayDiceVisualEffect(int Result, int DiceSize)
 {
     SoundManager& Sm = SoundManager::GetInstance();
     Sm.RegisterSound(SoundType::DiceSFX, L"BGM/DiceSound.wav");
-    Sm.SetSFXVolume(50);
+    Sm.SetSFXVolume(4);
     Sm.PlaySFX(SoundType::DiceSFX);
 
     GraphicManager& Gm = GraphicManager::GetInstance();
