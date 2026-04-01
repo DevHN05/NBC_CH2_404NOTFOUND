@@ -540,8 +540,8 @@ void EventManager::BattleBreaker()
         DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 30);
+        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
 
         if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
@@ -616,8 +616,8 @@ void EventManager::BattleInvader()
         DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 30);
+        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
 
         if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
@@ -1015,8 +1015,8 @@ void EventManager::BattleGravity()
         DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 30);
+        Logger.LogExpGain(30, Player.GetExperience(), Player.GetMaxExperience());
 
         if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + LukBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
@@ -1326,8 +1326,8 @@ void EventManager::ChoiceDanglingPointer()
         DiceWin();
         Gm.ClearLogs();
         Gm.AddLog("판정 성공!");
-        Logger.LogExpGain(60, Player.GetExperience(), Player.GetMaxExperience());
         Player.SetExperience(Player.GetExperience() + 60);
+        Logger.LogExpGain(60, Player.GetExperience(), Player.GetMaxExperience());
 
         if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + StrBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
