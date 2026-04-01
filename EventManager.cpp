@@ -699,6 +699,7 @@ void EventManager::BattleAssassin()
         else if (Choice == 2) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + DexBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Logger.LogEventFailAssassin();
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -1192,6 +1193,7 @@ void EventManager::ChoiceGarbageCollector()
             Player.SetHealth(max(0, Player.GetHealth() - 20));
             Gm.AddLog("Hp가 20 손실됩니다.");
             WaitEnter();
+            Logger.ChoiceGarbageCollectorFail();
             Gm.ClearLogs();
             cm.StartBossBattle(Player, *MonsterData::CreateShadowLord());
         }
@@ -1440,7 +1442,7 @@ void EventManager::ChoiceUninitArray()
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
     Gm.PerformAddLog("▶ 현재 스테이지: " + to_string(nextStage));
-    Logger.ChoiceDanglingPointer(IntBonus());
+    Logger.ChoiceUninitArray(IntBonus());
 
     Gm.CommandAddLog("숫자를 입력해 행동 선택 > ");
     while (true)
@@ -1486,6 +1488,7 @@ void EventManager::ChoiceUninitArray()
         if (Choice == 1) Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead() + IntBonus()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
         else Gm.CommandAddLog("판정 결과 : " + to_string(Dice.GetDiceHead()) + (Dice.GetResult() ? " [ 성공 ]" : " [ 실패 ]"));
 
+        Logger.ChoiceUninitArraySuccess();
         WaitEnter();
         Gm.ClearLogs();
     }
@@ -1502,6 +1505,7 @@ void EventManager::ChoiceUninitArray()
 
             Player.SetHealth(max(0, Player.GetHealth() - 10));
             // HP 10 차감
+            Logger.ChoiceUninitArrayFail();
             WaitEnter();
             Gm.ClearLogs();
         }
@@ -2139,7 +2143,7 @@ void EventManager::ShopBugStoreFix()
         }
         else if (Choice == 3)
         {
-            Dice.RollDice(20, 10, LukBonus() - 5);
+            Dice.RollDice(20, 15, LukBonus());
             if (!Dice.GetResult()) IsBattle = true;
         }
         else
