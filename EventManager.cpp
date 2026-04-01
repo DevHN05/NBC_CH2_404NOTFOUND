@@ -170,6 +170,9 @@ void EventManager::TutorialEvent()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::TutorialBGM, L"BGM/TutorialBGM");
+    Sm.PlayBGM(SoundType::TutorialBGM);
     Logger.ShowStory();
 
     Gm.GoSpace(30, 8);

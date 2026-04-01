@@ -11,6 +11,7 @@ enum class SoundType
     TitleBGM,
     BattleBGM,
     ChooseBGM,
+    TutorialBGM,
     AttackSFX,
     DiceSFX,
     DiceWinSFX,
