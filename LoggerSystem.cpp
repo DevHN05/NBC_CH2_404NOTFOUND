@@ -1009,18 +1009,18 @@ void LoggerSystem::LogPrintShopMenu()
     Gm.DrawLayout();
     //Gm.ClearLogs();
 
-    Gm.GoSpace(32, 7); cout << " [ SHOP MENU ] ";
+    Gm.GoSpace(5, 9); cout << " [ SHOP MENU ] ";
 
-    int LogStartX = 32;
+    int LogStartX = 5;
 
-    Gm.GoSpace(LogStartX, 10);
-    cout << "1. 구매하기";
     Gm.GoSpace(LogStartX, 12);
-    cout << "2. 판매하기";
+    cout << "1. 구매하기";
     Gm.GoSpace(LogStartX, 14);
+    cout << "2. 판매하기";
+    Gm.GoSpace(LogStartX, 16);
     cout << "3. 떠나기";
 
-    Gm.DrawAsciiArt("SHOPKEEPER" , 93, 6);
+    Gm.DrawAsciiArt("SHOPKEEPER" , Gm.GetCurrentWidth()/2+30, 8);
 
 }
 
@@ -1028,20 +1028,20 @@ void LoggerSystem::LogPrintShopMenu()
 void LoggerSystem::LogPrintShopItems(const vector<BaseItem*>& CurrentDisplayItems)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
-    Gm.DrawLayout();
-    Gm.GoSpace(32, 7); cout << " [ SYSTEM MERCHANT ] ";
+    //Gm.DrawLayout();
+    Gm.GoSpace(5, 9); cout << " [ SYSTEM MERCHANT ] ";
 
-    int LogStartX = 32;
+    int LogStartX = 5;
 
     for (int i =0; i < CurrentDisplayItems.size(); ++i)
     {
-        Gm.GoSpace(LogStartX, 10 + 2 * i);
+        Gm.GoSpace(LogStartX, 12 + 2 * i);
         cout << to_string(i+1) + ". [" + CurrentDisplayItems[i]->GetPotionTypeStr() + "] " +
             CurrentDisplayItems[i]->GetName() + " : " + to_string(CurrentDisplayItems[i]->GetPrice()) + "G";
     }
 
-    Gm.GoSpace(LogStartX, 20); cout << "0. EXIT TERMINAL";
-    Gm.DrawAsciiArt("SHOPKEEPER" , 93, 6);
+    Gm.GoSpace(LogStartX, 22); cout << "0. EXIT TERMINAL";
+    Gm.DrawAsciiArt("SHOPKEEPER" , Gm.GetCurrentWidth()/2+30, 8);
 
 }
 //----------------------------------------튜토리얼 관련----------------------------------------

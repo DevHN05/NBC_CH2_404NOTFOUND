@@ -63,13 +63,14 @@ public:
     void UpdateWindowSize();
     int GetCurrentWidth() const { return CurrentWidth; }
     int GetCurrentHeight() const { return CurrentHeight; }
+    int GetRightEdge() const { return RightEdge; }
     int GetMainBottom() const { return MainBottom; }
     int GetSplitColumn() const { return SplitColumn; }
 
     //Draw
     void DrawLayout() const;
     void DrawCombatLayOut() const;
-    void DrawLobbyStatus(PlayerManager& Player) const;
+    void DrawStatus(PlayerManager& Player, const int& X, const int& Y) const;
     void DrawInventoryData(PlayerManager& Player) const;
     void DrawGameOver(PlayerManager& Player);
     void DrawGameWin(PlayerManager& Player);
