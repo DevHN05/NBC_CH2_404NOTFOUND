@@ -171,7 +171,7 @@ void EventManager::TutorialEvent()
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
     Sm.RegisterSound(SoundType::TutorialBGM, L"BGM/TutorialBGM");
-    Sm.SetBGMVolume(2);
+    Sm.SetBGMVolume(10);
     Sm.PlayBGM(SoundType::TutorialBGM);
     Logger.ShowStory();
 

@@ -19,6 +19,7 @@ void CombatManager::StartBattle(PlayerManager& Player, BaseMonster& Monster)
     SoundManager& Sm = SoundManager::GetInstance();
 
     Sm.PlayBGM(SoundType::BattleBGM);
+    Sm.SetBGMVolume(10);
     Sm.RegisterSound(SoundType::AttackSFX, L"BGM/AttackSFX.wav");
     Ls.hideCursor();
 
@@ -105,7 +106,7 @@ void CombatManager::StartBossBattle(PlayerManager& Player, BaseBossMonster& Boss
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.SetBGMVolume(2);
+    Sm.SetBGMVolume(10);
     Sm.PlayBGM(SoundType::BattleBGM);
     Ls.hideCursor();
 

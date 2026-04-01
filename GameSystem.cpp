@@ -41,7 +41,7 @@ void GameSystem::StartGame()
     Sm.RegisterSound(SoundType::TitleBGM, L"BGM/BGM.wav");
     Sm.RegisterSound(SoundType::ChooseBGM, L"BGM/ChooseBGM.wav");
     Sm.RegisterSound(SoundType::BattleBGM, L"BGM/BattleBGM.wav");
-    Sm.SetBGMVolume(2);
+    Sm.SetBGMVolume(10);
     Sm.PlayBGM(SoundType::TitleBGM);
 
     Gm.UpdateWindowSize();
