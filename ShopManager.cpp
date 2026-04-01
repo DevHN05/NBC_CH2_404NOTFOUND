@@ -23,6 +23,10 @@ void ShopManager::EnterShop(PlayerManager& Player)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Ls = LoggerSystem::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::ShopBGM, L"BGM/ShopBGM.wav");
+    Sm.SetBGMVolume(10);
+    Sm.PlaySFX(SoundType::ShopBGM);
 
 	bool InShop = true;
 	int MenuChoice;
@@ -114,7 +118,7 @@ bool ShopManager::BuyItem(int SelectedNumber, PlayerManager& Player)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+    Sm.RegisterSound(SoundType::GoldSFX, L"BGM/GoldSFX.wav");
 
 	int ItemIndex = SelectedNumber - 1;
 	if (ItemIndex < 0 || ItemIndex >= CurrentDisplayItems.size()) return false;
@@ -141,7 +145,7 @@ bool ShopManager::SellItem(const std::string& ItemName, PlayerManager& Player)
 {
     LoggerSystem& Ls = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+    Sm.RegisterSound(SoundType::GoldSFX, L"BGM/GoldSFX.wav");
 
 	auto Item = Player.FindItem(ItemName);
 

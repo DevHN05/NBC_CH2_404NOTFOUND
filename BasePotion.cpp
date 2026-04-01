@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iomanip>
 #include "GraphicManager.h"
+#include "SoundManager.h"
 #include "GameSystem.h"
 
 map<string, int> BasePotion::PotionCounts;
@@ -47,6 +48,8 @@ string BasePotion::GetPotionTypeStr() const
 void BasePotion::Use(PlayerManager& User)
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::PotionSFX, L"BGM/PotionSFX.wav");
 
     if (PotionCounts[GetName()] <= 0)
     {
@@ -58,6 +61,7 @@ void BasePotion::Use(PlayerManager& User)
     {
     case EPotionType::Health:
         {
+            Sm.PlaySFX(SoundType::PotionSFX);
             int NewHealth = User.GetHealth() + Recovery;
             User.SetHealth(min(NewHealth, User.GetMaxHealth()));
 
@@ -70,6 +74,7 @@ void BasePotion::Use(PlayerManager& User)
 
     case EPotionType::Strength:
         {
+            Sm.PlaySFX(SoundType::PotionSFX);
             int NewStrength = User.GetStrength() + Recovery;
             User.SetStrength(NewStrength);
 

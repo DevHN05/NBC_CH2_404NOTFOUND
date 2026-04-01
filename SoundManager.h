@@ -18,7 +18,10 @@ enum class SoundType
     DiceLoseSFX,
     GoldSFX,
     KilkilSFX,
-    BossBattleBGM
+    BossBattleBGM,
+    GlitchSFX,
+    PotionSFX,
+    ShopBGM
 };
 
 class SoundManager

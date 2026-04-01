@@ -1525,7 +1525,7 @@ void EventManager::ChestNormal()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+    Sm.RegisterSound(SoundType::GoldSFX, L"BGM/GoldSFX.wav");
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
@@ -1604,7 +1604,7 @@ void EventManager::ChestConstLock()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+    Sm.RegisterSound(SoundType::GoldSFX, L"BGM/GoldSFX.wav");
 
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
@@ -1681,7 +1681,7 @@ void EventManager::ChestAndLogic()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+    Sm.RegisterSound(SoundType::GoldSFX, L"BGM/GoldSFX.wav");
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
     int nextStage = gs.GetStage();
@@ -1764,7 +1764,7 @@ void EventManager::ChestPointerSearch()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+    Sm.RegisterSound(SoundType::GoldSFX, L"BGM/GoldSFX.wav");
 
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();
@@ -1841,7 +1841,7 @@ void EventManager::ChestBugActorFix()
     GraphicManager& Gm = GraphicManager::GetInstance();
     LoggerSystem& Logger = LoggerSystem::GetInstance();
     SoundManager& Sm = SoundManager::GetInstance();
-    Sm.RegisterSound(SoundType::GoldSFX, L"GoldSFX.wav");
+    Sm.RegisterSound(SoundType::GoldSFX, L"BGM/GoldSFX.wav");
 
     Gm.ClearLogs();
     GameSystem& gs = GameSystem::GetInstance();

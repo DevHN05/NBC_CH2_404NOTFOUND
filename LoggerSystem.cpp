@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <conio.h>
 
+#include "SoundManager.h"
+
 
 //커서 숨기기
 void LoggerSystem::hideCursor() {
@@ -1223,6 +1225,8 @@ void LoggerSystem::Tutorial5()
 void LoggerSystem::Tutorial6()
 {
     GraphicManager& Gm = GraphicManager::GetInstance();
+    SoundManager& Sm = SoundManager::GetInstance();
+    Sm.RegisterSound(SoundType::GlitchSFX, L"BGM/GlitchSFX.wav");
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     Gm.ClearLogs();
@@ -1249,6 +1253,7 @@ void LoggerSystem::Tutorial6()
     TypeText(Gm, "잔여 시간 : 1", 3, 9);
     Sleep(1000);
 
+    Sm.PlaySFX(SoundType::GlitchSFX);
     SetConsoleTextAttribute(hConsole, 0x0F);
     system("cls");
     Sleep(500);
