@@ -72,6 +72,7 @@ public:
     void DrawLobbyStatus(PlayerManager& Player) const;
     void DrawInventoryData(PlayerManager& Player) const;
     void DrawGameOver(PlayerManager& Player);
+    void DrawGameWin(PlayerManager& Player);
     void DrawDiceRoll(int RollHead, int MaxNumber);
     void DrawCustomDice(int Number, int MaxNumber);
 
