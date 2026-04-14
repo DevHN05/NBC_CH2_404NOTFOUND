@@ -10,7 +10,7 @@
 - 장진희 (Game System, Graphic System, Combat System 구현)
 - 최민서 (Event System, Boss Monster 구현)
 ## 게임 이름
-미정
+404 NOT FOUND
 ## 게임 특징
 - 플레이어의 기본적인 RPG 요소
   - 체력, 스탯, 치명타 등
